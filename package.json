@@ -1,0 +1,11 @@
+{
+  "name": "choco",
+  "version": "1.0.0",
+  "description": "Website of chocolate store with front and back ends",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "YoWuzzup",
+  "license": "ISC"
+}
