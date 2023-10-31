@@ -4,8 +4,12 @@
   "description": "Website of chocolate store with front and back ends",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:dev": "concurrently \"npm run start:dev --prefix backend\" \"npm run dev --prefix frontend\""
   },
   "author": "YoWuzzup",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
 }
