@@ -9,4 +9,11 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
+
+  // @Roles('admin')
+  // @UseGuards(RolesGuard)
+  @Get('/s')
+  yeah(): string {
+    return 'yeah';
+  }
 }
