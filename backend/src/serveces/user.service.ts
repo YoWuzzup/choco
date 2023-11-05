@@ -32,7 +32,7 @@ export class UserService {
     }
   }
 
-  async registerUser(data: RegistrationDto): Promise<object> {
+  async registerUser(data: RegistrationDto): Promise<unknown> {
     if (data.password !== data.confirmPassword) {
       throw new BadRequestException('Passwords do not match');
     }

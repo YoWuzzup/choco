@@ -21,7 +21,6 @@ export class LocalAuthGuard extends AuthGuard() {
         email,
         password,
       );
-      console.log('local-auth:', validatedUser);
 
       return validatedUser;
     } catch (error) {

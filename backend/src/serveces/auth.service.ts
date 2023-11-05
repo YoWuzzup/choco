@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 
 import * as bcrypt from 'bcrypt';
 
@@ -12,6 +13,7 @@ export class AuthService {
   constructor(
     private jwtService: JwtService,
     private userService: UserService,
+    private configService: ConfigService,
   ) {}
 
   async validateUser(email: string, password: string): Promise<boolean> {
@@ -31,9 +33,10 @@ export class AuthService {
     const { password, ...payload } = data;
 
     return {
-      ...payload,
       accessToken: this.jwtService.sign(payload),
-      refreshToken: this.jwtService.sign(payload, { expiresIn: '7d' }),
+      refreshToken: this.jwtService.sign(payload, {
+        expiresIn: this.configService.get('JWT_REFRESH_EXPIRESIN') / 1000,
+      }),
     };
   }
 
