@@ -1,6 +1,8 @@
 import {
+  BadRequestException,
   Body,
   Controller,
+  Get,
   Post,
   Request,
   Res,
@@ -14,7 +16,10 @@ import { UserService } from 'src/serveces/user.service';
 
 import { LoginDto, RegistrationDto } from 'src/dtos/authData.dto';
 import { LocalAuthGuard } from 'src/guards/local-auth.guard';
-import { RefreshJwtGuard } from 'src/guards/refresh-jwt-auth.guard';
+import { RefreshTokenGuard } from 'src/guards/refresh-jwt-auth.guard';
+import { AccessTokenGuard } from 'src/guards/jwt-auth.guard';
+// import { AuthGuard } from '@nestjs/passport';
+// import { AccessTokenStrategy } from 'src/strategies/jwt-strategy';
 
 @Controller('auth')
 export class AuthController {
@@ -24,14 +29,19 @@ export class AuthController {
     private configService: ConfigService,
   ) {}
 
-  @Post('register')
-  async registerUser(
-    @Body() regData: RegistrationDto,
-    @Res({ passthrough: true }) response: Response,
-  ) {
-    const { password, email } = regData;
+  @UseGuards(AccessTokenGuard)
+  @Get('1')
+  async test() {
+    return 0;
+  }
 
-    return this.login({ password, email }, response);
+  @Post('register')
+  async registerUser(@Body() regData: RegistrationDto) {
+    if (!regData.email || !regData.password || !regData.confirmPassword) {
+      throw new BadRequestException('Missing required properties');
+    }
+
+    return await this.userService.registerUser(regData);
   }
 
   @UseGuards(LocalAuthGuard)
@@ -40,19 +50,10 @@ export class AuthController {
     @Body() req: LoginDto,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const { accessToken, refreshToken, ...data } =
-      await this.authService.login(req);
-
-    // Set refreshToken as a cookie
-    response.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      maxAge: this.configService.get('JWT_REFRESH_EXPIRESIN'),
-    });
-
-    return { accessToken: accessToken, ...data };
+    return await this.authService.login(req, response);
   }
 
-  @UseGuards(RefreshJwtGuard)
+  @UseGuards(RefreshTokenGuard)
   @Post('refresh')
   async refreshToken(@Request() req: any) {
     return this.authService.refreshToken(req.user);

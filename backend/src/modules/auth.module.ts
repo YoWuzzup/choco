@@ -9,15 +9,15 @@ import { UsersSchema } from 'src/models/users.model';
 import { AuthService } from 'src/serveces/auth.service';
 import { UserService } from 'src/serveces/user.service';
 
-import { JwtStrategy } from 'src/strategies/jwt-strategy';
+import { AccessTokenStrategy } from 'src/strategies/jwt-strategy';
 import { LocalStrategy } from 'src/strategies/local-strategy';
-import { RefreshJwtStrategy } from 'src/strategies/refreshToken.strategy';
+import { RefreshTokenStrategy } from 'src/strategies/refreshToken.strategy';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'Users', schema: UsersSchema }]),
     ConfigModule,
-    PassportModule.register({}),
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       useFactory: async (configService: ConfigService) => ({
         global: true,
@@ -31,9 +31,9 @@ import { RefreshJwtStrategy } from 'src/strategies/refreshToken.strategy';
   providers: [
     AuthService,
     UserService,
-    JwtStrategy,
+    AccessTokenStrategy,
+    RefreshTokenStrategy,
     LocalStrategy,
-    RefreshJwtStrategy,
   ],
 })
 export class AuthModule {}

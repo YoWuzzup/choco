@@ -12,6 +12,7 @@ export class UserController {
 
   // example of couple useguards
   @UseGuards(LocalAuthGuard)
+  // @UseGuards(AccessTokenGuard)
   @Roles('admin') // Specify the roles allowed to access this route
   @UseGuards(RolesGuard) // Apply the RolesGuard to this route
   @Get(':id')
