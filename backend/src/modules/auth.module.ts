@@ -1,17 +1,19 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_FILTER } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PassportModule } from '@nestjs/passport';
 
 import { AuthController } from 'src/controllers/auth.controller';
+import { AuthService } from 'src/services/auth.service';
 import { UsersSchema } from 'src/models/users.model';
-import { AuthService } from 'src/serveces/auth.service';
-import { UserService } from 'src/serveces/user.service';
+import { UserService } from 'src/services/user.service';
 
-import { AccessTokenStrategy } from 'src/strategies/jwt-strategy';
-import { LocalStrategy } from 'src/strategies/local-strategy';
-import { RefreshTokenStrategy } from 'src/strategies/refreshToken.strategy';
+import { AccessTokenStrategy } from 'src/guards/strategies/jwt-strategy';
+import { LocalStrategy } from 'src/guards/strategies/local-strategy';
+import { RefreshTokenStrategy } from 'src/guards/strategies/refreshToken.strategy';
+import { RedirectFilter } from 'src/guards/filters/redirect.filter';
 
 @Module({
   imports: [
@@ -34,6 +36,10 @@ import { RefreshTokenStrategy } from 'src/strategies/refreshToken.strategy';
     AccessTokenStrategy,
     RefreshTokenStrategy,
     LocalStrategy,
+    {
+      provide: APP_FILTER,
+      useClass: RedirectFilter,
+    },
   ],
 })
 export class AuthModule {}

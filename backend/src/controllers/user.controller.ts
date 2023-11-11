@@ -4,7 +4,7 @@ import { LocalAuthGuard } from 'src/guards/local-auth.guard';
 import { Roles } from 'src/guards/roles.decorator';
 import { RolesGuard } from 'src/guards/roles.guard';
 
-import { UserService } from 'src/serveces/user.service';
+import { UserService } from 'src/services/user.service';
 
 @Controller('user')
 export class UserController {

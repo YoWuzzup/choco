@@ -1,4 +1,8 @@
-import { ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
 
@@ -13,10 +17,10 @@ export class AccessTokenGuard extends AuthGuard('jwt') {
     const request = context.switchToHttp().getRequest();
     const accessToken = request.body?.access_token;
 
-    if (accessToken) {
-      request.headers.authorization = `Bearer ${accessToken}`;
-      console.log(accessToken);
+    if (!accessToken) {
+      throw new UnauthorizedException('Unauthorized');
     }
+    request.headers.authorization = `Bearer ${accessToken}`;
 
     return super.canActivate(context);
   }

@@ -4,7 +4,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { AuthService } from 'src/serveces/auth.service';
+import { AuthService } from 'src/services/auth.service';
 
 @Injectable()
 export class LocalAuthGuard extends AuthGuard() {
@@ -22,7 +22,7 @@ export class LocalAuthGuard extends AuthGuard() {
         password,
       );
 
-      return validatedUser;
+      return validatedUser ? true : false;
     } catch (error) {
       throw new UnauthorizedException('Invalid credentials');
     }
