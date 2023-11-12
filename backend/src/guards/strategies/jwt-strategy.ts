@@ -1,29 +1,45 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { Request } from 'express';
 
 import { RedirectException } from '../exceptions/redirect.exception';
 
 export class AccessTokenStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor() {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        AccessTokenStrategy.extractRefreshJWTFromBody,
+      ]),
       ignoreExpiration: true,
       passReqToCallback: true,
       secretOrKey: `${process.env.JWT_SECRET}`,
     });
   }
 
-  async validate(payload: any) {
+  private static extractRefreshJWTFromBody(req: Request): string | null {
+    if (req.body && req.body.access_token) {
+      return req.body.access_token;
+    }
+    return null;
+  }
+
+  async validate(req: Request, payload: any) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { exp, iat, ...data } = payload;
-    const validatedAccessToken: boolean = await this.validateToken(exp);
 
-    // if token is invalid - redirect
-    if (!validatedAccessToken) {
-      throw new RedirectException('/auth/refresh');
+    try {
+      const validatedAccessToken: boolean = await this.validateToken(exp);
+      console.log('validatedAccessToken', validatedAccessToken);
+
+      // if token is invalid - redirect
+      if (!validatedAccessToken) {
+        throw new RedirectException('/auth/refresh');
+      }
+
+      return payload;
+    } catch (error) {
+      return error;
     }
-
-    return payload;
   }
 
   async validateToken(exp: number): Promise<boolean> {

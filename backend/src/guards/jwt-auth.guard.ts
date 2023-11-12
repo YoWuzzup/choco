@@ -4,24 +4,34 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { Observable } from 'rxjs';
+import { RedirectException } from './exceptions/redirect.exception';
+
+import { AuthService } from 'src/services/auth.service';
 
 @Injectable()
 export class AccessTokenGuard extends AuthGuard('jwt') {
-  constructor() {
+  constructor(private authService: AuthService) {
     super();
   }
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const accessToken = request.body?.access_token;
 
     if (!accessToken) {
       throw new UnauthorizedException('Unauthorized');
     }
+
+    const validatingAccessToken =
+      await this.authService.validateJwtToken(accessToken);
+    const isValid =
+      validatingAccessToken?.response?.error === 'Unauthorized' ? false : true;
+
+    if (!isValid) {
+      throw new RedirectException('/auth/refresh');
+    }
+
     request.headers.authorization = `Bearer ${accessToken}`;
 
-    return super.canActivate(context);
+    return super.canActivate(context) as Promise<boolean>;
   }
 }

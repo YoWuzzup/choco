@@ -27,7 +27,7 @@ export class UserService {
         $or: [{ _id: idOrEmail._id }, { email: idOrEmail.email }],
       });
 
-      return user;
+      return user.toObject();
     } catch (error) {
       throw error;
     }
@@ -59,11 +59,23 @@ export class UserService {
     return result;
   }
 
-  async updateUser(id: string | ObjectId, updateUserDto: UpdateUserDto) {
+  async updateUser(
+    idOrEmail: {
+      email?: string;
+      _id?: ObjectId | string;
+    },
+    updateUserDto: UpdateUserDto,
+  ) {
     return await this.usersModel
-      .findByIdAndUpdate(id, updateUserDto, {
-        new: true,
-      })
+      .findOneAndUpdate(
+        {
+          $or: [{ _id: idOrEmail._id }, { email: idOrEmail.email }],
+        },
+        updateUserDto,
+        {
+          new: true,
+        },
+      )
       .exec();
   }
 }

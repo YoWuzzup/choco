@@ -18,7 +18,6 @@ import { LoginDto, RegistrationDto } from 'src/dtos/authData.dto';
 import { LocalAuthGuard } from 'src/guards/local-auth.guard';
 import { RefreshTokenGuard } from 'src/guards/refresh-jwt-auth.guard';
 import { JwtService } from '@nestjs/jwt';
-import { AccessTokenGuard } from 'src/guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -47,6 +46,11 @@ export class AuthController {
     return await this.authService.login(req, response);
   }
 
+  @Post('logout')
+  async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+    return this.authService.logout(req, res);
+  }
+
   @UseGuards(RefreshTokenGuard)
   @Get('refresh')
   async updateRefreshToken(
@@ -54,11 +58,5 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     return await this.authService.updateRefreshToken(req, res);
-  }
-
-  @UseGuards(AccessTokenGuard)
-  @Get('1')
-  async r() {
-    return 0;
   }
 }

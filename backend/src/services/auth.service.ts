@@ -1,5 +1,7 @@
 import {
   BadRequestException,
+  HttpException,
+  HttpStatus,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -11,7 +13,6 @@ import * as bcrypt from 'bcrypt';
 
 import { UserService } from './user.service';
 import { LoginDto } from 'src/dtos/authData.dto';
-import { ObjectId } from 'mongoose';
 
 @Injectable()
 export class AuthService {
@@ -21,22 +22,22 @@ export class AuthService {
     private configService: ConfigService,
   ) {}
 
-  async validateUser(
-    email: string,
-    password: string,
-  ): Promise<{ _id?: ObjectId | string; email?: string } | null> {
+  async validateUser(email: string, password: string): Promise<any | null> {
     const user = await this.userService.findOneUser({ email });
 
     if (user && (await bcrypt.compare(password, user.password))) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, ...result } = user.toObject();
+      const { password, tokens, ...result } = user;
 
       return result;
     }
     return null;
   }
 
-  async login(data: LoginDto, response: Response) {
+  async login(
+    data: LoginDto,
+    response: Response,
+  ): Promise<{ access_token: string }> {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, email, ...payload } = data;
     const validatedUser = await this.validateUser(email, password);
@@ -46,6 +47,15 @@ export class AuthService {
     const refreshToken = await this.createJwtToken(
       { id: validatedUser._id, email: validatedUser.email },
       'refresh',
+    );
+
+    // saving refresh token in the db
+    const hashedRefreshToken = await bcrypt.hash(refreshToken, 5);
+    await this.userService.updateUser(
+      {
+        email,
+      },
+      { tokens: { refresh_token: hashedRefreshToken } },
     );
 
     // Set refreshToken as a cookie
@@ -62,7 +72,51 @@ export class AuthService {
     };
   }
 
-  async createJwtToken(payload: any, type: 'refresh' | 'access') {
+  async logout(req: Request, res: Response): Promise<HttpException> {
+    const refreshToken = req.cookies?.refresh_token;
+
+    if (!refreshToken)
+      return new HttpException(
+        {
+          statusCode: HttpStatus.OK,
+          message: 'Already logged out.',
+          success: true,
+        },
+        HttpStatus.OK,
+      );
+
+    const decodedRefreshtoken: any = this.jwtService.decode(refreshToken);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { exp, iat, ...payload } = decodedRefreshtoken;
+    const expirationDate = new Date(0);
+
+    // removing refresh token in the db
+    await this.userService.updateUser(
+      {
+        email: payload.email,
+      },
+      { tokens: { refresh_token: '' } },
+    );
+
+    res.cookie('refresh_token', '', {
+      httpOnly: true,
+      expires: expirationDate,
+    });
+
+    return new HttpException(
+      {
+        statusCode: HttpStatus.OK,
+        message: 'User logged out successfully',
+        success: true,
+      },
+      HttpStatus.OK,
+    );
+  }
+
+  async createJwtToken(
+    payload: any,
+    type: 'refresh' | 'access',
+  ): Promise<string> {
     return this.jwtService.signAsync(payload, {
       expiresIn:
         type === 'refresh'
@@ -71,18 +125,21 @@ export class AuthService {
     });
   }
 
-  async validateJwtToken(jwt: string) {
+  async validateJwtToken(jwt: string): Promise<any> {
     try {
       const decoded = this.jwtService.verify(jwt);
 
       return decoded; // The token is valid, return the decoded payload
     } catch (error) {
       // If an error occurs during verification, it means the token is invalid
-      throw new UnauthorizedException('Invalid token.');
+      return new UnauthorizedException('Invalid token.');
     }
   }
 
-  async updateRefreshToken(req: Request, res: Response) {
+  async updateRefreshToken(
+    req: Request,
+    res: Response,
+  ): Promise<{ access_token: string }> {
     const refreshToken = req.cookies?.refresh_token;
     const decodedToken: any = this.jwtService.decode(refreshToken);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

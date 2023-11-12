@@ -41,5 +41,6 @@ import { RedirectFilter } from 'src/guards/filters/redirect.filter';
       useClass: RedirectFilter,
     },
   ],
+  exports: [AuthService],
 })
 export class AuthModule {}
