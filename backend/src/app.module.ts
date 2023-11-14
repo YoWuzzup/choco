@@ -7,6 +7,7 @@ import { AppService } from './app.service';
 import { RolesGuard } from './guards/roles.guard';
 import { AuthModule } from './modules/auth.module';
 import { UserModule } from './modules/user.module';
+import { ProductModule } from './modules/product.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { UserModule } from './modules/user.module';
     }),
     AuthModule,
     UserModule,
+    ProductModule,
   ],
   controllers: [AppController],
   providers: [AppService, RolesGuard],

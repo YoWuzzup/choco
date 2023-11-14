@@ -3,11 +3,11 @@ import {
   ConflictException,
   Injectable,
 } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model, ObjectId } from 'mongoose';
 
 import * as bcrypt from 'bcrypt';
 
-import { InjectModel } from '@nestjs/mongoose';
-import { Model, ObjectId } from 'mongoose';
 import { RegistrationDto } from 'src/dtos/authData.dto';
 import { Users } from 'src/models/users.model';
 import { UpdateUserDto } from 'src/dtos/user.dto';

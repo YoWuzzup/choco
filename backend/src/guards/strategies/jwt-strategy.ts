@@ -29,7 +29,6 @@ export class AccessTokenStrategy extends PassportStrategy(Strategy, 'jwt') {
 
     try {
       const validatedAccessToken: boolean = await this.validateToken(exp);
-      console.log('validatedAccessToken', validatedAccessToken);
 
       // if token is invalid - redirect
       if (!validatedAccessToken) {

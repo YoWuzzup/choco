@@ -24,7 +24,9 @@ export class AccessTokenGuard extends AuthGuard('jwt') {
     const validatingAccessToken =
       await this.authService.validateJwtToken(accessToken);
     const isValid =
-      validatingAccessToken?.response?.error === 'Unauthorized' ? false : true;
+      (await validatingAccessToken?.response?.error) === 'Unauthorized'
+        ? false
+        : true;
 
     if (!isValid) {
       throw new RedirectException('/auth/refresh');
