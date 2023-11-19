@@ -10,7 +10,6 @@ import * as bcrypt from 'bcrypt';
 
 import { RegistrationDto } from 'src/dtos/authData.dto';
 import { Users } from 'src/models/users.model';
-import { UpdateUserDto } from 'src/dtos/user.dto';
 
 @Injectable()
 export class UserService {
@@ -29,7 +28,7 @@ export class UserService {
 
       return user.toObject();
     } catch (error) {
-      throw error;
+      return error;
     }
   }
 
@@ -64,7 +63,7 @@ export class UserService {
       email?: string;
       _id?: ObjectId | string;
     },
-    updateUserDto: UpdateUserDto,
+    updateUserDto: any,
   ) {
     return await this.usersModel
       .findOneAndUpdate(

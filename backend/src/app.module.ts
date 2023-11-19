@@ -8,6 +8,7 @@ import { RolesGuard } from './guards/roles.guard';
 import { AuthModule } from './modules/auth.module';
 import { UserModule } from './modules/user.module';
 import { ProductModule } from './modules/product.module';
+import { OrderModule } from './modules/order.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ProductModule } from './modules/product.module';
     AuthModule,
     UserModule,
     ProductModule,
+    OrderModule,
   ],
   controllers: [AppController],
   providers: [AppService, RolesGuard],
