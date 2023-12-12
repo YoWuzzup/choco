@@ -1,5 +1,16 @@
 {
-  "Index": {
-    "title": "Hello world!"
+  "links": {
+    "home": "home",
+    "shop": "shop",
+    "about us": "about us"
+  },
+  "notifications": {
+    "notifications": "view notifications"
+  },
+  "user menu": {
+    "open menu": "Open user menu",
+    "my profile": "my profile",
+    "settings": "settings",
+    "sign out": "sign out"
   }
 }

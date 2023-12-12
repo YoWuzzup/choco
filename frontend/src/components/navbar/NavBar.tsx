@@ -26,15 +26,15 @@ const links = [
 
 const dropdown = [
   {
-    name: "My Profile",
+    name: "my profile",
     href: "profile",
   },
   {
-    name: "Settings",
+    name: "settings",
     href: "settings",
   },
   {
-    name: "Sign out",
+    name: "sign out",
     href: "",
   },
 ];
@@ -55,13 +55,13 @@ export default function NavBar(): ReactNode {
     setProfileMenuIsOpen((prev) => !prev);
   };
 
-  const t = useTranslations("Index");
+  const t = useTranslations("");
 
   return (
-    <nav className="bg-primary">
+    <nav className={`bg-primary w-full fixed`}>
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
-          {/* Mobile menu button */}
+          {/* Mobile menu button with icons*/}
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
             <Button
               type={"button"}
@@ -93,7 +93,7 @@ export default function NavBar(): ReactNode {
                     after:bg-colorful after:bottom-0 after:left-0
                     after:transition-all"
                   >
-                    {l.name}
+                    {t(`links.${l.name}`)}
                   </Link>
                 ))}
               </div>
@@ -111,14 +111,16 @@ export default function NavBar(): ReactNode {
                 console.log("TODO");
               }}
             >
-              <span className="sr-only">View notifications</span>
+              <span className="sr-only">
+                {t(`notifications.notifications`)}
+              </span>
               {<Notification className="h-6 w-6" />}
             </Button>
 
             {/* Profile dropdown */}
             <div className="relative ml-3">
               <div className="flex">
-                <span className="sr-only">Open user menu</span>
+                <span className="sr-only">{t(`user menu.open menu`)}</span>
                 <Button
                   type={"button"}
                   buttonClasses={
@@ -148,12 +150,12 @@ export default function NavBar(): ReactNode {
                     <Link
                       href={l.href}
                       key={`${l.name}_${index}`}
-                      className="block px-4 py-2 text-sm hover:text-colorful"
+                      className="block px-4 py-2 text-sm hover:text-colorful capitalize"
                       role="menuitem"
                       tabIndex={-1}
                       id={`user-menu-item-${index}`}
                     >
-                      {l.name}
+                      {t(`user menu.${l.name}`)}
                     </Link>
                   ))}
                 </div>
@@ -172,20 +174,25 @@ export default function NavBar(): ReactNode {
         id="mobile-menu"
       >
         <div className="flex flex-1 flex-col space-y-1 px-2 pb-3 pt-2">
-          {links.map((l, index) => (
-            <Link
-              href={l.href}
-              key={`${l.name}_${index}`}
-              className={`bg-${l.current ? "secondary" : "pramary"} text-${
-                l.current ? "colorful" : "primary"
-              }
+          {links.map(
+            (
+              l: { name: string; href: string; current: boolean },
+              index: number
+            ) => (
+              <Link
+                href={l.href}
+                key={`${l.name}_${index}`}
+                className={`bg-${l.current ? "secondary" : "pramary"} text-${
+                  l.current ? "colorful" : "primary"
+                }
                 block rounded-md px-3 py-2 font-medium
                 hover:bg-colorful hover:text-primary`}
-              aria-current={l.current ? "page" : undefined}
-            >
-              {l.name}
-            </Link>
-          ))}
+                aria-current={l.current ? "page" : undefined}
+              >
+                {t(`links.${l.name}`)}
+              </Link>
+            )
+          )}
         </div>
       </div>
     </nav>

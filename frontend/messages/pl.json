@@ -1,5 +1,7 @@
 {
-  "Index": {
-    "title": "Polski!"
+  "links": {
+    "home": "pl",
+    "shop": "pl",
+    "about us": "pl pl"
   }
 }

@@ -1,5 +1,16 @@
 {
-  "Index": {
-    "title": "Привет!"
+  "links": {
+    "home": "главная",
+    "shop": "магазин",
+    "about us": "о нас"
+  },
+  "notifications": {
+    "notifications": "просмотреть уведомления"
+  },
+  "user menu": {
+    "open menu": "открыть меню",
+    "my profile": "мой профиль",
+    "settings": "настройки",
+    "sign out": "выйти"
   }
 }
