@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { useLocale } from "next-intl";
-import NextIntlProvider from "./NextIntlProvider";
+
+import NextIntlProvider from "../../utils/i18n/NextIntlProvider";
 import ReduxStoreProvider from "./ReduxStoreProvider";
 
 import "./globals.css";
@@ -33,19 +34,19 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang={locale}>
+    <html lang={params.locale} id="h">
       <ReduxStoreProvider>
-        <NextIntlProvider
-          locale={params.locale}
-          messages={messages}
-          timeZone="Europe/Berlin"
-          now={new Date()}
-        >
-          <body className={inter.className}>
+        <body className={inter.className}>
+          <NextIntlProvider
+            locale={params.locale}
+            messages={messages}
+            timeZone="Europe/Szczecin"
+            now={new Date()}
+          >
             <NavBar />
             {children}
-          </body>
-        </NextIntlProvider>
+          </NextIntlProvider>
+        </body>
       </ReduxStoreProvider>
     </html>
   );

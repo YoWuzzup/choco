@@ -12,6 +12,7 @@ export const Button: React.FC<IButton> = ({
   buttonClasses,
   children,
   handleClick,
+  ...props
 }) => {
   return (
     <button
@@ -20,6 +21,7 @@ export const Button: React.FC<IButton> = ({
       aria-controls="mobile-menu"
       aria-expanded="false"
       onClick={handleClick}
+      {...props}
     >
       {children}
     </button>

@@ -63,21 +63,33 @@ const config: Config = {
     },
     extend: {
       textColor: {
-        primary: "rgb(var(--primary-text-color) / <alpha-value>)",
-        secondary: "rgb(var(--secondary-text-color) / <alpha-value>)",
-        colorful: "rgb(var(--colorful-text-color) / <alpha-value>)",
-        paraPrimary: "rgb(var(--para-primary-text-color-grey) / <alpha-value>)",
-        paraSecondary:
-          "rgb(var(--para-secondary-text-color-grey) / <alpha-value>)",
+        primary: "rgb(var(--primary-text-color))",
+        secondary: "rgb(var(--secondary-text-color))",
+        colorful: "rgb(var(--colorful-text-color))",
+        paraPrimary: "rgb(var(--para-primary-text-color-grey))",
+        paraSecondary: "rgb(var(--para-secondary-text-color-grey))",
       },
       backgroundColor: {
-        primary: "rgb(var(--primary-background) / <alpha-value>)",
-        secondary: "rgb(var(--secondary-background) / <alpha-value>)",
+        primary: "rgb(var(--primary-background))",
+        secondary: "rgb(var(--secondary-background))",
+        colorful: "rgb(var(--colorful-background))",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      },
+      keyframes: {
+        dropdown: {
+          "0%": { transform: "rotate(0.0deg)" },
+          "30%": { transform: "rotate(14deg)" },
+          "50%": { transform: "rotate(10.0deg)" },
+          "70%": { transform: "rotate(0.0deg)" },
+          "100%": { transform: "rotate(0.0deg)" },
+        },
+      },
+      animation: {
+        dropdown: "dropdown 2s linear infinite",
       },
     },
   },
