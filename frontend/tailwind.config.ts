@@ -36,6 +36,7 @@ const config: Config = {
       danger: "#dc3545",
       light: "#f8f9fa",
       dark: "#343a40",
+      colorfulColor: "#f69d9f",
     },
     fontFamily: {
       sans: [

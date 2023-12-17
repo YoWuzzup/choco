@@ -14,6 +14,8 @@ type TInput = {
     name: string;
     placeholder?: string | undefined;
     required: boolean;
+    value?: string | number;
+    handleChange: (e: any) => void;
   };
 } & ComponentProps<"input">;
 
@@ -24,15 +26,9 @@ export const Input: React.FC<TInput> = ({
   input,
 }) => {
   return (
-    <div className={classNameContainer || "mb-6 relative"}>
+    <div className={classNameContainer || `relative w-full h-12`}>
       {label ? (
-        <label
-          htmlFor={label.htmlfor}
-          className={
-            label.className ||
-            "block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          }
-        >
+        <label htmlFor={label.htmlfor} className={label.className || "sr-only"}>
           {label.labelContent}
         </label>
       ) : null}
@@ -43,10 +39,12 @@ export const Input: React.FC<TInput> = ({
         name={input?.name}
         className={
           input?.className ||
-          "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          "w-full h-full p-6 pr-16 bg-primary text-paraPrimary outline-none focus:outline-none focus-visible:outline-none"
         }
         placeholder={input?.placeholder || ""}
+        value={input?.value}
         required={input?.required || false}
+        onChange={input?.handleChange}
       />
       {children}
     </div>
