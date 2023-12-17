@@ -7,6 +7,7 @@ export { SubscribeSection } from "./sections/home/SubscribeSection";
 
 // exporting a client function
 export { default as NavBar } from "./navbar/NavBar";
+export { default as Footer } from "./footer/Footer";
 
 // slide overs
 export { default as SlideOver } from "./slide-overs/SlideOver";

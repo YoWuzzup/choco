@@ -1,35 +1,25 @@
-import { ComponentProps } from "react";
+import { InputHTMLAttributes, LabelHTMLAttributes, ReactNode } from "react";
 
 type TInput = {
   classNameContainer?: string;
-  label: {
-    className?: string;
-    labelContent: string;
-    htmlfor: string;
-  } | null;
-  input?: {
-    className?: string;
-    type: string;
-    id: string;
-    name: string;
-    placeholder?: string | undefined;
-    required: boolean;
-    value?: string | number;
-    handleChange: (e: any) => void;
-  };
-} & ComponentProps<"input">;
+  label?: LabelHTMLAttributes<HTMLLabelElement>;
+  input?: InputHTMLAttributes<HTMLInputElement>;
+  children?: ReactNode;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+};
 
 export const Input: React.FC<TInput> = ({
   children,
   classNameContainer,
   label,
+  handleChange,
   input,
 }) => {
   return (
     <div className={classNameContainer || `relative w-full h-12`}>
       {label ? (
-        <label htmlFor={label.htmlfor} className={label.className || "sr-only"}>
-          {label.labelContent}
+        <label htmlFor={label.htmlFor} className={label.className || "sr-only"}>
+          {label.children}
         </label>
       ) : null}
 
@@ -44,7 +34,8 @@ export const Input: React.FC<TInput> = ({
         placeholder={input?.placeholder || ""}
         value={input?.value}
         required={input?.required || false}
-        onChange={input?.handleChange}
+        onChange={handleChange}
+        {...input}
       />
       {children}
     </div>

@@ -7,7 +7,7 @@ import ReduxStoreProvider from "./ReduxStoreProvider";
 
 import "./globals.css";
 import { Inter } from "next/font/google";
-import { NavBar } from "../../components/index";
+import { Footer, NavBar } from "../../components/index";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -45,6 +45,7 @@ export default async function RootLayout({
           >
             <NavBar />
             {children}
+            <Footer />
           </NextIntlProvider>
         </body>
       </ReduxStoreProvider>

@@ -32,13 +32,6 @@ export default function Home() {
       <BestSellerSection />
       <BannerSection />
       <SubscribeSection />
-      <div onClick={handleChange}></div>
-      <div className="text-colorful h-screen">dsadasdasds</div>
-      <div className="text-colorful">dsadasdasds</div>
-      <div className="text-colorful">dsadasdasds</div>
-      <div className="text-colorful">dsadasdasds</div>
-      <div className="text-colorful">dsadasdasds</div>
-      <div className="text-colorful">dsadasdasds</div>
     </main>
   );
 }

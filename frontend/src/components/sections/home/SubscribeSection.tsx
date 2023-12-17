@@ -23,8 +23,8 @@ export const SubscribeSection: React.FC = () => {
       <div className={`basis-5/12 flex items-center justify-center`}>
         <Input
           label={{
-            labelContent: "Enter your email...",
-            htmlfor: "subscribeEmail",
+            children: <>"Enter your email..."</>,
+            htmlFor: "subscribeEmail",
           }}
           input={{
             type: "subscribeEmail",
@@ -33,8 +33,8 @@ export const SubscribeSection: React.FC = () => {
             placeholder: "Enter your email...",
             required: true,
             value: emailValue,
-            handleChange: handleEmailChange,
           }}
+          handleChange={handleEmailChange}
         >
           <Button
             type={"submit"}
