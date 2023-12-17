@@ -1,13 +1,13 @@
-import { ReactNode } from "react";
+import { ReactNode, ComponentProps } from "react";
 
-interface IButton {
+type TButton = {
   type: "button" | "submit" | "reset" | undefined;
   buttonClasses: string;
   handleClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   children?: ReactNode;
-}
+} & ComponentProps<"button">;
 
-export const Button: React.FC<IButton> = ({
+export const Button: React.FC<TButton> = ({
   type,
   buttonClasses,
   children,

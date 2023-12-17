@@ -1,5 +1,11 @@
 "use client";
-import { SliderSection } from "@/components";
+import {
+  AboutUsSection,
+  BannerSection,
+  BestSellerSection,
+  SliderSection,
+  SubscribeSection,
+} from "@/components";
 import { useState } from "react";
 
 export default function Home() {
@@ -21,11 +27,13 @@ export default function Home() {
 
   return (
     <main className="flex flex-col items-center justify-between mt-[4rem]">
-      <>
-        <SliderSection />
-      </>
+      <SliderSection />
+      <AboutUsSection />
+      <BestSellerSection />
+      <BannerSection />
+      <SubscribeSection />
       <div onClick={handleChange}></div>
-      <div className="text-colorful">dsadasdasds</div>
+      <div className="text-colorful h-screen">dsadasdasds</div>
       <div className="text-colorful">dsadasdasds</div>
       <div className="text-colorful">dsadasdasds</div>
       <div className="text-colorful">dsadasdasds</div>

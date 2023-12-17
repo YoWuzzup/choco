@@ -80,16 +80,23 @@ const config: Config = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       keyframes: {
-        dropdown: {
-          "0%": { transform: "rotate(0.0deg)" },
-          "30%": { transform: "rotate(14deg)" },
-          "50%": { transform: "rotate(10.0deg)" },
-          "70%": { transform: "rotate(0.0deg)" },
-          "100%": { transform: "rotate(0.0deg)" },
+        fadeInDown: {
+          "0%": { opacity: "0", transform: "translate3d(0,-100%,0)" },
+          "100%": { opacity: "1", transform: "translateZ(0)" },
+        },
+        fadeInLeft: {
+          "0%": { opacity: "0", transform: "translate3d(-100%,0,0)" },
+          "100%": { opacity: "1", transform: "translateZ(0)" },
+        },
+        fadeInRight: {
+          "0%": { opacity: "0", transform: "translate3d(100%,0,0)" },
+          "100%": { opacity: "1", transform: "translateZ(0)" },
         },
       },
       animation: {
-        dropdown: "dropdown 2s linear infinite",
+        fadeInDown: "fadeInDown 1s linear",
+        fadeInLeft: "fadeInLeft 1s linear",
+        fadeInRight: "fadeInRight 1s linear",
       },
     },
   },
