@@ -3,7 +3,7 @@ import { ReactNode, ComponentProps } from "react";
 type TButton = {
   type: "button" | "submit" | "reset" | undefined;
   buttonClasses: string;
-  handleClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  handleClick: (e: any) => void;
   children?: ReactNode;
 } & ComponentProps<"button">;
 

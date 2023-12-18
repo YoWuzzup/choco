@@ -17,3 +17,4 @@ export { Button } from "./common/Button";
 export { Slider } from "./common/Slider";
 export { Product } from "./common/Product";
 export { Input } from "./common/Input";
+export { AuthOverlay } from "./common/AuthOverlay";

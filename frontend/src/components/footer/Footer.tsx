@@ -121,7 +121,8 @@ export default function Footer(): ReactNode {
       <div className="flex flex-col items-center py-5 sm:w-1/3 capitalize">
         <h4
           className={`font-bold text-primary relative mb-8 
-          after:bottom-0 after:left-0 after:absolute after:content-[''] after:w-10 after:border-b`}
+          after:bottom-0 after:left-0 after:absolute after:content-[''] after:w-10 after:border-b
+          after:translate-y-4`}
         >
           {t(`footer.customer.header`)}
         </h4>
@@ -147,7 +148,8 @@ export default function Footer(): ReactNode {
       >
         <h4
           className={`font-bold text-primary relative mb-8 
-          after:bottom-0 after:left-0 after:absolute after:content-[''] after:w-10 after:border-b`}
+          after:bottom-0 after:left-0 after:absolute after:content-[''] after:w-10 after:border-b
+          after:translate-y-4`}
         >
           {t(`footer.shop.header`)}
         </h4>
@@ -170,7 +172,8 @@ export default function Footer(): ReactNode {
       <div className="flex flex-col items-center py-5 sm:w-1/3 capitalize">
         <h4
           className={`font-bold text-primary relative mb-8 
-          after:bottom-0 after:left-0 after:absolute after:content-[''] after:w-10 after:border-b`}
+          after:bottom-0 after:left-0 after:absolute after:content-[''] after:w-10 after:border-b
+          after:translate-y-4`}
         >
           {t(`footer.company.header`)}
         </h4>

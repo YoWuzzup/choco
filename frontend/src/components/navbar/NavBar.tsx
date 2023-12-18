@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { ReactNode, useState } from "react";
 
-import { Button } from "..";
+import { AuthOverlay, Button } from "..";
 import { Notification, ClosedMenu, OpenMenu } from "../../../public/svgs/index";
 
 const links = [
@@ -58,7 +58,7 @@ export default function NavBar(): ReactNode {
   const t = useTranslations("");
 
   return (
-    <nav className={`bg-primary w-full fixed z-50`}>
+    <nav className={`bg-primary w-full fixed z-20`}>
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
           {/* Mobile menu button with icons*/}
@@ -195,6 +195,8 @@ export default function NavBar(): ReactNode {
           )}
         </div>
       </div>
+
+      <AuthOverlay isShown={true} />
     </nav>
   );
 }
