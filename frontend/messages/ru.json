@@ -5,12 +5,38 @@
     "about us": "о нас"
   },
   "notifications": {
-    "notifications": "просмотреть уведомления"
+    "notifications": "просмотр уведомлений"
   },
   "user menu": {
-    "open menu": "открыть меню",
+    "open menu": "oткрыть меню пользователя",
     "my profile": "мой профиль",
     "settings": "настройки",
     "sign out": "выйти"
+  },
+  "footer": {
+    "customer": {
+      "header": "уход за клиентами",
+      "pagination": "пагинация",
+      "terms & conditions": "условия и положения",
+      "contact": "контакт",
+      "accessories": "аксессуары",
+      "term of use": "условия использования"
+    },
+    "shop": {
+      "header": "быстрый магазин",
+      "about us": "о нас",
+      "privacy policy": "политика конфиденциальности",
+      "terms & conditions": "условия и положения",
+      "products return": "возврат товаров",
+      "wholesale policy": "оптовая политика"
+    },
+    "company": {
+      "header": "компания",
+      "help center": "центр помощи",
+      "address store": "адрес магазина",
+      "privacy policy": "политика конфиденциальности",
+      "receivers & amplifiers": "приемники и усилители",
+      "chocoostore": "chocostore"
+    }
   }
 }

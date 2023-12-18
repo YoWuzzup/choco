@@ -1,11 +1,8 @@
-"use client";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { ReactNode, useState } from "react";
+import { ReactNode } from "react";
 
-import { Button } from "..";
 import InstagramIcon from "@mui/icons-material/Instagram";
-import { Notification, ClosedMenu, OpenMenu } from "../../../public/svgs/index";
 
 const customerLinks = [
   {
@@ -94,9 +91,9 @@ export default function Footer(): ReactNode {
 
   return (
     <footer
-      className={`w-full bg-primary text-primary mx-auto px-2 sm:px-6 lg:px-8
-                flex flex-col sm:flex-row flex-wrap justify-center
-      `}
+      className={`w-full bg-primary text-primary mx-auto mb-10 px-2 sm:px-6 lg:px-8
+                flex flex-col sm:flex-row flex-wrap justify-center 
+                border-b border-[#ddd] border-solid`}
     >
       {/* logo block */}
       <div
@@ -121,14 +118,14 @@ export default function Footer(): ReactNode {
       </div>
 
       {/* customer links */}
-      <div className="flex flex-col items-center py-5 sm:w-1/4">
+      <div className="flex flex-col items-center py-5 sm:w-1/3 capitalize">
         <h4
           className={`font-bold text-primary relative mb-8 
           after:bottom-0 after:left-0 after:absolute after:content-[''] after:w-10 after:border-b`}
         >
-          Customer Care
+          {t(`footer.customer.header`)}
         </h4>
-        <div className="capitalize flex flex-col items-center text-primary text-sm leading-8">
+        <div className="flex flex-col items-center text-primary text-sm leading-8 text-center">
           {customerLinks.map((l, index) => {
             return (
               <Link
@@ -136,7 +133,7 @@ export default function Footer(): ReactNode {
                 key={`${l.name}_${index}`}
                 className="transition-all duration-300 hover:text-colorful"
               >
-                {l.name}
+                {t(`footer.customer.${l.name}`)}
               </Link>
             );
           })}
@@ -144,14 +141,17 @@ export default function Footer(): ReactNode {
       </div>
 
       {/* shop links */}
-      <div className="flex flex-col items-center py-5 sm:w-1/4">
+      <div
+        className={`flex flex-col items-center py-5 sm:w-1/3 capitalize
+                  sm:border-l sm:border-r sm:border-solid sm:border-[#ddd]`}
+      >
         <h4
           className={`font-bold text-primary relative mb-8 
           after:bottom-0 after:left-0 after:absolute after:content-[''] after:w-10 after:border-b`}
         >
-          Customer Care
+          {t(`footer.shop.header`)}
         </h4>
-        <div className="capitalize flex flex-col items-center text-primary text-sm leading-8">
+        <div className="capitalize flex flex-col items-center text-primary text-sm leading-8 text-center">
           {shopLinks.map((l, index) => {
             return (
               <Link
@@ -159,7 +159,7 @@ export default function Footer(): ReactNode {
                 key={`${l.name}_${index}`}
                 className="transition-all duration-300 hover:text-colorful"
               >
-                {l.name}
+                {t(`footer.shop.${l.name}`)}
               </Link>
             );
           })}
@@ -167,14 +167,14 @@ export default function Footer(): ReactNode {
       </div>
 
       {/* company links */}
-      <div className="flex flex-col items-center py-5 sm:w-1/4">
+      <div className="flex flex-col items-center py-5 sm:w-1/3 capitalize">
         <h4
           className={`font-bold text-primary relative mb-8 
           after:bottom-0 after:left-0 after:absolute after:content-[''] after:w-10 after:border-b`}
         >
-          Customer Care
+          {t(`footer.company.header`)}
         </h4>
-        <div className="capitalize flex flex-col items-center text-primary text-sm leading-8">
+        <div className="capitalize flex flex-col items-center text-primary text-sm leading-8 text-center">
           {companyLinks.map((l, index) => {
             return (
               <Link
@@ -182,7 +182,7 @@ export default function Footer(): ReactNode {
                 key={`${l.name}_${index}`}
                 className="transition-all duration-300 hover:text-colorful"
               >
-                {l.name}
+                {t(`footer.company.${l.name}`)}
               </Link>
             );
           })}

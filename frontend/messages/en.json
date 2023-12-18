@@ -8,9 +8,35 @@
     "notifications": "view notifications"
   },
   "user menu": {
-    "open menu": "Open user menu",
+    "open menu": "open user menu",
     "my profile": "my profile",
     "settings": "settings",
     "sign out": "sign out"
+  },
+  "footer": {
+    "customer": {
+      "header": "customer care",
+      "pagination": "pagination",
+      "terms & conditions": "terms & conditions",
+      "contact": "contact",
+      "accessories": "accessories",
+      "term of use": "term of use"
+    },
+    "shop": {
+      "header": "quick Shop",
+      "about us": "about us",
+      "privacy policy": "privacy policy",
+      "terms & conditions": "terms & conditions",
+      "products return": "products return",
+      "wholesale policy": "wholesale policy"
+    },
+    "company": {
+      "header": "company",
+      "help center": "help center",
+      "address store": "address store",
+      "privacy policy": "privacy policy",
+      "receivers & amplifiers": "receivers & amplifiers",
+      "chocoostore": "chocostore"
+    }
   }
 }

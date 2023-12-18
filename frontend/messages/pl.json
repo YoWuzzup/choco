@@ -1,7 +1,42 @@
 {
   "links": {
-    "home": "pl",
-    "shop": "pl",
-    "about us": "pl pl"
+    "home": "strona główna",
+    "shop": "sklep",
+    "about us": "o nas"
+  },
+  "notifications": {
+    "notifications": "pokaż powiadomienia"
+  },
+  "user menu": {
+    "open menu": "otwórz menu użytkownika",
+    "my profile": "mój profil",
+    "settings": "ustawienia",
+    "sign out": "wyloguj się"
+  },
+  "footer": {
+    "customer": {
+      "header": "opieka nad klientem",
+      "pagination": "paginacja",
+      "terms & conditions": "warunki",
+      "contact": "kontakt",
+      "accessories": "akcesoria",
+      "term of use": "warunki korzystania"
+    },
+    "shop": {
+      "header": "szybki sklep",
+      "about us": "o nas",
+      "privacy policy": "polityka prywatności",
+      "terms & conditions": "warunki",
+      "products return": "zwroty produktów",
+      "wholesale policy": "polityka hurtowa"
+    },
+    "company": {
+      "header": "firma",
+      "help center": "centrum pomocy",
+      "address store": "adres sklepu",
+      "privacy policy": "polityka prywatności",
+      "receivers & amplifiers": "odbiorniki i wzmacniacze",
+      "chocoostore": "chocoostore"
+    }
   }
 }
