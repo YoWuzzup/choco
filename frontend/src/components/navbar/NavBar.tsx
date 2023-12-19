@@ -4,7 +4,12 @@ import { useTranslations } from "next-intl";
 import { ReactNode, useState } from "react";
 
 import { AuthOverlay, Button } from "..";
-import { Notification, ClosedMenu, OpenMenu } from "../../../public/svgs/index";
+import {
+  Notification,
+  ClosedMenu,
+  OpenMenu,
+  AvatarPlaceholder,
+} from "../../../public/svgs/index";
 
 const links = [
   {
@@ -43,6 +48,8 @@ export default function NavBar(): ReactNode {
   const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
   const [profileMenuIsOpen, setProfileMenuIsOpen] = useState<boolean>(false);
   const [showAuthOverlay, setShowAuthOverlay] = useState<boolean>(false);
+  //  TODO
+  const [user, _] = useState<boolean>(false);
 
   const handleMobileMenuClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -102,66 +109,82 @@ export default function NavBar(): ReactNode {
           </div>
 
           {/* Notification and profile buttons */}
-          <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-            <Button
-              type={"button"}
-              buttonClasses={
-                "outline-none focus:outline-none focus-visible:outline-none text-primary"
-              }
-              handleClick={(e) => {
-                console.log("TODO");
-              }}
-            >
-              <span className="sr-only">
-                {t(`notifications.notifications`)}
-              </span>
-              {<Notification className="h-6 w-6" />}
-            </Button>
-
+          <div className="absolute inset-y-0 right-0 flex items-center sm:static sm:inset-auto sm:ml-6 sm:pr-0">
             {/* Profile dropdown */}
-            <div className="relative ml-3">
-              <div className="flex">
-                <span className="sr-only">{t(`user menu.open menu`)}</span>
+            {/* if no use show log in/up form/overlay if user is logged in show use menu */}
+            {!user ? (
+              <div className="relative w-10 h-10 overflow-hidden bg-gray rounded-full dark:bg-gray">
                 <Button
                   type={"button"}
                   buttonClasses={
-                    "outline-none focus:outline-none focus-visible:outline-none"
+                    "w-full h-full outline-none focus:outline-none focus-visible:outline-none"
                   }
-                  handleClick={handleProfileMenuClick}
+                  handleClick={() => setShowAuthOverlay(true)}
                 >
-                  <img
-                    className="h-8 w-8 rounded-full"
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    alt="avatar"
-                  />
+                  <AvatarPlaceholder />
                 </Button>
               </div>
+            ) : (
+              // user menu
+              <div className="ml-3 flex flex-row flex-nowrap gap-3">
+                <Button
+                  type={"button"}
+                  buttonClasses={
+                    "outline-none focus:outline-none focus-visible:outline-none text-primary"
+                  }
+                  handleClick={(e) => {
+                    console.log("TODO");
+                  }}
+                >
+                  <span className="sr-only">
+                    {t(`notifications.notifications`)}
+                  </span>
+                  {<Notification className="h-6 w-6" />}
+                </Button>
 
-              {profileMenuIsOpen ? (
-                <div
-                  className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md 
+                <div className="flex">
+                  <span className="sr-only">{t(`user menu.open menu`)}</span>
+                  <Button
+                    type={"button"}
+                    buttonClasses={
+                      "outline-none focus:outline-none focus-visible:outline-none"
+                    }
+                    handleClick={handleProfileMenuClick}
+                  >
+                    <img
+                      className="h-8 w-8 rounded-full"
+                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                      alt="avatar"
+                    />
+                  </Button>
+                </div>
+
+                {profileMenuIsOpen ? (
+                  <div
+                    className="absolute right-0 top-10 z-10 mt-2 w-48 origin-top-right rounded-md 
                   bg-primary py-1 shadow-lg ring-1 ring-black ring-opacity-5 text-primary
                   focus:outline-none"
-                  role="menu"
-                  aria-orientation="vertical"
-                  aria-labelledby="user-menu-button"
-                  tabIndex={-1}
-                >
-                  {dropdown.map((l, index) => (
-                    <Link
-                      href={l.href}
-                      key={`${l.name}_${index}`}
-                      className="block px-4 py-2 text-sm hover:text-colorful capitalize"
-                      role="menuitem"
-                      tabIndex={-1}
-                      id={`user-menu-item-${index}`}
-                    >
-                      {t(`user menu.${l.name}`)}
-                    </Link>
-                  ))}
-                </div>
-              ) : null}
-            </div>
+                    role="menu"
+                    aria-orientation="vertical"
+                    aria-labelledby="user-menu-button"
+                    tabIndex={-1}
+                  >
+                    {dropdown.map((l, index) => (
+                      <Link
+                        href={l.href}
+                        key={`${l.name}_${index}`}
+                        className="block px-4 py-2 text-sm hover:text-colorful capitalize"
+                        role="menuitem"
+                        tabIndex={-1}
+                        id={`user-menu-item-${index}`}
+                      >
+                        {t(`user menu.${l.name}`)}
+                      </Link>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+            )}
           </div>
         </div>
       </div>
