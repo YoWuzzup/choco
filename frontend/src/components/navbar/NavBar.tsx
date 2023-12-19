@@ -42,6 +42,7 @@ const dropdown = [
 export default function NavBar(): ReactNode {
   const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
   const [profileMenuIsOpen, setProfileMenuIsOpen] = useState<boolean>(false);
+  const [showAuthOverlay, setShowAuthOverlay] = useState<boolean>(false);
 
   const handleMobileMenuClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -196,7 +197,9 @@ export default function NavBar(): ReactNode {
         </div>
       </div>
 
-      <AuthOverlay isShown={true} />
+      {showAuthOverlay ? (
+        <AuthOverlay setShowAuthOverlay={setShowAuthOverlay} />
+      ) : null}
     </nav>
   );
 }

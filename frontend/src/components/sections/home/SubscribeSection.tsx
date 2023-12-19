@@ -13,15 +13,17 @@ export const SubscribeSection: React.FC = () => {
   };
 
   return (
-    <section className="w-full text-primary bg-[#f2f2f2] flex flex-col justify-around md:flex-row mx-auto px-2 py-28 lg:px-8">
+    <section className="w-full text-primary bg-[#f2f2f2] flex flex-col justify-between md:flex-row mx-auto px-10 py-28 lg:px-8">
       <div className={`pb-4 md:pb-0 flex flex-col items-center sm:items-start`}>
         <h3 className={`text-3xl font-bold`}>GET UPDATE</h3>
         <p className="text-paraPrimary text-center sm:text-left">
           Subscribe our newsletter and get discount 30% off
         </p>
       </div>
+
       <div className={`basis-5/12 flex items-center justify-center`}>
         <Input
+          classNameContainer="relative w-full"
           label={{
             children: <>"Enter your email..."</>,
             htmlFor: "subscribeEmail",

@@ -2,7 +2,7 @@ import { Button } from "@/components";
 
 export const BannerSection: React.FC = () => {
   return (
-    <section className="w-full text-secondary bg-primary flex flex-col md:flex-row mx-auto px-2 lg:px-8">
+    <section className="w-full text-secondary bg-primary flex flex-col md:flex-row mx-auto">
       <div
         className={`basis-full bg-colorful px-8 py-10 flex flex-col justify-center items-start
         md:basis-4/6`}
