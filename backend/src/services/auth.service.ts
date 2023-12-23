@@ -17,9 +17,9 @@ import { LoginDto } from 'src/dtos/authData.dto';
 @Injectable()
 export class AuthService {
   constructor(
+    private configService: ConfigService,
     private jwtService: JwtService,
     private userService: UserService,
-    private configService: ConfigService,
   ) {}
 
   async validateUser(email: string, password: string): Promise<any | null> {
@@ -117,11 +117,12 @@ export class AuthService {
     payload: any,
     type: 'refresh' | 'access',
   ): Promise<string> {
-    return this.jwtService.signAsync(payload, {
+    return await this.jwtService.signAsync(payload, {
       expiresIn:
         type === 'refresh'
           ? this.configService.get('JWT_REFRESH_EXPIRESIN') / 1000
           : this.configService.get('JWT_EXPIRESIN'),
+      secret: this.configService.get('JWT_SECRET'),
     });
   }
 

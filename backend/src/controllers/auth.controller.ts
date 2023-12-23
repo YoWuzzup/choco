@@ -29,12 +29,15 @@ export class AuthController {
   ) {}
 
   @Post('register')
-  async registerUser(@Body() regData: RegistrationDto) {
+  async registerUser(
+    @Body() regData: RegistrationDto,
+    @Res({ passthrough: true }) response: Response,
+  ) {
     if (!regData.email || !regData.password || !regData.confirmPassword) {
       throw new BadRequestException('Missing required properties');
     }
 
-    return await this.userService.registerUser(regData);
+    return await this.userService.registerUser(regData, response);
   }
 
   @UseGuards(LocalAuthGuard)

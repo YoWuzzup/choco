@@ -23,7 +23,7 @@ export const SubscribeSection: React.FC = () => {
 
       <div className={`basis-5/12 flex items-center justify-center`}>
         <Input
-          classNameContainer="relative w-full"
+          classNameContainer="relative w-full h-12"
           label={{
             children: <>"Enter your email..."</>,
             htmlFor: "subscribeEmail",

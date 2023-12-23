@@ -2,6 +2,8 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Button, Input } from "..";
+import { POSTLoginData, POSTRegister } from "@/api/authentication";
+import { useReduxAndLocalStorage } from "@/hooks/useReduxAndLocalStorage ";
 
 type TAuthOverlay = {
   setShowAuthOverlay: (e: any) => void;
@@ -50,6 +52,7 @@ const Login: React.FC<{
     }
 
     // TODO: login logic
+    POSTLoginData(loginData);
   };
 
   return (
@@ -169,7 +172,7 @@ const Register: React.FC<{
   const [passwordIsValid, setPasswordIsValid] = useState<boolean>(true);
   const [confirmPasswordIsValid, setConfirmPasswordIsValid] =
     useState<boolean>(true);
-  const [registerloginData, setRegisterLoginData] = useState<{
+  const [registerData, setRegisterData] = useState<{
     email: string;
     password: string;
     confirmPassword: string;
@@ -181,20 +184,20 @@ const Register: React.FC<{
     setEmailIsValid(true);
     setPasswordIsValid(true);
     setConfirmPasswordIsValid(true);
-    setRegisterLoginData((prev) => ({
+    setRegisterData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
   };
 
-  const handleRegisterSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleRegisterSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     // Check if email is valid
     if (
-      registerloginData.email.trim() === "" ||
-      !emailRegex.test(registerloginData.email)
+      registerData.email.trim() === "" ||
+      !emailRegex.test(registerData.email)
     ) {
       setEmailIsValid(false);
       return;
@@ -202,8 +205,8 @@ const Register: React.FC<{
 
     // Check if passwords are valid
     if (
-      registerloginData.password.trim() === "" ||
-      registerloginData.password !== registerloginData.confirmPassword
+      registerData.password.trim() === "" ||
+      registerData.password !== registerData.confirmPassword
     ) {
       setPasswordIsValid(false);
       setConfirmPasswordIsValid(false);
@@ -211,7 +214,10 @@ const Register: React.FC<{
     }
 
     // TODO: register logic
-    console.log("asd");
+    const res = await POSTRegister(registerData)
+      .then((res) => console.log("caught res:", res))
+      .catch((r) => console.log("caught error:", r));
+    console.log("res:", res);
   };
 
   return (

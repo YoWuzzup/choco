@@ -1,11 +1,13 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+
+import { UserService } from 'src/services/user.service';
+import { AuthService } from 'src/services/auth.service';
 
 import { UsersSchema } from 'src/models/users.model';
+
 import { UserController } from 'src/controllers/user.controller';
-import { UserService } from 'src/services/user.service';
-import { AuthModule } from './auth.module';
 
 import { AccessTokenStrategy } from 'src/guards/strategies/jwt-strategy';
 import { RefreshTokenStrategy } from 'src/guards/strategies/refreshToken.strategy';
@@ -13,10 +15,15 @@ import { RefreshTokenStrategy } from 'src/guards/strategies/refreshToken.strateg
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'Users', schema: UsersSchema }]),
-    PassportModule.register({ defaultStrategy: 'jwt' }),
-    AuthModule,
+    JwtModule,
   ],
   controllers: [UserController],
-  providers: [UserService, AccessTokenStrategy, RefreshTokenStrategy],
+  providers: [
+    UserService,
+    AuthService,
+    AccessTokenStrategy,
+    RefreshTokenStrategy,
+  ],
+  exports: [UserService],
 })
 export class UserModule {}

@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { OrderController } from 'src/controllers/order.controller';
 
@@ -19,7 +20,7 @@ import { UserService } from 'src/services/user.service';
     ]),
   ],
   controllers: [OrderController],
-  providers: [OrderService, UserService, ProductService],
-  exports: [],
+  providers: [OrderService, UserService, ProductService, JwtService],
+  exports: [OrderService],
 })
 export class OrderModule {}
