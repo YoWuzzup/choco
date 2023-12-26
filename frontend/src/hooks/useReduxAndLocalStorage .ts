@@ -4,13 +4,12 @@ import useLocalStorage from "./useLocalStorage";
 export const useReduxAndLocalStorage = <T>(key: string) => {
   const dispatch = useAppDispatch();
 
-  // check if there's anything in local storage if nothing we get null
   const [storedValue, setDataToLocalStorage] = useLocalStorage<T | null>(
     key,
     null
   );
 
-  const saveData = (data: any, action: any) => {
+  const saveData = (data: T, action: (data: any) => any) => {
     try {
       // save to redux
       dispatch(action(data));
@@ -22,5 +21,5 @@ export const useReduxAndLocalStorage = <T>(key: string) => {
     }
   };
 
-  return [storedValue, saveData];
+  return [storedValue, saveData] as const;
 };

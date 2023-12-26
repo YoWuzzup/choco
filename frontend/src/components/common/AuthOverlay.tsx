@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Button, Input } from "..";
 import { POSTLoginData, POSTRegister } from "@/api/authentication";
 import { useReduxAndLocalStorage } from "@/hooks/useReduxAndLocalStorage ";
+import { saveAccessTokenToRedux } from "@/redux/slices/accessTokenSlice";
+import { userRegister } from "@/redux/slices/userSlice";
 
 type TAuthOverlay = {
   setShowAuthOverlay: (e: any) => void;
@@ -168,6 +170,10 @@ const Register: React.FC<{
     page: "register" | "login" | "forgot"
   ) => void;
 }> = ({ handlePageChange }) => {
+  const [storedAccessToken, saveAccessToken] =
+    useReduxAndLocalStorage("access_token");
+  const [storedUser, saveUser] = useReduxAndLocalStorage("user");
+  const [errorOnRegister, setErrorOnRegister] = useState<false | Error>(false);
   const [emailIsValid, setEmailIsValid] = useState<boolean>(true);
   const [passwordIsValid, setPasswordIsValid] = useState<boolean>(true);
   const [confirmPasswordIsValid, setConfirmPasswordIsValid] =
@@ -213,11 +219,16 @@ const Register: React.FC<{
       return;
     }
 
-    // TODO: register logic
-    const res = await POSTRegister(registerData)
-      .then((res) => console.log("caught res:", res))
-      .catch((r) => console.log("caught error:", r));
-    console.log("res:", res);
+    // if everything is ok send the request to register a new user
+    try {
+      const res = await POSTRegister(registerData);
+      const { access_token, userData } = res;
+
+      saveAccessToken(access_token, saveAccessTokenToRedux);
+      saveUser(userData, userRegister);
+    } catch (error: any) {
+      setErrorOnRegister(error.response.data as Error);
+    }
   };
 
   return (
@@ -330,6 +341,15 @@ const Register: React.FC<{
             }}
           />
         </div>
+        {errorOnRegister ? (
+          <div
+            className={`block w-full py-1.5 px-2 text-red shadow-sm border border-solid
+                  border-red`}
+          >
+            {errorOnRegister.message ||
+              "Something went wrong, try a bit later..."}
+          </div>
+        ) : null}
 
         <div>
           <Button
@@ -344,7 +364,7 @@ const Register: React.FC<{
 
           <Button
             type={"button"}
-            buttonClasses={`flex w-full h-14 justify-center items-center bg-[#F2F2F2]
+            buttonClasses={`flex flex-col sm:flex-row w-full sm:h-14 justify-center items-center bg-[#F2F2F2]
                 text-sm font-semibold leading-6 text-primary shadow-sm duration-300 
                 outline-none focus:outline-none focus-visible:outline-none`}
             handleClick={(e: React.MouseEvent<HTMLButtonElement>) =>
@@ -352,7 +372,7 @@ const Register: React.FC<{
             }
           >
             Already have an account?{" "}
-            <span className="ml-4 hover:text-colorful">Login now</span>
+            <span className="sm:ml-4 hover:text-colorful">Login now</span>
           </Button>
         </div>
       </form>
