@@ -10,6 +10,7 @@ import {
   OpenMenu,
   AvatarPlaceholder,
 } from "../../../public/svgs/index";
+import { useAppSelector } from "@/hooks/redux";
 
 const links = [
   {
@@ -48,8 +49,7 @@ export default function NavBar(): ReactNode {
   const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
   const [profileMenuIsOpen, setProfileMenuIsOpen] = useState<boolean>(false);
   const [showAuthOverlay, setShowAuthOverlay] = useState<boolean>(false);
-  //  TODO
-  const [user, _] = useState<boolean>(false);
+  const user = useAppSelector((st) => st.user);
 
   const handleMobileMenuClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -142,20 +142,24 @@ export default function NavBar(): ReactNode {
                   {<Notification className="h-6 w-6" />}
                 </Button>
 
-                <div className="flex">
+                <div className="relative w-10 h-10 overflow-hidden bg-gray rounded-full dark:bg-gray">
                   <span className="sr-only">{t(`user menu.open menu`)}</span>
                   <Button
                     type={"button"}
                     buttonClasses={
-                      "outline-none focus:outline-none focus-visible:outline-none"
+                      "w-full h-full outline-none focus:outline-none focus-visible:outline-none"
                     }
                     handleClick={handleProfileMenuClick}
                   >
-                    <img
-                      className="h-8 w-8 rounded-full"
-                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                      alt="avatar"
-                    />
+                    {user.avatar ? (
+                      <img
+                        className="h-8 w-8 rounded-full"
+                        src={`${user.avatar}`}
+                        alt="avatar"
+                      />
+                    ) : (
+                      <AvatarPlaceholder className="h-full w-full rounded-full" />
+                    )}
                   </Button>
                 </div>
 

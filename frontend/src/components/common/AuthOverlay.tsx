@@ -5,7 +5,7 @@ import { Button, Input } from "..";
 import { POSTLoginData, POSTRegister } from "@/api/authentication";
 import { useReduxAndLocalStorage } from "@/hooks/useReduxAndLocalStorage ";
 import { saveAccessTokenToRedux } from "@/redux/slices/accessTokenSlice";
-import { userRegister } from "@/redux/slices/userSlice";
+import { userLogin, userRegister } from "@/redux/slices/userSlice";
 
 type TAuthOverlay = {
   setShowAuthOverlay: (e: any) => void;
@@ -16,7 +16,12 @@ const Login: React.FC<{
     e: React.MouseEvent<HTMLButtonElement>,
     page: "register" | "login" | "forgot"
   ) => void;
-}> = ({ handlePageChange }) => {
+  setShowAuthOverlay: (arg0: boolean) => void;
+}> = ({ handlePageChange, setShowAuthOverlay }) => {
+  const [storedAccessToken, saveAccessToken] =
+    useReduxAndLocalStorage("access_token");
+  const [storedUser, saveUser] = useReduxAndLocalStorage("user");
+  const [errorOnLogin, setErrorOnLogin] = useState<false | Error>(false);
   const [emailIsValid, setEmailValid] = useState<boolean>(true);
   const [passwordIsValid, setPasswordValid] = useState<boolean>(true);
   const [loginData, setLoginData] = useState<{
@@ -34,9 +39,11 @@ const Login: React.FC<{
     }));
   };
 
-  const handleLoginSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLoginSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     e.stopPropagation();
+
+    setErrorOnLogin(false);
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     // Check if email is valid
@@ -53,8 +60,19 @@ const Login: React.FC<{
       return;
     }
 
-    // TODO: login logic
-    POSTLoginData(loginData);
+    // if everything is ok send the request to login
+    try {
+      const res = await POSTLoginData(loginData);
+      const { access_token, userData } = res;
+
+      saveAccessToken(access_token, saveAccessTokenToRedux);
+      saveUser(userData, userLogin);
+
+      // close menu on success
+      setShowAuthOverlay(false);
+    } catch (error: any) {
+      setErrorOnLogin(error.response.data as Error);
+    }
   };
 
   return (
@@ -136,6 +154,15 @@ const Login: React.FC<{
             }}
           />
         </div>
+        {errorOnLogin ? (
+          <div
+            className={`block w-full py-1.5 px-2 text-red shadow-sm border border-solid
+                  border-red`}
+          >
+            {(errorOnLogin && "Wrong credentials") ||
+              "Something went wrong, try a bit later..."}
+          </div>
+        ) : null}
 
         <Button
           type={"submit"}
@@ -169,7 +196,8 @@ const Register: React.FC<{
     e: React.MouseEvent<HTMLButtonElement>,
     page: "register" | "login" | "forgot"
   ) => void;
-}> = ({ handlePageChange }) => {
+  setShowAuthOverlay: (arg0: boolean) => void;
+}> = ({ handlePageChange, setShowAuthOverlay }) => {
   const [storedAccessToken, saveAccessToken] =
     useReduxAndLocalStorage("access_token");
   const [storedUser, saveUser] = useReduxAndLocalStorage("user");
@@ -199,6 +227,7 @@ const Register: React.FC<{
   const handleRegisterSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    setErrorOnRegister(false);
 
     // Check if email is valid
     if (
@@ -226,6 +255,9 @@ const Register: React.FC<{
 
       saveAccessToken(access_token, saveAccessTokenToRedux);
       saveUser(userData, userRegister);
+
+      // close menu on success
+      setShowAuthOverlay(false);
     } catch (error: any) {
       setErrorOnRegister(error.response.data as Error);
     }
@@ -336,8 +368,7 @@ const Register: React.FC<{
                 passwordIsValid || confirmPasswordIsValid
                   ? "border-gray"
                   : "border-red"
-              }
-                `,
+              }`,
             }}
           />
         </div>
@@ -513,9 +544,15 @@ export const AuthOverlay: React.FC<TAuthOverlay> = ({ setShowAuthOverlay }) => {
         className="flex min-h-1/2 w-full sm:w-7/12 md:w-4/12 flex-col justify-center items-center px-6 pt-12 pb-14 lg:px-8 bg-primary"
       >
         {page === "login" ? (
-          <Login handlePageChange={handlePageChange} />
+          <Login
+            handlePageChange={handlePageChange}
+            setShowAuthOverlay={setShowAuthOverlay}
+          />
         ) : page === "register" ? (
-          <Register handlePageChange={handlePageChange} />
+          <Register
+            handlePageChange={handlePageChange}
+            setShowAuthOverlay={setShowAuthOverlay}
+          />
         ) : page === "forgot" ? (
           <Forgot handlePageChange={handlePageChange} />
         ) : null}
