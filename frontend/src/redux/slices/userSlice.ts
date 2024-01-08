@@ -12,7 +12,7 @@ const userSlice = createSlice({
     userRegister(state, action) {
       return { ...action.payload };
     },
-    userLogout(state, action) {
+    userLogout() {
       return null;
     },
   },

@@ -1,8 +1,10 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
+type SliceState = null | string;
+
 const accessTokenSlice = createSlice({
   name: "access_token",
-  initialState: "",
+  initialState: null as SliceState,
   reducers: {
     saveAccessTokenToRedux(state, action: PayloadAction<string>) {
       state = action.payload;
@@ -10,7 +12,7 @@ const accessTokenSlice = createSlice({
       return state;
     },
     removeAccessTokenFromRedux(state) {
-      return (state = "");
+      return null;
     },
   },
 });

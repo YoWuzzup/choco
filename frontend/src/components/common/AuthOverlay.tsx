@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { Button, Input } from "..";
 import { POSTLoginData, POSTRegister } from "@/api/authentication";
 import { useReduxAndLocalStorage } from "@/hooks/useReduxAndLocalStorage ";
@@ -515,7 +515,9 @@ const Forgot: React.FC<{
   );
 };
 
-export const AuthOverlay: React.FC<TAuthOverlay> = ({ setShowAuthOverlay }) => {
+export default function AuthOverlay({
+  setShowAuthOverlay,
+}: TAuthOverlay): ReactNode {
   const [page, setPage] = useState<"register" | "login" | "forgot">("login");
 
   const handlePageChange = (
@@ -559,4 +561,4 @@ export const AuthOverlay: React.FC<TAuthOverlay> = ({ setShowAuthOverlay }) => {
       </div>
     </div>
   );
-};
+}

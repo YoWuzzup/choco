@@ -3,7 +3,6 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { ReactNode, useState } from "react";
 
-import { AuthOverlay, Button } from "..";
 import {
   Notification,
   ClosedMenu,
@@ -11,6 +10,7 @@ import {
   AvatarPlaceholder,
 } from "../../../public/svgs/index";
 import { useAppSelector } from "@/hooks/redux";
+import { AuthOverlay, Button } from "..";
 
 const links = [
   {
@@ -41,7 +41,7 @@ const dropdown = [
   },
   {
     name: "sign out",
-    href: "",
+    href: "auth/signout",
   },
 ];
 
@@ -111,7 +111,7 @@ export default function NavBar(): ReactNode {
           {/* Notification and profile buttons */}
           <div className="absolute inset-y-0 right-0 flex items-center sm:static sm:inset-auto sm:ml-6 sm:pr-0">
             {/* Profile dropdown */}
-            {/* if no use show log in/up form/overlay if user is logged in show use menu */}
+            {/* if no user show log in/up form/overlay if user is logged in show use menu */}
             {!user ? (
               <div className="relative w-10 h-10 overflow-hidden bg-gray rounded-full dark:bg-gray">
                 <Button
@@ -224,9 +224,9 @@ export default function NavBar(): ReactNode {
         </div>
       </div>
 
-      {showAuthOverlay ? (
+      {showAuthOverlay && (
         <AuthOverlay setShowAuthOverlay={setShowAuthOverlay} />
-      ) : null}
+      )}
     </nav>
   );
 }

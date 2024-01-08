@@ -34,7 +34,7 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang={params.locale} id="h">
+    <html lang={params.locale}>
       <ReduxStoreProvider>
         <body className={inter.className}>
           <NextIntlProvider

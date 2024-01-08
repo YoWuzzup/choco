@@ -11,11 +11,11 @@ export const useReduxAndLocalStorage = <T>(key: string) => {
 
   const saveData = (data: T, action: (data: any) => any) => {
     try {
+      // Save data to local storage
+      setDataToLocalStorage(data);
+
       // save to redux
       dispatch(action(data));
-
-      // save to local storage
-      setDataToLocalStorage(data);
     } catch (error) {
       console.error("Error saving to Redux and/or local storage:", error);
     }
