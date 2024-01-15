@@ -1,9 +1,13 @@
-// sections
+// home sections
 export { SliderSection } from "./sections/home/SliderSection";
 export { AboutUsSection } from "./sections/home/AboutUsSection";
 export { BestSellerSection } from "./sections/home/BestSellerSection";
 export { BannerSection } from "./sections/home/BannerSection";
 export { SubscribeSection } from "./sections/home/SubscribeSection";
+
+// shop sections
+export { HeaderSection } from "./sections/shop/HeaderSection";
+export { CollectionSection } from "./sections/shop/CollectionSection";
 
 // exporting a client function
 export { default as NavBar } from "./navbar/NavBar";
@@ -17,4 +21,5 @@ export { Button } from "./common/Button";
 export { Slider } from "./common/Slider";
 export { Product } from "./common/Product";
 export { Input } from "./common/Input";
+export { Breadcrumb } from "./common/Breadcrumb";
 export { default as AuthOverlay } from "./common/AuthOverlay";

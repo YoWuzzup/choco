@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { ReactNode, useState } from "react";
+import { ReactNode, useRef, useState } from "react";
 
 import {
   Notification,
@@ -11,11 +11,12 @@ import {
 } from "../../../public/svgs/index";
 import { useAppSelector } from "@/hooks/redux";
 import { AuthOverlay, Button } from "..";
+import { useOnClickOutside } from "usehooks-ts";
 
 const links = [
   {
     name: "home",
-    href: "#",
+    href: "/",
     current: true,
   },
   {
@@ -46,6 +47,7 @@ const dropdown = [
 ];
 
 export default function NavBar(): ReactNode {
+  const profileMenuRef = useRef(null);
   const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
   const [profileMenuIsOpen, setProfileMenuIsOpen] = useState<boolean>(false);
   const [showAuthOverlay, setShowAuthOverlay] = useState<boolean>(false);
@@ -64,6 +66,13 @@ export default function NavBar(): ReactNode {
   };
 
   const t = useTranslations("");
+  useOnClickOutside(
+    profileMenuRef,
+    () => {
+      setProfileMenuIsOpen(false);
+    },
+    "mouseup"
+  );
 
   return (
     <nav className={`bg-primary w-full fixed z-20`}>
@@ -85,7 +94,7 @@ export default function NavBar(): ReactNode {
           {/* Links to other pages and logo img*/}
           <div className="flex flex-1 items-center justify-center sm:items-stretch">
             <div className="flex flex-shrink-0 items-center">
-              <Link href={""}>
+              <Link href={"/"}>
                 <img className="h-8 w-auto" src="/logo.webp" alt="Choco" />
               </Link>
             </div>
@@ -166,12 +175,13 @@ export default function NavBar(): ReactNode {
                 {profileMenuIsOpen ? (
                   <div
                     className="absolute right-0 top-10 z-10 mt-2 w-48 origin-top-right rounded-md 
-                  bg-primary py-1 shadow-lg ring-1 ring-black ring-opacity-5 text-primary
-                  focus:outline-none"
+                      bg-primary py-1 shadow-lg ring-1 ring-black ring-opacity-5 text-primary
+                      focus:outline-none"
                     role="menu"
                     aria-orientation="vertical"
                     aria-labelledby="user-menu-button"
                     tabIndex={-1}
+                    ref={profileMenuRef}
                   >
                     {dropdown.map((l, index) => (
                       <Link

@@ -1,11 +1,12 @@
 "use client";
 import Link from "next/link";
-import { ReactNode, useState } from "react";
+import { ReactNode, useRef, useState } from "react";
 import { Button, Input } from "..";
 import { POSTLoginData, POSTRegister } from "@/api/authentication";
 import { useReduxAndLocalStorage } from "@/hooks/useReduxAndLocalStorage ";
 import { saveAccessTokenToRedux } from "@/redux/slices/accessTokenSlice";
 import { userLogin, userRegister } from "@/redux/slices/userSlice";
+import { useOnClickOutside } from "usehooks-ts";
 
 type TAuthOverlay = {
   setShowAuthOverlay: (e: any) => void;
@@ -518,6 +519,7 @@ const Forgot: React.FC<{
 export default function AuthOverlay({
   setShowAuthOverlay,
 }: TAuthOverlay): ReactNode {
+  const overlayRef = useRef(null);
   const [page, setPage] = useState<"register" | "login" | "forgot">("login");
 
   const handlePageChange = (
@@ -530,20 +532,23 @@ export default function AuthOverlay({
     setPage(page);
   };
 
+  useOnClickOutside(
+    overlayRef,
+    () => {
+      setShowAuthOverlay(false);
+    },
+    "mouseup"
+  );
+
   return (
     <div
       className={`w-full h-full fixed top-0 left-0 overflow-auto bg-[#000c] 
       z-50 flex justify-center items-center`}
-      onClick={(e: any) => {
-        e.preventDefault();
-        e.stopPropagation();
-
-        setShowAuthOverlay(false);
-      }}
     >
       <div
         onClick={(e: any) => e.stopPropagation()}
         className="flex min-h-1/2 w-full sm:w-7/12 md:w-4/12 flex-col justify-center items-center px-6 pt-12 pb-14 lg:px-8 bg-primary"
+        ref={overlayRef}
       >
         {page === "login" ? (
           <Login
