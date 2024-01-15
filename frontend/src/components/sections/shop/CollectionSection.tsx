@@ -1,8 +1,9 @@
 "use client";
 import { Input } from "@/components";
-import { ChangeEvent, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect } from "react";
 
-const categories = [
+const listOfCategories = [
   "Chocolate Bars",
   "Cups & Candy",
   "Handmade Confections",
@@ -13,24 +14,52 @@ const categories = [
 const headerStyles = `w-full font-bold text-lg py-1 pl-2 mb-5 border-l-4 flex flex-row flex-nowrap items-center gap-3 after:content-[''] after:border-b-2 after:border-solid after:border-[#e6e6e6] after:w-full`;
 
 export const CollectionSection: React.FC = () => {
-  const [filterState, setFilterState] = useState<{
-    search: string;
-    price: number;
-  }>({
-    search: "",
-    price: 0,
-  });
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const searchQueryParam = searchParams.get("search");
+  const categoriesQueryParam = searchParams.get("categories");
+  const minpriceQueryParam = searchParams.get("minprice");
+  const maxpriceQueryParam = searchParams.get("maxprice");
+
+  const createQueryString = useCallback(
+    (key: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(key, value);
+
+      return params.toString();
+    },
+    [searchParams]
+  );
 
   const handleFilterChange = (e: any) => {
     e.preventDefault();
 
-    setFilterState((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
+    const name = e.target.id || e.target.name;
 
-    console.log(filterState);
+    router.replace(`${pathname}?${createQueryString(name, e.target.value)}`);
   };
+
+  // TODO: try this func
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    const delay = 500;
+
+    timer = setTimeout(() => {
+      const fetchData = async () => {
+        try {
+          console.log("i feched");
+        } catch (error) {
+          console.log(`something wrong shop/useEffect ${error}`);
+        }
+      };
+      fetchData();
+    }, delay);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [searchParams]);
 
   return (
     <section
@@ -54,8 +83,8 @@ export const CollectionSection: React.FC = () => {
               name: "search",
               id: "search",
               placeholder: "Searching...",
-              value: filterState.search,
-              className: "m-0 p-2 shadow-md",
+              value: searchQueryParam || "",
+              className: "w-full m-0 p-2 shadow-md",
             }}
           />
         </div>
@@ -63,19 +92,21 @@ export const CollectionSection: React.FC = () => {
         {/* categories filter */}
         <div className="flex-col">
           <h3 className={headerStyles}>Categories</h3>
-          <ul className="p-2 shadow-md">
-            {categories.map((c, i) => (
-              <li
-                className="h-8 text-sm hover:text-colorful cursor-pointer duration-300"
-                onClick={handleFilterChange}
-                key={`${c}_${i}`}
-                id={c}
-                data-name={c}
-              >
-                {c}
-              </li>
+          <select
+            value={categoriesQueryParam ?? ""}
+            onChange={handleFilterChange}
+            className="p-2 shadow-md"
+            name="categories"
+          >
+            <option value="" disabled>
+              Select an option
+            </option>
+            {listOfCategories.map((option, index) => (
+              <option key={`${option}_${index}`} value={option}>
+                {option}
+              </option>
             ))}
-          </ul>
+          </select>
         </div>
 
         {/* Price filter */}
@@ -84,13 +115,13 @@ export const CollectionSection: React.FC = () => {
           <Input
             classNameContainer="relative w-2/5 h-12 flex items-center shadow-md"
             handleChange={handleFilterChange}
-            label={{ htmlFor: "minPrice" }}
+            label={{ htmlFor: "minprice" }}
             input={{
               type: "number",
-              name: "minPrice",
-              id: "minPrice",
-              placeholder: "min",
-              value: filterState.price,
+              name: "minprice",
+              id: "minprice",
+              placeholder: "0",
+              value: minpriceQueryParam || "",
               className: "m-0 p-3 w-full",
             }}
           />
@@ -98,13 +129,13 @@ export const CollectionSection: React.FC = () => {
           <Input
             classNameContainer="relative w-2/5 h-12 flex items-center shadow-md"
             handleChange={handleFilterChange}
-            label={{ htmlFor: "maxPrice" }}
+            label={{ htmlFor: "maxprice" }}
             input={{
               type: "number",
-              name: "maxPrice",
-              id: "maxPrice",
-              placeholder: "max",
-              value: filterState.price,
+              name: "maxprice",
+              id: "maxprice",
+              placeholder: "1000",
+              value: maxpriceQueryParam || "",
               className: "m-0 p-3 w-full",
             }}
           />

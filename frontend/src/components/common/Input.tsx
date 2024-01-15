@@ -5,7 +5,7 @@ type TInput = {
   label?: LabelHTMLAttributes<HTMLLabelElement>;
   input?: InputHTMLAttributes<HTMLInputElement>;
   children?: ReactNode;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 export const Input: React.FC<TInput> = ({
