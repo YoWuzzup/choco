@@ -6,4 +6,9 @@ export class productDto {
   description: string;
 }
 
-export class partialProductDto extends PartialType(productDto) {}
+export class partialProductDto extends PartialType(productDto) {
+  search?: string;
+  categories?: string;
+  minprice?: number | string;
+  maxprice?: number | string;
+}

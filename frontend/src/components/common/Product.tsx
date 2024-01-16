@@ -5,6 +5,7 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 
 type TPropduct = { p: any };
 
+// TODO: proper props
 export const Product: React.FC<TPropduct> = (props) => {
   return (
     <div

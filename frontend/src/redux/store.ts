@@ -1,10 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./slices/userSlice";
 import accessTokenReducer from "./slices/accessTokenSlice";
+import productsReducer from "./slices/productsSlice";
 
 export const makeStore = () => {
   return configureStore({
-    reducer: { user: userReducer, access_token: accessTokenReducer },
+    reducer: {
+      user: userReducer,
+      access_token: accessTokenReducer,
+      products: productsReducer,
+    },
   });
 };
 

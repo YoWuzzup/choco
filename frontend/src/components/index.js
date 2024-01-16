@@ -18,6 +18,7 @@ export { default as SlideOver } from "./slide-overs/SlideOver";
 
 // common
 export { Button } from "./common/Button";
+export { Spinner } from "./common/Spinner";
 export { Slider } from "./common/Slider";
 export { Product } from "./common/Product";
 export { Input } from "./common/Input";
