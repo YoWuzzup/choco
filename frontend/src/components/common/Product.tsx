@@ -4,7 +4,6 @@ import { Button } from "@/components";
 
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 
 type TPropduct = {
   img: { src: string; alt: string } | null;
