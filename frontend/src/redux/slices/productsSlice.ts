@@ -2,9 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 
 type singleProduct = {
   name: string;
-  minprice: number;
-  maxprice: number;
+  img: string | null | undefined;
+  price: number | string;
   description: string;
+  _id: string;
 };
 
 type ProductsState = {
@@ -24,8 +25,12 @@ const productsSlice = createSlice({
     addListOfProducts(state, action) {
       return { ...state, listOfProducts: [...action.payload] };
     },
+    removeListOfProducts(state) {
+      return { ...state, listOfProducts: null };
+    },
   },
 });
 
-export const { addListOfProducts } = productsSlice.actions;
+export const { addListOfProducts, removeListOfProducts } =
+  productsSlice.actions;
 export default productsSlice.reducer;

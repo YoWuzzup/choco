@@ -1,10 +1,15 @@
 "use client";
-import { GETProducts } from "@/api/products";
-import { Button, Input, Product, Spinner } from "@/components";
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
-import { addListOfProducts } from "@/redux/slices/productsSlice";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect } from "react";
+import { useLocale, useTranslations } from "next-intl";
+
+import { Button, Input, Product, Spinner } from "@/components";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import {
+  addListOfProducts,
+  removeListOfProducts,
+} from "@/redux/slices/productsSlice";
+import { GETProducts } from "@/api/products";
 
 const listOfCategories = [
   "Chocolate Bars",
@@ -15,12 +20,21 @@ const listOfCategories = [
 ];
 
 const headerStyles = `w-full font-bold text-lg py-1 pl-2 mb-5 border-l-4 flex flex-row flex-nowrap items-center gap-3 after:content-[''] after:border-b-2 after:border-solid after:border-[#e6e6e6] after:w-full`;
+const currencies: {
+  readonly [key: string]: string;
+} = {
+  en: "$",
+  pl: "zł",
+  ru: "zł",
+};
 
 export const CollectionSection: React.FC = () => {
   const dispatch = useAppDispatch();
   const reduxListOfProducts = useAppSelector(
     (st) => st.products.listOfProducts
   );
+  const t = useTranslations();
+  const locale = useLocale();
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -28,6 +42,7 @@ export const CollectionSection: React.FC = () => {
   const categoriesQueryParam = searchParams.get("categories");
   const minpriceQueryParam = searchParams.get("minprice");
   const maxpriceQueryParam = searchParams.get("maxprice");
+  const selectedCurrency = currencies[locale] || "$";
 
   const createQueryString = useCallback(
     (key: string, value: string) => {
@@ -56,6 +71,7 @@ export const CollectionSection: React.FC = () => {
   };
 
   useEffect(() => {
+    dispatch(removeListOfProducts());
     let timer: NodeJS.Timeout;
     const delay = 1000;
 
@@ -85,7 +101,7 @@ export const CollectionSection: React.FC = () => {
 
   return (
     <section
-      className="w-full text-primary bg-primary flex flex-col sm:flex-row mx-auto
+      className="w-full text-primary bg-primary flex flex-col gap-5 sm:flex-row mx-auto
                 py-8 px-10 content-center"
     >
       {/* filter container*/}
@@ -94,8 +110,8 @@ export const CollectionSection: React.FC = () => {
       [&>*]:mb-5 [&>*]:flex"
       >
         {/* search filter */}
-        <div className="w-full flex-col">
-          <h3 className={headerStyles}>Search</h3>
+        <div className="w-full flex-col capitalize">
+          <h3 className={headerStyles}>{t("pages.shop.search")}</h3>
           <Input
             classNameContainer="relative w-full h-12 flex items-center"
             handleChange={handleFilterChange}
@@ -104,7 +120,7 @@ export const CollectionSection: React.FC = () => {
               type: "search",
               name: "search",
               id: "search",
-              placeholder: "Searching...",
+              placeholder: t("pages.shop.search"),
               value: searchQueryParam || "",
               className: "w-full m-0 p-2 shadow-md",
             }}
@@ -112,8 +128,8 @@ export const CollectionSection: React.FC = () => {
         </div>
 
         {/* categories filter */}
-        <div className="w-full flex-col">
-          <h3 className={headerStyles}>Categories</h3>
+        <div className="w-full flex-col capitalize">
+          <h3 className={headerStyles}>{t("pages.shop.categories")}</h3>
           <select
             value={categoriesQueryParam || ""}
             onChange={handleFilterChange}
@@ -130,8 +146,8 @@ export const CollectionSection: React.FC = () => {
         </div>
 
         {/* Price filter */}
-        <div className={`w-full flex-row flex-wrap justify-between`}>
-          <h3 className={headerStyles}>Price</h3>
+        <div className={`w-full flex-row flex-wrap justify-between capitalize`}>
+          <h3 className={headerStyles}>{t("pages.shop.price")}</h3>
           <Input
             classNameContainer="relative w-2/5 h-12 flex items-center shadow-md"
             handleChange={handleFilterChange}
@@ -174,14 +190,25 @@ export const CollectionSection: React.FC = () => {
             }, 500);
           }}
         >
-          Reset filter
+          {t("pages.shop.reset filter")}
         </Button>
       </div>
 
       {/* list of results */}
-      <div className="basis-full flex flex-row items-start justify-evenly">
-        {reduxListOfProducts ? (
-          reduxListOfProducts.map((p, i) => <Product key={`${p}_${i}`} p={p} />)
+      <div className="basis-full flex flex-col items-center gap-3 sm:flex-row sm:items-start justify-evenly">
+        {reduxListOfProducts && reduxListOfProducts.length > 0 ? (
+          reduxListOfProducts.map((p, i) => (
+            <Product
+              key={`${p}_${i}`}
+              img={null}
+              name={p.name}
+              price={p.price}
+              currency={selectedCurrency}
+              id={p._id}
+            />
+          ))
+        ) : reduxListOfProducts?.length === 0 ? (
+          <>No results found</>
         ) : (
           <Spinner />
         )}

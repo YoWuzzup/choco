@@ -2,7 +2,8 @@
   "links": {
     "home": "home",
     "shop": "shop",
-    "about us": "about us"
+    "about us": "about us",
+    "products": "products"
   },
   "notifications": {
     "notifications": "view notifications"
@@ -20,10 +21,10 @@
       "terms & conditions": "terms & conditions",
       "contact": "contact",
       "accessories": "accessories",
-      "term of use": "term of use"
+      "term of use": "terms of use"
     },
     "shop": {
-      "header": "quick Shop",
+      "header": "quick shop",
       "about us": "about us",
       "privacy policy": "privacy policy",
       "terms & conditions": "terms & conditions",
@@ -33,10 +34,19 @@
     "company": {
       "header": "company",
       "help center": "help center",
-      "address store": "address store",
+      "address store": "store address",
       "privacy policy": "privacy policy",
       "receivers & amplifiers": "receivers & amplifiers",
       "chocoostore": "chocostore"
+    }
+  },
+  "pages": {
+    "shop": {
+      "header": "products",
+      "search": "search",
+      "categories": "categories",
+      "price": "price",
+      "reset filter": "reset"
     }
   }
 }

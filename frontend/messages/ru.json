@@ -2,7 +2,8 @@
   "links": {
     "home": "главная",
     "shop": "магазин",
-    "about us": "о нас"
+    "about us": "о нас",
+    "products": "товары"
   },
   "notifications": {
     "notifications": "просмотр уведомлений"
@@ -37,6 +38,15 @@
       "privacy policy": "политика конфиденциальности",
       "receivers & amplifiers": "приемники и усилители",
       "chocoostore": "chocostore"
+    }
+  },
+  "pages": {
+    "shop": {
+      "header": "товары",
+      "search": "поиск",
+      "categories": "категории",
+      "price": "цена",
+      "reset filter": "очистить"
     }
   }
 }
