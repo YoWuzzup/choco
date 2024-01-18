@@ -47,6 +47,11 @@
       "categories": "categories",
       "price": "price",
       "reset filter": "reset"
+    },
+    "about": {
+      "header": "about us",
+      "our team": "meet our team",
+      "description": "We’re known for our cakes! from bakery cakes to custom cakes, sculpted cakes to wedding cakes, every celebration deserves a cst cake. serving burlington & surrounding communities since 2013."
     }
   }
 }

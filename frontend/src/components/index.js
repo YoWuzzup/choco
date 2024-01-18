@@ -6,8 +6,13 @@ export { BannerSection } from "./sections/home/BannerSection";
 export { SubscribeSection } from "./sections/home/SubscribeSection";
 
 // shop sections
-export { HeaderSection } from "./sections/shop/HeaderSection";
+export { HeaderShopSection } from "./sections/shop/HeaderShopSection";
 export { CollectionSection } from "./sections/shop/CollectionSection";
+
+// about sections
+export { HeaderAboutSection } from "./sections/about/HeaderAboutSection";
+export { OurTeamSection } from "./sections/about/OurTeamSection";
+export { WhyUsSection } from "./sections/about/WhyUsSection";
 
 // exporting a client function
 export { default as NavBar } from "./navbar/NavBar";

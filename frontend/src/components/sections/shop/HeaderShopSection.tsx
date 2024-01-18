@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
 import { Breadcrumb } from "@/components";
 
-export const HeaderSection: React.FC = () => {
+export const HeaderShopSection: React.FC = () => {
   const t = useTranslations();
 
   return (

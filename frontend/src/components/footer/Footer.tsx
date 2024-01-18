@@ -101,7 +101,7 @@ export default function Footer(): ReactNode {
                   md:items-center basis-auto sm:basis-full`}
       >
         <div className="flex items-center mb-4">
-          <Link href={""}>
+          <Link href={"/"}>
             <img className="h-8 w-auto" src="/logo.webp" alt="Choco" />
           </Link>
         </div>
