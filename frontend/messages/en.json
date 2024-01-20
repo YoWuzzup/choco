@@ -51,7 +51,26 @@
     "about": {
       "header": "about us",
       "our team": "meet our team",
-      "description": "We’re known for our cakes! from bakery cakes to custom cakes, sculpted cakes to wedding cakes, every celebration deserves a cst cake. serving burlington & surrounding communities since 2013."
+      "description": "We’re known for our cakes! from bakery cakes to custom cakes, sculpted cakes to wedding cakes, every celebration deserves a cst cake. serving burlington & surrounding communities since 2013.",
+      "reasons": {
+        "header": "Reasons to shop with us",
+        "first reason": {
+          "header": "24/7 FRIENDLY SUPPORT",
+          "subheader": "Our support team always ready for you to 7 days a week"
+        },
+        "second reason": {
+          "header": "7 DAYS EASY RETURN",
+          "subheader": "Product any fault within 7 days for an immediately exchange."
+        },
+        "third reason": {
+          "header": "QUALITY GUARANTEED",
+          "subheader": "If your product aren't perfect, return them for a full refund"
+        }
+      },
+      "instagram": {
+        "header": "",
+        "subheader": "Get the latest news & updates"
+      }
     }
   }
 }

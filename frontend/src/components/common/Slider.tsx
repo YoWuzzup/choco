@@ -1,11 +1,11 @@
 "use client";
 import React, { ReactNode, useState } from "react";
-import ReactSlider from "react-slick";
+import ReactSlider, { Settings } from "react-slick";
 
 type SliderT = {
   children?: ReactNode;
   header?: ReactNode;
-  propSettings?: {};
+  propSettings?: Settings;
   containerStyles?: string;
 };
 

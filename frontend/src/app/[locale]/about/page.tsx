@@ -1,4 +1,9 @@
-import { HeaderAboutSection, OurTeamSection, WhyUsSection } from "@/components";
+import {
+  HeaderAboutSection,
+  InstagramSection,
+  OurTeamSection,
+  WhyUsSection,
+} from "@/components";
 
 export default function About() {
   return (
@@ -6,6 +11,7 @@ export default function About() {
       <HeaderAboutSection />
       <OurTeamSection />
       <WhyUsSection />
+      <InstagramSection />
     </main>
   );
 }

@@ -28,6 +28,7 @@ const config: Config = {
       teal: "#20c997",
       cyan: "#17a2b8",
       white: "#fff",
+      black: "#000",
       primary: "#007bff",
       secondary: "#6c757d",
       success: "#28a745",
