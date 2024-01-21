@@ -71,7 +71,7 @@ export const InstagramSection: React.FC = () => {
         {posts.map((p, i) => (
           <div key={`${p}_${i}`} className="relative group w-full h-80">
             <div
-              className="absolute top-0 left-0 w-full h-full bg-secondary opacity-0 
+              className="absolute top-0 left-0 w-full h-80 bg-secondary opacity-0 
                         flex justify-center items-center transition-all duration-500
                         group-hover:opacity-70"
             />

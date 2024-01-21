@@ -8,6 +8,8 @@ export { SubscribeSection } from "./sections/home/SubscribeSection";
 // shop sections
 export { HeaderShopSection } from "./sections/shop/HeaderShopSection";
 export { CollectionSection } from "./sections/shop/CollectionSection";
+// shop/productId sections
+export { ProductMainInfoSection } from "./sections/shop/productId/ProductMainInfoSection";
 
 // about sections
 export { HeaderAboutSection } from "./sections/about/HeaderAboutSection";
