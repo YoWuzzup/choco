@@ -21,12 +21,12 @@ const links = [
   },
   {
     name: "shop",
-    href: "shop",
+    href: "/shop",
     current: false,
   },
   {
     name: "about us",
-    href: "about",
+    href: "/about",
     current: false,
   },
 ];
