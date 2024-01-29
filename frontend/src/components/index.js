@@ -10,6 +10,7 @@ export { HeaderShopSection } from "./sections/shop/HeaderShopSection";
 export { CollectionSection } from "./sections/shop/CollectionSection";
 // shop/productId sections
 export { ProductMainInfoSection } from "./sections/shop/productId/ProductMainInfoSection";
+export { InformationAndReview } from "./sections/shop/productId/InformationAndReview";
 
 // about sections
 export { HeaderAboutSection } from "./sections/about/HeaderAboutSection";

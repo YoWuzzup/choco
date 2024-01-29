@@ -10,6 +10,7 @@ import { Breadcrumb, Button, Slider } from "@/components";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import { useScreenSize } from "@/hooks/useScreenSize";
 
 const currencies: {
   readonly [key: string]: string;
@@ -129,11 +130,16 @@ const AddToCardBlock: React.FC = () => {
 };
 
 const LeftPictureSide: React.FC = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
   return (
-    <div className="flex flex-col justify-center items-center">
+    <div className="flex flex-col justify-start items-center mb-5 dm:mb-0">
       <Slider
         propSettings={{
           dots: true,
+          arrows: false,
+          // for rewriting default class of dots and then add my dots
+          dotsClass: `flex flex-row justify-between w-full static gap-3`,
           appendDots: (dots: any) => (
             <ul>
               {dots.map((d: any, index: number) => {
@@ -141,10 +147,23 @@ const LeftPictureSide: React.FC = () => {
               })}
             </ul>
           ),
-          customPaging: (i) => <div style={{ all: "unset" }}>sad</div>,
+          customPaging: (i: number) => (
+            <img
+              className={`w-36 h-16 sm:h-28 md:h-36 object-cover cursor-pointer ${
+                i === currentSlide
+                  ? "border-solid border-2 border-colorfulColor"
+                  : ""
+              }`}
+              src="/home/slide1.1.webp"
+              alt="first slide"
+            />
+          ),
+          beforeChange: (prev: number, next: number) => {
+            setCurrentSlide(next);
+          },
         }}
       >
-        <div className={`relative`}>
+        <div className={`relative mb-2`}>
           <img
             className="object-cover"
             src="/home/slide1.1.webp"
@@ -251,6 +270,7 @@ const RightInfoSide: React.FC = () => {
         </div>
       )}
 
+      {/* colors */}
       {color && (
         <div className="w-full mb-5 flex flex-row flex-nowrap gap-6">
           <div
@@ -276,9 +296,13 @@ const RightInfoSide: React.FC = () => {
               <div
                 key={`${c}_${i}`}
                 className={`relative rounded-full cursor-pointer transition-all duration-300 w-9 h-9 p-2
-                        after:bottom-1/2 after:left-1/2 after:absolute after:content-[''] 
+                        ${
+                          activeColor === c
+                            ? `after:bottom-1/2 after:left-1/2 after:absolute after:content-[''] 
                         after:w-12 after:h-12 after:rounded-full after:border-2 after:border-[#b0b0b0]
-                        after:-translate-x-1/2 after:translate-y-1/2`}
+                        after:-translate-x-1/2 after:translate-y-1/2`
+                            : ""
+                        }`}
                 style={{
                   background: `conic-gradient(${gradientColors})`,
                 }}
@@ -344,7 +368,7 @@ export const ProductMainInfoSection: React.FC = () => {
                 pb-16 pt-4 px-3 content-center"
     >
       <BreadcrumbAndNExtPrevBtns />
-      <div className="flex flex-col md:flex-row flex-nowrap justify-between [&>*]:w-[48%]">
+      <div className="flex flex-col md:flex-row flex-nowrap justify-between [&>*]:w-full md:[&>*]:w-[48%]">
         <LeftPictureSide />
         <RightInfoSide />
       </div>
