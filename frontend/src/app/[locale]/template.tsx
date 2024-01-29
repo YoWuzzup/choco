@@ -41,5 +41,5 @@ export default function Template({ children }: { children: React.ReactNode }) {
     localStorage.setItem("user", JSON.stringify(decodedJwt));
   }, []);
 
-  return <div>{children}</div>;
+  return <>{children}</>;
 }

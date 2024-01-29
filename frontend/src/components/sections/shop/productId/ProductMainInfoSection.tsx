@@ -58,12 +58,90 @@ const BreadcrumbAndNExtPrevBtns: React.FC = () => {
   );
 };
 
+const AddToCardBlock: React.FC = () => {
+  const [productCount, setproductCount] = useState<number>(1);
+
+  const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+  };
+
+  const handleBuy = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+  };
+
+  return (
+    <div className="flex flex-row flex-wrap gap-4 self-start">
+      <div className="grid grid-cols-2 grid-rows-2 w-20 border-solid border-black border-2 font-bold">
+        <div
+          className="flex justify-center items-center w-full border-r-[1px]"
+          style={{ gridArea: "1 / 1 / 3 / 2" }}
+        >
+          {productCount}
+        </div>
+        <div
+          className={`flex justify-center items-center w-full border-b-[1px] border-b-black
+          cursor-pointer text-primary hover:text-colorful duration-300`}
+          style={{ gridArea: "1 / 2 / 2 / 3" }}
+          onClick={(e) => setproductCount((prev) => prev++)}
+        >
+          +
+        </div>
+        <div
+          className="flex justify-center items-center w-full cursor-pointer text-primary hover:text-colorful duration-300"
+          style={{ gridArea: "2 / 2 / 3 / 3" }}
+          onClick={(e) => setproductCount((prev) => prev--)}
+        >
+          -
+        </div>
+      </div>
+
+      <Button
+        type={"button"}
+        buttonClasses={`text-secondary grow text-sm capitalize px-10 bg-colorful hover:bg-secondary duration-300
+        h-14`}
+        handleClick={handleAddToCart}
+      >
+        ADD TO CART
+      </Button>
+
+      <Button
+        type={"button"}
+        buttonClasses={`basis-full text-secondary text-sm capitalize px-10 bg-secondary hover:bg-colorful duration-300
+          h-14`}
+        handleClick={handleBuy}
+      >
+        BUY IT NOW
+      </Button>
+
+      <div className="text-sm">
+        Categories:{" "}
+        {["one", "two", "three"].map((c, i) => (
+          <span
+            key={`${c}_${i}`}
+            className="text-[#bfbfbf] hover:text-colorful cursor-pointer"
+          >
+            {c},{" "}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 const LeftPictureSide: React.FC = () => {
   return (
     <div className="flex flex-col justify-center items-center">
       <Slider
         propSettings={{
-          dots: false,
+          dots: true,
+          appendDots: (dots: any) => (
+            <ul>
+              {dots.map((d: any, index: number) => {
+                return <li key={index}>{d.props.children}</li>;
+              })}
+            </ul>
+          ),
+          customPaging: (i) => <div style={{ all: "unset" }}>sad</div>,
         }}
       >
         <div className={`relative`}>
@@ -210,6 +288,8 @@ const RightInfoSide: React.FC = () => {
           })}
         </div>
       )}
+
+      <AddToCardBlock />
     </div>
   );
 };
