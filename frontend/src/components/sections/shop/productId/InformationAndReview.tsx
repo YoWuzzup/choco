@@ -2,6 +2,14 @@
 import Link from "next/link";
 import { useState } from "react";
 
+import { useAppSelector } from "@/hooks/redux";
+import { Button, Input } from "@/components";
+
+const reviews: any[] = [
+  { name: "asd", comment: "asd sd as dsadwda ", score: 4 },
+  { name: "asd", comment: "asd sd as dsadwda ", score: 4 },
+  { name: "asd", comment: "asd sd as dsadwda ", score: 4 },
+];
 // TODO: write the correct href pathsfor these links
 const links = [
   {
@@ -98,12 +106,82 @@ const AddInformation: React.FC = () => {
 };
 
 const Reviews: React.FC = () => {
+  const user = useAppSelector((st) => st.user);
+  const [openNewReviewForm, setOpenNewReviewForm] = useState<boolean>(false);
+
   return (
     <div
-      className="py-8 px-3 mb-8 md:px-10 flex flex-col sm:flex-row justify-between gap-8
+      className="py-8 px-3 mb-8 md:px-10 flex flex-row flex-wrap justify-between gap-4
                   border-b-[1px] border-[#e7e7e7] border-solid"
     >
-      Reviews
+      <h4 className="basis-full text-sm">Customer Reviews</h4>
+
+      <div className="basis-full">
+        {reviews.length > 0 ? (
+          reviews.map((r, i) => (
+            <div
+              key={`${r.name}_${i}`}
+              className="flex flex-row flex-nowrap justify-between items-center 
+                    border-b-[1px] border-[#e7e7e7] border-solid pb-4 mb-4"
+            >
+              <div className="flex flex-col grow">
+                <div className="capitalize">{r.name}</div>
+                <div className="text-paraPrimary">{r.comment}</div>
+              </div>
+              <div>{r.score}</div>
+            </div>
+          ))
+        ) : (
+          <div>No reviews yet</div>
+        )}
+        <div className="flex flex-col justify-start items-center text-paraPrimary">
+          {user ? (
+            <>
+              <div
+                className="text-primary hover:text-colorful cursor-pointer duration-300"
+                onClick={() => setOpenNewReviewForm(!openNewReviewForm)}
+              >
+                Write a review
+              </div>
+              <div
+                className={`flex flex-col w-full overflow-hidden transition-all duration-700 ${
+                  openNewReviewForm ? "max-h-[250px]" : "max-h-0 invisible"
+                }`}
+              >
+                <div className="text-[13px]">Rating</div>
+                <div className="text-[13px]">
+                  Raview Title
+                  <Input
+                    input={{
+                      id: "title",
+                      className: `border-solid border-[1px] border-grey w-full p-2 mt-2 mb-6`,
+                    }}
+                  />
+                </div>
+                <div className="text-[13px] w-full">
+                  Review (1500)
+                  <Input
+                    input={{
+                      id: "comment",
+                      className: `border-solid border-[1px] border-grey w-full p-2 mt-2 mb-6`,
+                    }}
+                  />
+                </div>
+                <Button
+                  type={"submit"}
+                  buttonClasses={`text-secondary grow text-sm capitalize px-10 
+                    bg-colorful hover:bg-secondary duration-300 h-14`}
+                  handleClick={(e: any) => {}}
+                >
+                  submit review
+                </Button>
+              </div>
+            </>
+          ) : (
+            "Log in to write a review"
+          )}
+        </div>
+      </div>
     </div>
   );
 };

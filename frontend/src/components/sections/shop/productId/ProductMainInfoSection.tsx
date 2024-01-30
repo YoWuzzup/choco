@@ -1,16 +1,16 @@
 "use client";
-import { usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 
-import { useAppDispatch } from "@/hooks/redux";
-import { removeListOfProducts } from "@/redux/slices/productsSlice";
-import { Breadcrumb, Button, Slider } from "@/components";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { addSingleProduct } from "@/redux/slices/productsSlice";
+import { Breadcrumb, Button, Skeleton, Slider, Spinner } from "@/components";
 
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
-import { useScreenSize } from "@/hooks/useScreenSize";
+import { GETOneProduct } from "@/api/products";
 
 const currencies: {
   readonly [key: string]: string;
@@ -21,13 +21,15 @@ const currencies: {
 };
 
 const BreadcrumbAndNExtPrevBtns: React.FC = () => {
+  const product = useAppSelector((st) => st.products.singleProduct);
+
   return (
     <div className="w-full mb-8 flex flex-wrap sm:flex-nowrap justify-center sm:justify-between items-center">
       <Breadcrumb
         crumbs={[
           { name: "home", href: "/" },
           { name: "shop", href: "/shop" },
-          { name: "string", href: "/" },
+          { name: product?.name || "", href: "/" },
         ]}
       />
 
@@ -197,6 +199,10 @@ const LeftPictureSide: React.FC = () => {
 };
 
 const RightInfoSide: React.FC = () => {
+  const product = useAppSelector((st) => st.products.singleProduct);
+  const locale = useLocale();
+  const selectedCurrency = currencies[locale] || "$";
+
   const size = ["8 piece", "12 piece"];
   const [activeSize, setActiveSize] = useState<null | string>("8 piece");
   const color = ["pink", "orange", "black-yellow", "brown-yellow-pink-blue"];
@@ -206,7 +212,9 @@ const RightInfoSide: React.FC = () => {
     <div className="flex flex-col justify-start items-center [&>*:basis-full]">
       {/* name and like */}
       <div className="flex justify-between items-center w-full mb-2">
-        <h3 className="text-2xl font-bold text-primary">Header</h3>
+        <h3 className="text-2xl font-bold text-primary capitalize flex justify-center items-center">
+          {product?.name || <Skeleton />}
+        </h3>
         <Button
           type={"button"}
           buttonClasses={""}
@@ -228,8 +236,8 @@ const RightInfoSide: React.FC = () => {
         className="flex flex-col justify-start w-full pb-6 mb-5
                   border-b-[1px] border-[#e7e7e7] border-solid"
       >
-        <div className="capitalize text-xl text-colorful font-bold mb-4">
-          $Currency
+        <div className="capitalize text-xl text-colorful font-bold w-full mb-4 flex flex-row items-center justify-start">
+          {selectedCurrency} {product?.price || <Skeleton width="16" />}
         </div>
         <div className="text-xs text-[#999] font-normal">$No reviews</div>
       </div>
@@ -323,6 +331,7 @@ export const ProductMainInfoSection: React.FC = () => {
   const t = useTranslations();
   const locale = useLocale();
   const router = useRouter();
+  const params = useParams();
   const pathname = usePathname();
   const selectedCurrency = currencies[locale] || "$";
 
@@ -343,13 +352,14 @@ export const ProductMainInfoSection: React.FC = () => {
   };
 
   useEffect(() => {
-    dispatch(removeListOfProducts());
     let timer: NodeJS.Timeout;
     const delay = 1000;
 
     timer = setTimeout(() => {
       const fetchData = async () => {
         try {
+          const res = await GETOneProduct(params.id);
+          dispatch(addSingleProduct(res));
         } catch (error) {
           console.log(`something wrong shop/useEffect ${error}`);
         }

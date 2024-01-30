@@ -28,9 +28,12 @@ const productsSlice = createSlice({
     removeListOfProducts(state) {
       return { ...state, listOfProducts: null };
     },
+    addSingleProduct(state, action) {
+      return { ...state, singleProduct: { ...action.payload } };
+    },
   },
 });
 
-export const { addListOfProducts, removeListOfProducts } =
+export const { addListOfProducts, removeListOfProducts, addSingleProduct } =
   productsSlice.actions;
 export default productsSlice.reducer;

@@ -12,3 +12,14 @@ export const GETProducts = async (query: unknown) => {
     throw error;
   }
 };
+
+export const GETOneProduct = async (id: unknown) => {
+  try {
+    const res = await axios.get(`${url}products/${id}`);
+    const { data } = res;
+
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};

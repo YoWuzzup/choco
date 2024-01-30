@@ -32,4 +32,5 @@ export { Slider } from "./common/Slider";
 export { Product } from "./common/Product";
 export { Input } from "./common/Input";
 export { Breadcrumb } from "./common/Breadcrumb";
+export { Skeleton } from "./common/Skeleton";
 export { default as AuthOverlay } from "./common/AuthOverlay";
