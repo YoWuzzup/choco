@@ -1,11 +1,23 @@
 "use client";
-import { useParams, usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { addSingleProduct } from "@/redux/slices/productsSlice";
-import { Breadcrumb, Button, Skeleton, Slider, Spinner } from "@/components";
+import {
+  Breadcrumb,
+  Button,
+  Rating,
+  Skeleton,
+  Slider,
+  Spinner,
+} from "@/components";
 
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
@@ -200,8 +212,39 @@ const LeftPictureSide: React.FC = () => {
 
 const RightInfoSide: React.FC = () => {
   const product = useAppSelector((st) => st.products.singleProduct);
+  const router = useRouter();
   const locale = useLocale();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const colorQueryParam = searchParams.get("color");
+  const sizeQueryParam = searchParams.get("size");
   const selectedCurrency = currencies[locale] || "$";
+
+  const createQueryString = useCallback(
+    (key: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(key, value);
+
+      return params.toString();
+    },
+    [searchParams]
+  );
+
+  const handleFilterChange = (e: any) => {
+    e.preventDefault();
+
+    const name = e.target.id || e.target.name;
+    const value = e.target.value;
+
+    router.replace(`${pathname}?${createQueryString(name, value)}`);
+
+    if (!value) {
+      const searchParams = new URLSearchParams(window.location.search);
+      searchParams.delete(name);
+
+      router.replace(`${pathname}?${searchParams.toString()}`);
+    }
+  };
 
   const size = ["8 piece", "12 piece"];
   const [activeSize, setActiveSize] = useState<null | string>("8 piece");
@@ -239,22 +282,41 @@ const RightInfoSide: React.FC = () => {
         <div className="capitalize text-xl text-colorful font-bold w-full mb-4 flex flex-row items-center justify-start">
           {selectedCurrency} {product?.price || <Skeleton width="16" />}
         </div>
-        <div className="text-xs text-[#999] font-normal">$No reviews</div>
+        <div className="text-xs text-[#999] font-normal flex justify-start items-center">
+          {product?.reviews ? (
+            <>
+              <Rating data={product.reviews.map((r) => r.rating)} />{" "}
+              {product.reviews.length} reviews
+            </>
+          ) : (
+            <>
+              <Rating
+                data={[]}
+                containerClasses="flex justrify-center items-center mr-4"
+              />{" "}
+              No reviews
+            </>
+          )}
+        </div>
       </div>
 
       {/*  info para */}
-      <div>
-        <p className="text-sm text-[#a8a8a8] pb-5">
-          three main types of chocolate here are three main types of chocolate —
-          white chocolate, milk chocolate, and dark chocolate. Everyone has
-          their favorite, go-to flavor. But, how much do you actually know about
-          the different kinds of chocolate? Do you know what differentiates
-          semisweet from bittersweet? Or why white...
-        </p>
+      <div className="flex flex-col justify-center items-start w-full pb-5">
+        {product?.description ? (
+          <p className="text-sm text-[#a8a8a8]">{product.description}</p>
+        ) : (
+          ["", "", ""].map((_, i) => (
+            <Skeleton
+              width="full"
+              key={`${i}`}
+              containerClassName="w-3/4 animate-pulse flex justify-start items-center mb-2"
+            />
+          ))
+        )}
       </div>
 
       {/* options */}
-      {size && (
+      {product?.sizes && (
         <div className="w-full mb-5 flex flex-row flex-nowrap gap-2">
           <div
             className="text-[11px] w-6 text-primary font-bold uppercase relative mr-5 pb-2 h-fit
@@ -263,23 +325,26 @@ const RightInfoSide: React.FC = () => {
           >
             size
           </div>
-          {size.map((s, i) => (
-            <div
+          {product?.sizes.map((s, i) => (
+            <Button
               key={`${s}_${i}`}
-              className={`py-2 px-4 border-solid border-[1px] border-black cursor-pointer
+              buttonClasses={`py-2 px-4 border-solid border-[1px] border-black cursor-pointer
               transition-all duration-300 hover:bg-secondary hover:text-secondary
-              ${activeSize === s ? "bg-secondary" : "bg-primary"}
-              ${activeSize === s ? "text-secondary" : "text-primary"}`}
-              onClick={() => setActiveSize(s)}
+              ${sizeQueryParam === s ? "bg-secondary" : "bg-primary"}
+              ${sizeQueryParam === s ? "text-secondary" : "text-primary"}`}
+              handleClick={(e) => handleFilterChange(e)}
+              value={s}
+              id="size"
+              type={"button"}
             >
               {s}
-            </div>
+            </Button>
           ))}
         </div>
       )}
 
       {/* colors */}
-      {color && (
+      {product?.colors && (
         <div className="w-full mb-5 flex flex-row flex-nowrap gap-6">
           <div
             className="text-[11px] w-6 text-primary font-bold uppercase relative mr-5 pb-2 h-fit
@@ -301,11 +366,11 @@ const RightInfoSide: React.FC = () => {
               .join(",");
 
             return (
-              <div
+              <Button
                 key={`${c}_${i}`}
-                className={`relative rounded-full cursor-pointer transition-all duration-300 w-9 h-9 p-2
+                buttonClasses={`relative rounded-full cursor-pointer transition-all duration-300 w-9 h-9 p-2
                         ${
-                          activeColor === c
+                          colorQueryParam === c
                             ? `after:bottom-1/2 after:left-1/2 after:absolute after:content-[''] 
                         after:w-12 after:h-12 after:rounded-full after:border-2 after:border-[#b0b0b0]
                         after:-translate-x-1/2 after:translate-y-1/2`
@@ -314,7 +379,10 @@ const RightInfoSide: React.FC = () => {
                 style={{
                   background: `conic-gradient(${gradientColors})`,
                 }}
-                onClick={() => setActiveColor(c)}
+                type={"button"}
+                id="color"
+                value={c}
+                handleClick={(e) => handleFilterChange(e)}
               />
             );
           })}

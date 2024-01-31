@@ -20,15 +20,15 @@ export const Skeleton: React.FC<TSkeleton> = ({
       role="status"
       className={
         containerClassName
-          ? containerClassName + "w-full animate-pulse"
-          : `w-full animate-pulse`
+          ? containerClassName
+          : `w-full animate-pulse flex justify-start items-center`
       }
     >
       {skeletonDivs.map((_, i) => {
         return (
           <div
             key={`${i}`}
-            className={`bg-gray rounded-full dark:bg-gray mb-4 flex items-center justify-start
+            className={`bg-gray rounded-full dark:bg-gray flex items-center justify-start
             ${width ? `w-${width}` : "w-48"}
             ${height ? `h-${height}` : "h-2.5"}`}
           />
