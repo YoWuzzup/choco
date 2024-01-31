@@ -6,9 +6,10 @@ type singleProduct = {
   price: number | string;
   description: string;
   reviews: { rating: number }[];
-  sizes: ""[];
-  tastes: ""[];
-  colors: ""[];
+  sizes: string[];
+  tastes: string[];
+  colors: string[];
+  categories: string[];
   _id: string;
 };
 

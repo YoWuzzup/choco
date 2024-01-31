@@ -23,6 +23,7 @@ import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import { GETOneProduct } from "@/api/products";
+import { addToCart } from "@/redux/slices/cartSlice";
 
 const currencies: {
   readonly [key: string]: string;
@@ -73,75 +74,21 @@ const BreadcrumbAndNExtPrevBtns: React.FC = () => {
   );
 };
 
-const AddToCardBlock: React.FC = () => {
-  const [productCount, setproductCount] = useState<number>(1);
+// const AddToCardBlock: React.FC = () => {
+//   const [productCount, setproductCount] = useState<number>(1);
 
-  const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-  };
+//   const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
+//     e.preventDefault();
+//   };
 
-  const handleBuy = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-  };
+//   const handleBuy = (e: React.MouseEvent<HTMLButtonElement>) => {
+//     e.preventDefault();
+//   };
 
-  return (
-    <div className="flex flex-row flex-wrap gap-4 self-start">
-      <div className="grid grid-cols-2 grid-rows-2 w-20 border-solid border-black border-2 font-bold">
-        <div
-          className="flex justify-center items-center w-full border-r-[1px]"
-          style={{ gridArea: "1 / 1 / 3 / 2" }}
-        >
-          {productCount}
-        </div>
-        <div
-          className={`flex justify-center items-center w-full border-b-[1px] border-b-black
-          cursor-pointer text-primary hover:text-colorful duration-300`}
-          style={{ gridArea: "1 / 2 / 2 / 3" }}
-          onClick={(e) => setproductCount((prev) => prev++)}
-        >
-          +
-        </div>
-        <div
-          className="flex justify-center items-center w-full cursor-pointer text-primary hover:text-colorful duration-300"
-          style={{ gridArea: "2 / 2 / 3 / 3" }}
-          onClick={(e) => setproductCount((prev) => prev--)}
-        >
-          -
-        </div>
-      </div>
+//   return (
 
-      <Button
-        type={"button"}
-        buttonClasses={`text-secondary grow text-sm capitalize px-10 bg-colorful hover:bg-secondary duration-300
-        h-14`}
-        handleClick={handleAddToCart}
-      >
-        ADD TO CART
-      </Button>
-
-      <Button
-        type={"button"}
-        buttonClasses={`basis-full text-secondary text-sm capitalize px-10 bg-secondary hover:bg-colorful duration-300
-          h-14`}
-        handleClick={handleBuy}
-      >
-        BUY IT NOW
-      </Button>
-
-      <div className="text-sm">
-        Categories:{" "}
-        {["one", "two", "three"].map((c, i) => (
-          <span
-            key={`${c}_${i}`}
-            className="text-[#bfbfbf] hover:text-colorful cursor-pointer"
-          >
-            {c},{" "}
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-};
+//   );
+// };
 
 const LeftPictureSide: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -211,6 +158,7 @@ const LeftPictureSide: React.FC = () => {
 };
 
 const RightInfoSide: React.FC = () => {
+  const dispatch = useAppDispatch();
   const product = useAppSelector((st) => st.products.singleProduct);
   const router = useRouter();
   const locale = useLocale();
@@ -218,6 +166,7 @@ const RightInfoSide: React.FC = () => {
   const searchParams = useSearchParams();
   const colorQueryParam = searchParams.get("color");
   const sizeQueryParam = searchParams.get("size");
+  let amountQueryParam = searchParams.get("amount") || 1;
   const selectedCurrency = currencies[locale] || "$";
 
   const createQueryString = useCallback(
@@ -246,10 +195,23 @@ const RightInfoSide: React.FC = () => {
     }
   };
 
-  const size = ["8 piece", "12 piece"];
-  const [activeSize, setActiveSize] = useState<null | string>("8 piece");
-  const color = ["pink", "orange", "black-yellow", "brown-yellow-pink-blue"];
-  const [activeColor, setActiveColor] = useState<null | string>("pink");
+  const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    dispatch(
+      addToCart([
+        {
+          _id: product?._id,
+          priceForOne: product?.price,
+          amount: amountQueryParam,
+          filters: {
+            sizes: sizeQueryParam,
+            colors: colorQueryParam,
+          },
+        },
+      ])
+    );
+  };
 
   return (
     <div className="flex flex-col justify-start items-center [&>*:basis-full]">
@@ -353,7 +315,7 @@ const RightInfoSide: React.FC = () => {
           >
             color
           </div>
-          {color.map((c, i) => {
+          {product?.colors.map((c, i) => {
             const colorArray = c.split("-");
             const arrayLength = colorArray.length;
             const gradientColors = colorArray
@@ -389,7 +351,76 @@ const RightInfoSide: React.FC = () => {
         </div>
       )}
 
-      <AddToCardBlock />
+      {/* amount and order button */}
+      <div className="flex flex-row flex-wrap gap-4 self-start">
+        <div className="grid grid-cols-2 grid-rows-2 w-20 border-solid border-black border-2 font-bold">
+          <div
+            className="flex justify-center items-center w-full border-r-[1px]"
+            style={{ gridArea: "1 / 1 / 3 / 2" }}
+          >
+            {amountQueryParam}
+          </div>
+          <Button
+            buttonClasses={`flex justify-center items-center w-full border-b-[1px] border-b-black
+                  cursor-pointer text-primary hover:text-colorful duration-300`}
+            style={{ gridArea: "1 / 2 / 2 / 3" }}
+            type={"button"}
+            handleClick={handleFilterChange}
+            id="amount"
+            value={Number(amountQueryParam) + 1}
+          >
+            +
+          </Button>
+          <Button
+            buttonClasses="flex justify-center items-center w-full cursor-pointer text-primary hover:text-colorful duration-300"
+            style={{ gridArea: "2 / 2 / 3 / 3" }}
+            type={"button"}
+            handleClick={handleFilterChange}
+            id="amount"
+            value={
+              Number(amountQueryParam) > 1 ? Number(amountQueryParam) - 1 : 1
+            }
+          >
+            -
+          </Button>
+        </div>
+
+        <Button
+          type={"button"}
+          buttonClasses={`text-secondary grow text-sm capitalize px-10 bg-colorful hover:bg-secondary duration-300
+              h-14`}
+          handleClick={handleAddToCart}
+        >
+          ADD TO CART
+        </Button>
+
+        <Button
+          type={"button"}
+          buttonClasses={`basis-full text-secondary text-sm capitalize px-10 bg-secondary hover:bg-colorful duration-300
+              h-14`}
+          handleClick={(e) => {
+            handleAddToCart(e);
+
+            router.push("/profile/cart");
+          }}
+        >
+          BUY IT NOW
+        </Button>
+
+        {product?.categories && (
+          <div className="text-sm">
+            Categories:{" "}
+            {product.categories.map((c, i) => (
+              <span
+                key={`${c}_${i}`}
+                className="text-[#bfbfbf] hover:text-colorful cursor-pointer"
+              >
+                {c},{" "}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
