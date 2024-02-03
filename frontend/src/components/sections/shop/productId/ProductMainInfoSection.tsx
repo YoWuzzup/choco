@@ -11,6 +11,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { addSingleProduct } from "@/redux/slices/productsSlice";
 import {
+  AuthOverlay,
   Breadcrumb,
   Button,
   Rating,
@@ -24,6 +25,10 @@ import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import { GETOneProduct } from "@/api/products";
 import { addToCart } from "@/redux/slices/cartSlice";
+import { POSTUpdateUser } from "@/api/user";
+import { saveAccessTokenToRedux } from "@/redux/slices/accessTokenSlice";
+import { userUpdate } from "@/redux/slices/userSlice";
+import { useReduxAndLocalStorage } from "@/hooks/useReduxAndLocalStorage ";
 
 const currencies: {
   readonly [key: string]: string;
@@ -73,22 +78,6 @@ const BreadcrumbAndNExtPrevBtns: React.FC = () => {
     </div>
   );
 };
-
-// const AddToCardBlock: React.FC = () => {
-//   const [productCount, setproductCount] = useState<number>(1);
-
-//   const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
-//     e.preventDefault();
-//   };
-
-//   const handleBuy = (e: React.MouseEvent<HTMLButtonElement>) => {
-//     e.preventDefault();
-//   };
-
-//   return (
-
-//   );
-// };
 
 const LeftPictureSide: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -158,8 +147,11 @@ const LeftPictureSide: React.FC = () => {
 };
 
 const RightInfoSide: React.FC = () => {
-  const dispatch = useAppDispatch();
   const product = useAppSelector((st) => st.products.singleProduct);
+  const user = useAppSelector((st) => st.user);
+  const [storedUser, saveUserToReduxAndLocalStorage] =
+    useReduxAndLocalStorage("user");
+  const access_token = useAppSelector((st) => st.access_token);
   const router = useRouter();
   const locale = useLocale();
   const pathname = usePathname();
@@ -168,6 +160,7 @@ const RightInfoSide: React.FC = () => {
   const sizeQueryParam = searchParams.get("size");
   let amountQueryParam = searchParams.get("amount") || 1;
   const selectedCurrency = currencies[locale] || "$";
+  const [showAuthOverlay, setShowAuthOverlay] = useState<boolean>(false);
 
   const createQueryString = useCallback(
     (key: string, value: string) => {
@@ -197,20 +190,33 @@ const RightInfoSide: React.FC = () => {
 
   const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+  };
 
-    dispatch(
-      addToCart([
-        {
-          _id: product?._id,
-          priceForOne: product?.price,
-          amount: amountQueryParam,
-          filters: {
-            sizes: sizeQueryParam,
-            colors: colorQueryParam,
-          },
-        },
-      ])
-    );
+  const handleLikeProduct = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (!user) return setShowAuthOverlay(true);
+
+    if (product?._id) {
+      const currentLikes = user.likes || [];
+      const hasLike = currentLikes.includes(product?._id);
+
+      let updatedLikes;
+
+      if (hasLike) {
+        updatedLikes = currentLikes.filter((id) => id !== product?._id);
+      } else {
+        updatedLikes = [...currentLikes, product?._id];
+      }
+
+      const data = await POSTUpdateUser(user._id, {
+        //sending access_token for access
+        access_token,
+        // to data to change
+        likes: updatedLikes,
+      });
+
+      saveUserToReduxAndLocalStorage(data, userUpdate);
+    }
   };
 
   return (
@@ -223,15 +229,15 @@ const RightInfoSide: React.FC = () => {
         <Button
           type={"button"}
           buttonClasses={""}
-          handleClick={(e) => {
-            console.log("asd");
-          }}
+          handleClick={handleLikeProduct}
         >
           <FavoriteBorderOutlinedIcon
-            className={`text-primary w-10 h-10 p-2
-                    transition-all duration-300 bg-primary
-                    hover:text-secondary hover:bg-colorful rounded-full shadow-md
-                    `}
+            className={`w-10 h-10 p-2 transition-all duration-300 rounded-full shadow-md
+                  ${
+                    user?.likes?.includes(product?._id || "")
+                      ? "bg-colorful hover:bg-primary text-secondary hover:text-primary"
+                      : "bg-primary hover:bg-colorful text-primary hover:text-secondary"
+                  }`}
           />
         </Button>
       </div>
@@ -407,6 +413,7 @@ const RightInfoSide: React.FC = () => {
           BUY IT NOW
         </Button>
 
+        {/* categories */}
         {product?.categories && (
           <div className="text-sm">
             Categories:{" "}
@@ -421,6 +428,10 @@ const RightInfoSide: React.FC = () => {
           </div>
         )}
       </div>
+
+      {showAuthOverlay && (
+        <AuthOverlay setShowAuthOverlay={setShowAuthOverlay} />
+      )}
     </div>
   );
 };

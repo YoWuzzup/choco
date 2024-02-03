@@ -5,6 +5,7 @@ export const UsersSchema = new mongoose.Schema({
   password: { type: String, required: true },
   tokens: { refresh_token: { type: String, default: '' } },
   orders: [{ type: mongoose.Schema.Types.Mixed }],
+  likes: [{ type: String }],
 });
 
 export interface Users extends mongoose.Document {
@@ -12,4 +13,5 @@ export interface Users extends mongoose.Document {
   password: string;
   tokens: { refresh_token: string };
   orders: object[];
+  likes: string[];
 }

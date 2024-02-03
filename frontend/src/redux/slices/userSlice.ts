@@ -1,6 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-type SliceState = null | { avatar: string };
+type SliceState = null | {
+  _id: string;
+  avatar: string;
+  likes: string[];
+};
 
 const userSlice = createSlice({
   name: "user",
@@ -12,11 +16,15 @@ const userSlice = createSlice({
     userRegister(state, action) {
       return { ...action.payload };
     },
+    userUpdate(state, action) {
+      return { ...state, ...action.payload };
+    },
     userLogout() {
       return null;
     },
   },
 });
 
-export const { userLogin, userRegister, userLogout } = userSlice.actions;
+export const { userLogin, userRegister, userLogout, userUpdate } =
+  userSlice.actions;
 export default userSlice.reducer;

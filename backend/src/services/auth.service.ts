@@ -18,7 +18,7 @@ import { LoginDto } from 'src/dtos/authData.dto';
 export class AuthService {
   constructor(
     private configService: ConfigService,
-    private jwtService: JwtService,
+    private readonly jwtService: JwtService,
     private userService: UserService,
   ) {}
 
@@ -45,7 +45,7 @@ export class AuthService {
       throw new BadRequestException('User does not exist or wrong credentials');
 
     const refreshToken = await this.createJwtToken(
-      { id: validatedUser._id, email: validatedUser.email },
+      { _id: validatedUser._id, email: validatedUser.email },
       'refresh',
     );
 
@@ -66,7 +66,7 @@ export class AuthService {
 
     return {
       access_token: await this.createJwtToken(
-        { id: validatedUser._id, email: validatedUser.email },
+        { _id: validatedUser._id, email: validatedUser.email },
         'access',
       ),
     };
@@ -128,7 +128,9 @@ export class AuthService {
 
   async validateJwtToken(jwt: string): Promise<any> {
     try {
-      const decoded = this.jwtService.verify(jwt);
+      const decoded = await this.jwtService.verifyAsync(jwt, {
+        secret: `${this.configService.get('JWT_SECRET')}`,
+      });
 
       return decoded; // The token is valid, return the decoded payload
     } catch (error) {

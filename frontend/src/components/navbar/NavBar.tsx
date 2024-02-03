@@ -34,15 +34,15 @@ const links = [
 const dropdown = [
   {
     name: "my profile",
-    href: "profile",
+    href: "/profile",
   },
   {
     name: "settings",
-    href: "settings",
+    href: "/settings",
   },
   {
     name: "sign out",
-    href: "auth/signout",
+    href: "/auth/signout",
   },
 ];
 
