@@ -57,4 +57,20 @@ export class ProductService {
       return error;
     }
   }
+
+  async updateReview(_id: ObjectId | string, review: object) {
+    try {
+      const product = await this.productsModel.findById(_id);
+
+      if (!product) throw new Error('Product not found!');
+
+      const updatedReviews = [...product.reviews, review];
+
+      return await this.productsModel
+        .findOneAndUpdate({ _id }, { reviews: updatedReviews }, { new: true })
+        .exec();
+    } catch (error) {
+      return error;
+    }
+  }
 }

@@ -79,6 +79,7 @@ const BreadcrumbAndNExtPrevBtns: React.FC = () => {
   );
 };
 
+// TODO: get some pics for products
 const LeftPictureSide: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -148,9 +149,10 @@ const LeftPictureSide: React.FC = () => {
 
 const RightInfoSide: React.FC = () => {
   const product = useAppSelector((st) => st.products.singleProduct);
-  const user = useAppSelector((st) => st.user);
-  const [storedUser, saveUserToReduxAndLocalStorage] =
-    useReduxAndLocalStorage("user");
+  const [user, saveUserToReduxAndLocalStorage] =
+    useReduxAndLocalStorage<any>("user");
+  const [cart, saveCartToReduxAndLocalStorage] =
+    useReduxAndLocalStorage<any>("cart");
   const access_token = useAppSelector((st) => st.access_token);
   const router = useRouter();
   const locale = useLocale();
@@ -158,6 +160,7 @@ const RightInfoSide: React.FC = () => {
   const searchParams = useSearchParams();
   const colorQueryParam = searchParams.get("color");
   const sizeQueryParam = searchParams.get("size");
+  const tasteQueryParam = searchParams.get("taste");
   let amountQueryParam = searchParams.get("amount") || 1;
   const selectedCurrency = currencies[locale] || "$";
   const [showAuthOverlay, setShowAuthOverlay] = useState<boolean>(false);
@@ -188,8 +191,36 @@ const RightInfoSide: React.FC = () => {
     }
   };
 
-  const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleAddToCart = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+
+    if (!user) return setShowAuthOverlay(true);
+
+    if (product?._id) {
+      const updatedCart = [
+        ...(cart || []),
+        {
+          _id: product._id,
+          priceForOne: product.price,
+          amount: Number(amountQueryParam),
+          filters: {
+            color: colorQueryParam,
+            tastes: tasteQueryParam,
+            size: sizeQueryParam,
+          },
+        },
+      ];
+
+      await POSTUpdateUser(
+        user._id,
+        {
+          cart: updatedCart,
+        },
+        access_token
+      );
+
+      saveCartToReduxAndLocalStorage(updatedCart, addToCart);
+    }
   };
 
   const handleLikeProduct = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -203,17 +234,18 @@ const RightInfoSide: React.FC = () => {
       let updatedLikes;
 
       if (hasLike) {
-        updatedLikes = currentLikes.filter((id) => id !== product?._id);
+        updatedLikes = currentLikes.filter((id: string) => id !== product?._id);
       } else {
         updatedLikes = [...currentLikes, product?._id];
       }
 
-      const data = await POSTUpdateUser(user._id, {
-        //sending access_token for access
-        access_token,
-        // to data to change
-        likes: updatedLikes,
-      });
+      const data = await POSTUpdateUser(
+        user._id,
+        {
+          likes: updatedLikes,
+        },
+        access_token
+      );
 
       saveUserToReduxAndLocalStorage(data, userUpdate);
     }
@@ -250,7 +282,7 @@ const RightInfoSide: React.FC = () => {
         <div className="capitalize text-xl text-colorful font-bold w-full mb-4 flex flex-row items-center justify-start">
           {selectedCurrency} {product?.price || <Skeleton width="16" />}
         </div>
-        <div className="text-xs text-[#999] font-normal flex justify-start items-center">
+        <div className="text-xs text-[#999] font-normal flex justify-start items-center gap-5">
           {product?.reviews ? (
             <>
               <Rating data={product.reviews.map((r) => r.rating)} />{" "}

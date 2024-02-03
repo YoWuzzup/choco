@@ -23,3 +23,23 @@ export const GETOneProduct = async (id: unknown) => {
     throw error;
   }
 };
+
+export const POSTUpdateProductReviews = async (
+  id: string,
+  data: any,
+  access_token: string | null
+) => {
+  try {
+    const res = await axios.post(
+      `${url}products/${id}/update/reviews`,
+      { ...data, access_token },
+      {
+        withCredentials: true,
+      }
+    );
+
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};

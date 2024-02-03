@@ -4,6 +4,16 @@ type SliceState = null | {
   _id: string;
   avatar: string;
   likes: string[];
+  name: string;
+  email: string;
+  cart: {
+    _id: string;
+    filters: {
+      color: string;
+      size: string;
+      amount: number;
+    };
+  }[];
 };
 
 const userSlice = createSlice({

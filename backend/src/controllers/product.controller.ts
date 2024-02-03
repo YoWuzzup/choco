@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { ObjectId } from 'mongoose';
 import { partialProductDto } from 'src/dtos/product.dto';
+import { AccessTokenGuard } from 'src/guards/jwt-auth.guard';
 import { Roles } from 'src/guards/roles.decorator';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { ProductService } from 'src/services/product.service';
@@ -44,5 +45,20 @@ export class ProductController {
     const updatedProduct = await this.productService.updateProduct(_id, data);
 
     return updatedProduct;
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Post(':id/update/reviews')
+  async updateProductReview(
+    @Param('id') _id: ObjectId | string,
+    @Body() data: any,
+  ) {
+    const { review } = data;
+    const productWithReview = await this.productService.updateReview(
+      _id,
+      review,
+    );
+
+    return productWithReview;
   }
 }

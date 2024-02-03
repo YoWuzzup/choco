@@ -2,20 +2,14 @@
 import Link from "next/link";
 import { useState } from "react";
 
-import { useAppSelector } from "@/hooks/redux";
-import { Button, Input } from "@/components";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { AuthOverlay, Button, Input } from "@/components";
+import { POSTUpdateProductReviews } from "@/api/products";
+import { POSTUpdateUser } from "@/api/user";
+import { addSingleProduct } from "@/redux/slices/productsSlice";
 
-const reviews: any[] = [
-  { name: "asd", comment: "asd sd as dsadwda ", score: 4 },
-  { name: "asd", comment: "asd sd as dsadwda ", score: 4 },
-  { name: "asd", comment: "asd sd as dsadwda ", score: 4 },
-];
-// TODO: write the correct href pathsfor these links
+// TODO: write the correct href paths for these links
 const links = [
-  {
-    name: "Orders & Shipping",
-    href: "#",
-  },
   {
     name: "Returns & Refunds",
     href: "#",
@@ -26,7 +20,7 @@ const links = [
   },
   {
     name: "Your Orders",
-    href: "#",
+    href: "/profile/orders",
   },
 ];
 
@@ -106,8 +100,65 @@ const AddInformation: React.FC = () => {
 };
 
 const Reviews: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const product = useAppSelector((st) => st.products.singleProduct);
   const user = useAppSelector((st) => st.user);
+  const access_token = useAppSelector((st) => st.access_token);
   const [openNewReviewForm, setOpenNewReviewForm] = useState<boolean>(false);
+  const [showAuthOverlay, setShowAuthOverlay] = useState<boolean>(false);
+  const [review, setReview] = useState({
+    title: "",
+    comment: "",
+    rating: 5,
+    author: user?.name || user?.email || "unknown",
+  });
+
+  const handleChangeReview = (e: React.ChangeEvent<unknown>) => {
+    e.preventDefault();
+
+    let target = e.target as HTMLInputElement;
+
+    setReview((prev) => {
+      return { ...prev, [target.name]: target.value };
+    });
+  };
+
+  const handleUserExists = (e: any) => {
+    e.preventDefault();
+
+    user ? setOpenNewReviewForm(!openNewReviewForm) : setShowAuthOverlay(true);
+  };
+
+  const handleSubmitReview = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    if (product?._id && user?._id) {
+      const updatedReviews = [...(product.reviews || []), review];
+
+      // update product with a new review
+      const data = await POSTUpdateProductReviews(
+        product?._id,
+        { review },
+        access_token
+      );
+      dispatch(addSingleProduct(data));
+
+      // update user that wrote new review
+      await POSTUpdateUser(
+        user?._id,
+        { reviews: updatedReviews },
+        access_token
+      );
+    }
+
+    // reset inputs
+    setReview({
+      title: "",
+      comment: "",
+      rating: 5,
+      author: user?.name || "unknown",
+    });
+  };
 
   return (
     <div
@@ -117,71 +168,110 @@ const Reviews: React.FC = () => {
       <h4 className="basis-full text-sm">Customer Reviews</h4>
 
       <div className="basis-full">
-        {reviews.length > 0 ? (
-          reviews.map((r, i) => (
+        {product?.reviews && product?.reviews?.length > 0 ? (
+          product?.reviews?.map((r, i) => (
             <div
-              key={`${r.name}_${i}`}
+              key={`${r.author}_${i}`}
               className="flex flex-row flex-nowrap justify-between items-center 
                     border-b-[1px] border-[#e7e7e7] border-solid pb-4 mb-4"
             >
               <div className="flex flex-col grow">
-                <div className="capitalize">{r.name}</div>
+                <div className="capitalize">{r.author}</div>
                 <div className="text-paraPrimary">{r.comment}</div>
               </div>
-              <div>{r.score}</div>
+              <div>{r.rating}</div>
             </div>
           ))
         ) : (
           <div>No reviews yet</div>
         )}
         <div className="flex flex-col justify-start items-center text-paraPrimary">
-          {user ? (
-            <>
-              <div
-                className="text-primary hover:text-colorful cursor-pointer duration-300"
-                onClick={() => setOpenNewReviewForm(!openNewReviewForm)}
-              >
-                Write a review
-              </div>
-              <div
-                className={`flex flex-col w-full overflow-hidden transition-all duration-700 ${
-                  openNewReviewForm ? "max-h-[250px]" : "max-h-0 invisible"
-                }`}
-              >
-                <div className="text-[13px]">Rating</div>
-                <div className="text-[13px]">
-                  Raview Title
-                  <Input
-                    input={{
-                      id: "title",
-                      className: `border-solid border-[1px] border-grey w-full p-2 mt-2 mb-6`,
-                    }}
-                  />
-                </div>
-                <div className="text-[13px] w-full">
-                  Review (1500)
-                  <Input
-                    input={{
-                      id: "comment",
-                      className: `border-solid border-[1px] border-grey w-full p-2 mt-2 mb-6`,
-                    }}
-                  />
-                </div>
-                <Button
-                  type={"submit"}
-                  buttonClasses={`text-secondary grow text-sm capitalize px-10 
+          <div
+            className="text-primary hover:text-colorful cursor-pointer duration-300"
+            onClick={handleUserExists}
+          >
+            Write a review
+          </div>
+          <div
+            className={`flex flex-col w-full overflow-hidden transition-all duration-700 ${
+              openNewReviewForm ? "max-h-[250px]" : "max-h-0 invisible"
+            }`}
+          >
+            <div className="text-[13px] flex flex-row justify-start items-center mb-3">
+              {[1, 2, 3, 4, 5].map((i, index) => (
+                <Input
+                  key={`${index}`}
+                  input={{
+                    id: `rating-${index}`,
+                    name: "rating",
+                    type: "radio",
+                    className: "hidden",
+                    value: i,
+                    onChange: handleChangeReview,
+                  }}
+                  label={{
+                    htmlFor: `rating-${index}`,
+                    className: "",
+                    children: (
+                      <svg
+                        className={`w-4 h-4 ms-1 ${
+                          review.rating > index ? "text-yellow" : "text-gray"
+                        }`}
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor"
+                        viewBox="0 0 22 20"
+                      >
+                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                      </svg>
+                    ),
+                  }}
+                ></Input>
+              ))}
+              {/* <Rating
+                data={Array.from({ length: 5 }, (x, index) => 4) || [5]}
+              /> */}
+            </div>
+            <div className="text-[13px]">
+              Raview Title
+              <Input
+                input={{
+                  id: "title",
+                  name: "title",
+                  value: review.title,
+                  onChange: handleChangeReview,
+                  className: `border-solid border-[1px] border-grey w-full p-2 mt-2 mb-6`,
+                }}
+              />
+            </div>
+            <div className="text-[13px] w-full">
+              Review {1500 - review.comment.length}
+              <Input
+                input={{
+                  id: "comment",
+                  name: "comment",
+                  value: review.comment,
+                  onChange: handleChangeReview,
+                  className: `border-solid border-[1px] border-grey w-full p-2 mt-2 mb-6`,
+                }}
+              />
+            </div>
+
+            <Button
+              type={"submit"}
+              buttonClasses={`text-secondary grow text-sm capitalize px-10 
                     bg-colorful hover:bg-secondary duration-300 h-14`}
-                  handleClick={(e: any) => {}}
-                >
-                  submit review
-                </Button>
-              </div>
-            </>
-          ) : (
-            "Log in to write a review"
-          )}
+              handleClick={handleSubmitReview}
+            >
+              submit review
+            </Button>
+          </div>
         </div>
       </div>
+
+      {showAuthOverlay && (
+        <AuthOverlay setShowAuthOverlay={setShowAuthOverlay} />
+      )}
     </div>
   );
 };
@@ -215,6 +305,7 @@ export const InformationAndReview: React.FC = () => {
           Review
         </div>
       </div>
+
       {tab ? <Reviews /> : <AddInformation />}
     </section>
   );

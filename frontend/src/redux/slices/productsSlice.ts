@@ -5,7 +5,7 @@ type singleProduct = {
   img: string | null | undefined;
   price: number | string;
   description: string;
-  reviews: { rating: number }[];
+  reviews: { rating: number; author: string; comment: string }[];
   sizes: string[];
   tastes: string[];
   colors: string[];

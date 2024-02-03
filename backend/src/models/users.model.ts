@@ -6,6 +6,7 @@ export const UsersSchema = new mongoose.Schema({
   tokens: { refresh_token: { type: String, default: '' } },
   orders: [{ type: mongoose.Schema.Types.Mixed }],
   likes: [{ type: String }],
+  reviews: [{}],
 });
 
 export interface Users extends mongoose.Document {
@@ -14,4 +15,5 @@ export interface Users extends mongoose.Document {
   tokens: { refresh_token: string };
   orders: object[];
   likes: string[];
+  reviews: object[];
 }
