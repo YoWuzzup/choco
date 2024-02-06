@@ -66,12 +66,11 @@ export class UserService {
 
     // use toObject() to remove mongoose data and get only user data
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, tokens, ...result } = savedUser.toObject();
+    const { password, tokens, __v, ...result } = savedUser.toObject();
 
     const refreshToken = await this.jwtService.signAsync(
       {
-        id: result._id,
-        email: result.email,
+        ...result,
       },
       {
         expiresIn: this.configService.get('JWT_REFRESH_EXPIRESIN') / 1000,
@@ -94,8 +93,7 @@ export class UserService {
     return {
       access_token: await this.jwtService.signAsync(
         {
-          id: newUser._id,
-          email: newUser.email,
+          ...result,
         },
         {
           expiresIn: this.configService.get('JWT_EXPIRESIN'),

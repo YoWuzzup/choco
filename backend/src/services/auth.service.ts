@@ -13,6 +13,7 @@ import * as bcrypt from 'bcrypt';
 
 import { UserService } from './user.service';
 import { LoginDto } from 'src/dtos/authData.dto';
+import { returnUserDto } from 'src/dtos/user.dto';
 
 @Injectable()
 export class AuthService {
@@ -22,12 +23,15 @@ export class AuthService {
     private userService: UserService,
   ) {}
 
-  async validateUser(email: string, password: string): Promise<any | null> {
+  async validateUser(
+    email: string,
+    password: string,
+  ): Promise<returnUserDto | null> {
     const user = await this.userService.findOneUser({ email });
 
     if (user && (await bcrypt.compare(password, user.password))) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, tokens, ...result } = user;
+      const { password, tokens, __v, ...result } = user;
 
       return result;
     }
@@ -45,7 +49,7 @@ export class AuthService {
       throw new BadRequestException('User does not exist or wrong credentials');
 
     const refreshToken = await this.createJwtToken(
-      { _id: validatedUser._id, email: validatedUser.email },
+      { ...validatedUser },
       'refresh',
     );
 
@@ -65,10 +69,7 @@ export class AuthService {
     });
 
     return {
-      access_token: await this.createJwtToken(
-        { _id: validatedUser._id, email: validatedUser.email },
-        'access',
-      ),
+      access_token: await this.createJwtToken({ ...validatedUser }, 'access'),
     };
   }
 

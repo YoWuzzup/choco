@@ -6,7 +6,7 @@ import {
   useSearchParams,
 } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { useLocale, useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { addSingleProduct } from "@/redux/slices/productsSlice";
@@ -17,7 +17,6 @@ import {
   Rating,
   Skeleton,
   Slider,
-  Spinner,
 } from "@/components";
 
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
@@ -153,7 +152,8 @@ const RightInfoSide: React.FC = () => {
     useReduxAndLocalStorage<any>("user");
   const [cart, saveCartToReduxAndLocalStorage] =
     useReduxAndLocalStorage<any>("cart");
-  const access_token = useAppSelector((st) => st.access_token);
+  const [storedAccessToken, saveAccessTokenToReduxAndLocalStorage] =
+    useReduxAndLocalStorage("access_token");
   const router = useRouter();
   const locale = useLocale();
   const pathname = usePathname();
@@ -213,10 +213,9 @@ const RightInfoSide: React.FC = () => {
 
       await POSTUpdateUser(
         user._id,
-        {
-          cart: updatedCart,
-        },
-        access_token
+        { cart: updatedCart },
+        storedAccessToken as string,
+        saveAccessTokenToReduxAndLocalStorage
       );
 
       saveCartToReduxAndLocalStorage(updatedCart, addToCart);
@@ -244,7 +243,8 @@ const RightInfoSide: React.FC = () => {
         {
           likes: updatedLikes,
         },
-        access_token
+        storedAccessToken as string,
+        saveAccessTokenToReduxAndLocalStorage
       );
 
       saveUserToReduxAndLocalStorage(data, userUpdate);
@@ -470,28 +470,7 @@ const RightInfoSide: React.FC = () => {
 
 export const ProductMainInfoSection: React.FC = () => {
   const dispatch = useAppDispatch();
-  const t = useTranslations();
-  const locale = useLocale();
-  const router = useRouter();
   const params = useParams();
-  const pathname = usePathname();
-  const selectedCurrency = currencies[locale] || "$";
-
-  const handleFilterChange = (e: any) => {
-    e.preventDefault();
-
-    const name = e.target.id || e.target.name;
-    const value = e.target.value;
-
-    router.replace(`${pathname}`);
-
-    if (!value) {
-      const searchParams = new URLSearchParams(window.location.search);
-      searchParams.delete(name);
-
-      router.replace(`${pathname}?${searchParams.toString()}`);
-    }
-  };
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
