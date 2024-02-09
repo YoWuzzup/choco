@@ -18,6 +18,9 @@ export { OurTeamSection } from "./sections/about/OurTeamSection";
 export { WhyUsSection } from "./sections/about/WhyUsSection";
 export { InstagramSection } from "./sections/about/InstagramSection";
 
+// profile sections
+export { ProfileMenu } from "./sections/profile/ProfileMenu";
+
 // exporting a client function
 export { default as NavBar } from "./navbar/NavBar";
 export { default as Footer } from "./footer/Footer";

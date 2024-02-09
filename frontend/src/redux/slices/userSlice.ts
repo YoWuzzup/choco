@@ -4,6 +4,7 @@ type SliceState = null | {
   _id: string;
   avatar: string;
   likes: string[];
+  currentLikes: { [key: string]: any }[];
   name: string;
   email: string;
   cart: {

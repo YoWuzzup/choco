@@ -7,7 +7,7 @@ import ReduxStoreProvider from "./ReduxStoreProvider";
 
 import "./globals.css";
 import { Inter } from "next/font/google";
-import { Footer, NavBar } from "../../components/index";
+import { NavBar } from "../../components/index";
 
 const inter = Inter({ subsets: ["latin"] });
 

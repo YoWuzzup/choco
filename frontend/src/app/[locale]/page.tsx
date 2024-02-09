@@ -3,6 +3,7 @@ import {
   AboutUsSection,
   BannerSection,
   BestSellerSection,
+  Footer,
   SliderSection,
   SubscribeSection,
 } from "@/components";
@@ -15,6 +16,7 @@ export default function Home() {
       <BestSellerSection />
       <BannerSection />
       <SubscribeSection />
+      <Footer />
     </main>
   );
 }

@@ -38,7 +38,7 @@ const dropdown = [
   },
   {
     name: "settings",
-    href: "/settings",
+    href: "/profile/settings",
   },
   {
     name: "sign out",
