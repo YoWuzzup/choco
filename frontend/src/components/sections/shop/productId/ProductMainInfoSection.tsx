@@ -23,9 +23,7 @@ import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import { GETOneProduct } from "@/api/products";
-import { addToCart } from "@/redux/slices/cartSlice";
 import { POSTUpdateUser } from "@/api/user";
-import { saveAccessTokenToRedux } from "@/redux/slices/accessTokenSlice";
 import { userUpdate } from "@/redux/slices/userSlice";
 import { useReduxAndLocalStorage } from "@/hooks/useReduxAndLocalStorage ";
 
@@ -150,8 +148,6 @@ const RightInfoSide: React.FC = () => {
   const product = useAppSelector((st) => st.products.singleProduct);
   const [user, saveUserToReduxAndLocalStorage] =
     useReduxAndLocalStorage<any>("user");
-  const [cart, saveCartToReduxAndLocalStorage] =
-    useReduxAndLocalStorage<any>("cart");
   const [storedAccessToken, saveAccessTokenToReduxAndLocalStorage] =
     useReduxAndLocalStorage("access_token");
   const router = useRouter();
@@ -198,10 +194,9 @@ const RightInfoSide: React.FC = () => {
 
     if (product?._id) {
       const updatedCart = [
-        ...(cart || []),
+        ...user.cart,
         {
-          _id: product._id,
-          priceForOne: product.price,
+          ...product,
           amount: Number(amountQueryParam),
           filters: {
             color: colorQueryParam,
@@ -211,14 +206,14 @@ const RightInfoSide: React.FC = () => {
         },
       ];
 
-      await POSTUpdateUser(
+      const data = await POSTUpdateUser(
         user._id,
         { cart: updatedCart },
         storedAccessToken as string,
         saveAccessTokenToReduxAndLocalStorage
       );
 
-      saveCartToReduxAndLocalStorage(updatedCart, addToCart);
+      saveUserToReduxAndLocalStorage(data, userUpdate);
     }
   };
 

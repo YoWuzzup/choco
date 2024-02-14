@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { createSlice } from "@reduxjs/toolkit";
 
 type SliceState = null | {
@@ -8,6 +9,8 @@ type SliceState = null | {
   name: string;
   email: string;
   cart: {
+    description: ReactNode;
+    name: ReactNode;
     _id: string;
     filters: {
       color: string;

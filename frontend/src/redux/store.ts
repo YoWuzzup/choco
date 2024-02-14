@@ -2,7 +2,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./slices/userSlice";
 import accessTokenReducer from "./slices/accessTokenSlice";
 import productsReducer from "./slices/productsSlice";
-import cartReducer from "./slices/cartSlice";
 
 export const makeStore = () => {
   return configureStore({
@@ -10,7 +9,6 @@ export const makeStore = () => {
       user: userReducer,
       access_token: accessTokenReducer,
       products: productsReducer,
-      cart: cartReducer,
     },
   });
 };

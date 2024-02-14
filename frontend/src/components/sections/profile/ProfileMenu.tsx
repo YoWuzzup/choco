@@ -55,14 +55,17 @@ export const ProfileMenu: React.FC = () => {
   const path = usePathname();
 
   return (
-    <div className="flex flex-col gap-2 h-screen w-3/12 shadow-xl fixed top-0 left-0 px-3 pt-[4rem]">
+    <div
+      className="flex flex-row flex-wrap gap-2 h-auto w-full shadow-xl fixed top-0 left-0 px-3 pt-[4rem] 
+            xl:w-2/12 sm:flex-col sm:h-screen sm:w-3/12"
+    >
       {menu().map((m, i) => {
         return (
           <div key={`${m.header}_${i}`}>
-            <h3 className="text-colorful capitalize mb-2 text-lg">
+            <h3 className="text-colorful capitalize mb-2 text-lg hidden sm:block">
               {m.header}
             </h3>
-            <div className="w-full flex flex-col">
+            <div className="w-full flex flex-row sm:flex-col">
               {m.tabs?.map((t, idx) => {
                 return (
                   <Link

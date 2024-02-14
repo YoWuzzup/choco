@@ -59,13 +59,14 @@ export default function NavBar(): ReactNode {
     setMenuIsOpen((prev) => !prev);
   };
 
-  const handleProfileMenuClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleProfileMenuClick = (e: React.MouseEvent<any>) => {
     e.preventDefault();
 
     setProfileMenuIsOpen((prev) => !prev);
   };
 
   const t = useTranslations("");
+
   useOnClickOutside(
     profileMenuRef,
     () => {
@@ -182,6 +183,7 @@ export default function NavBar(): ReactNode {
                     aria-labelledby="user-menu-button"
                     tabIndex={-1}
                     ref={profileMenuRef}
+                    onClick={(e) => handleProfileMenuClick(e)}
                   >
                     {dropdown.map((l, index) => (
                       <Link
