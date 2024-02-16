@@ -5,19 +5,9 @@ type SliceState = null | {
   _id: string;
   avatar: string;
   likes: string[];
-  currentLikes: { [key: string]: any }[];
   name: string;
   email: string;
-  cart: {
-    description: ReactNode;
-    name: ReactNode;
-    _id: string;
-    filters: {
-      color: string;
-      size: string;
-      amount: number;
-    };
-  }[];
+  cart: [] | string[];
 };
 
 const userSlice = createSlice({

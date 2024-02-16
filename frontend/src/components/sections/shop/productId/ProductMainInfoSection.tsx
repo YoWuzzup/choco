@@ -193,18 +193,10 @@ const RightInfoSide: React.FC = () => {
     if (!user) return setShowAuthOverlay(true);
 
     if (product?._id) {
-      const updatedCart = [
-        ...user.cart,
-        {
-          ...product,
-          amount: Number(amountQueryParam),
-          filters: {
-            color: colorQueryParam,
-            tastes: tasteQueryParam,
-            size: sizeQueryParam,
-          },
-        },
-      ];
+      const urlSearchParams = new URLSearchParams(window.location.search);
+      const newCartItem = `${product._id}?${urlSearchParams.toString()}`;
+
+      const updatedCart = [...user.cart, newCartItem];
 
       const data = await POSTUpdateUser(
         user._id,

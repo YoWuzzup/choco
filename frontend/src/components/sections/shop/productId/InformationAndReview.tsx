@@ -7,6 +7,7 @@ import { AuthOverlay, Button, Input } from "@/components";
 import { POSTUpdateProductReviews } from "@/api/products";
 import { POSTUpdateUser } from "@/api/user";
 import { addSingleProduct } from "@/redux/slices/productsSlice";
+import { useReduxAndLocalStorage } from "@/hooks/useReduxAndLocalStorage ";
 
 // TODO: write the correct href paths for these links
 const links = [
@@ -103,7 +104,8 @@ const Reviews: React.FC = () => {
   const dispatch = useAppDispatch();
   const product = useAppSelector((st) => st.products.singleProduct);
   const user = useAppSelector((st) => st.user);
-  const access_token = useAppSelector((st) => st.access_token);
+  const [access_token, saveAccessTokenToReduxAndLocalStorage] =
+    useReduxAndLocalStorage("access_token");
   const [openNewReviewForm, setOpenNewReviewForm] = useState<boolean>(false);
   const [showAuthOverlay, setShowAuthOverlay] = useState<boolean>(false);
   const [review, setReview] = useState({
@@ -139,7 +141,7 @@ const Reviews: React.FC = () => {
       const data = await POSTUpdateProductReviews(
         product?._id,
         { review },
-        access_token
+        access_token as string
       );
       dispatch(addSingleProduct(data));
 
@@ -147,7 +149,8 @@ const Reviews: React.FC = () => {
       await POSTUpdateUser(
         user?._id,
         { reviews: updatedReviews },
-        access_token
+        access_token as string,
+        saveAccessTokenToReduxAndLocalStorage
       );
     }
 
