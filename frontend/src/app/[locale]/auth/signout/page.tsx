@@ -16,12 +16,15 @@ export default function Signout() {
       // Remove local storage
       await deleteDataFromLocalStorage("access_token");
       await deleteDataFromLocalStorage("user");
+      await deleteDataFromLocalStorage("cart");
+      await deleteDataFromLocalStorage("userCart");
+      await deleteDataFromLocalStorage("userBookmarks");
 
       // Remove redux
       dispatch(removeAccessTokenFromRedux());
       dispatch(userLogout());
 
-      router.push("/");
+      return router.push("/");
     };
 
     logout();

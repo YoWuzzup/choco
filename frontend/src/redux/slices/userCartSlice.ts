@@ -12,11 +12,14 @@ const userCartSlice = createSlice({
   name: "userCart",
   initialState: [] as SliceState,
   reducers: {
-    addUserCart(state, action) {
+    addToUserCart(state, action) {
       return [...state, ...action.payload];
+    },
+    renewUserCart(state, action) {
+      return [...action.payload];
     },
   },
 });
 
-export const { addUserCart } = userCartSlice.actions;
+export const { addToUserCart, renewUserCart } = userCartSlice.actions;
 export default userCartSlice.reducer;

@@ -4,7 +4,10 @@ const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export const GETProducts = async (query: unknown) => {
   try {
-    const res = await axios.get(`${url}products`, { params: query });
+    const res = await axios.get(`${url}products`, {
+      params: query,
+      withCredentials: true,
+    });
     const { data } = res;
 
     return data;
@@ -15,7 +18,9 @@ export const GETProducts = async (query: unknown) => {
 
 export const GETOneProduct = async (id: unknown) => {
   try {
-    const res = await axios.get(`${url}products/${id}`);
+    const res = await axios.get(`${url}products/${id}`, {
+      withCredentials: true,
+    });
     const { data } = res;
 
     return data;

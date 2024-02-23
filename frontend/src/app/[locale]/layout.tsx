@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { useLocale } from "next-intl";
 

@@ -8,7 +8,7 @@ import { useReduxAndLocalStorage } from "@/hooks/useReduxAndLocalStorage ";
 import { POSTUpdateUser } from "@/api/user";
 import { userUpdate } from "@/redux/slices/userSlice";
 import { GETProducts } from "@/api/products";
-import { addUserCart } from "@/redux/slices/userCartSlice";
+import { renewUserCart } from "@/redux/slices/userCartSlice";
 
 export default function Cart() {
   const [user, saveUser] = useReduxAndLocalStorage<any>("user");
@@ -27,7 +27,7 @@ export default function Cart() {
 
     if (!cartId || !user) return;
     setLoading(true);
-    const filteredCart = user.cart.filter((c: any) => c._id !== cartId);
+    const filteredCart = user.cart.filter((c: string) => c !== cartId);
 
     const data = await POSTUpdateUser(
       user._id,
@@ -43,26 +43,23 @@ export default function Cart() {
   };
 
   useEffect(() => {
-    if (!user.cart || user.cart.length === 0) return;
+    if (!user.cart || user.cart.length === 0) return setLoading(false);
 
     const fetchCart = async () => {
       try {
-        const arrayOfIds: string[] = user.cart.map((c: string, i: number) => {
-          const [idPart, restPart] = c.split("?");
+        const ids = user.cart.reduce((acc: any, item: any) => {
+          const id = item.split("?");
 
-          return idPart;
-        });
+          return [...acc, id[0]];
+        }, []);
 
-        let res = await GETProducts({ _id: arrayOfIds });
-        console.log(arrayOfIds);
-        console.log(res);
+        const res = await GETProducts({ _id: ids });
 
-        saveUserCartToReduxAndLocalStorage(res, addUserCart);
+        saveUserCartToReduxAndLocalStorage(res, renewUserCart);
       } catch (error) {
         console.error("Error fetching cart:", error);
       }
     };
-
     fetchCart();
 
     setLoading(false);
@@ -77,37 +74,43 @@ export default function Cart() {
           <div className="mt-28">
             <Spinner />
           </div>
-        ) : !storedUserCart || storedUserCart.length === 0 ? (
-          <div>There's no items in your cart yet.</div>
+        ) : !user.cart || user.cart.length === 0 ? (
+          <div className="flex justify-center items-center mt-10">
+            There's no items in your cart yet.
+          </div>
         ) : (
           <div className="flex flex-col p-2 sm:p-10">
-            {storedUserCart?.map((l: any, i: number) => {
+            {user?.cart?.map((l: string, i: number) => {
+              let obj: any = storedUserCart?.find((item: any) => {
+                return l.includes(`${item._id}`) ? item : null;
+              });
+
               return (
                 <Link
-                  href={`/shop/${l._id}`}
-                  key={`${l.name}_${i}`}
+                  href={`/shop/${l}`}
+                  key={`${obj?.name}_${i}`}
                   className="w-full px-7 py-14 mb-8 flex flex-row flex-nowrap gap-8 items-center justify-start
                     shadow-lg rounded-md hover:-translate-y-2 duration-200 group"
                 >
                   <>
                     {/* TODO:add correct image */}
                     <img
-                      src={``}
+                      src={`${obj?.image || ""}`}
                       alt={`like picture ${i}`}
                       className=""
                       style={{ objectFit: "cover" }}
                     />
                     <div className="flex flex-col grow">
                       <div className="text-lg capitalize text-primary group-hover:text-colorful">
-                        {l.name}
+                        {obj?.name}
                       </div>
-                      <div className="text-paraPrimary">{l.description}</div>
+                      <div className="text-paraPrimary">{obj?.description}</div>
                     </div>
                     <Button
                       type={"button"}
                       buttonClasses={`group/button p-2 border border-red bg-primary rounded-full duration-300 
                         hover:bg-red`}
-                      handleClick={(e) => handleRemoveCart(e, l._id)}
+                      handleClick={(e) => handleRemoveCart(e, l)}
                     >
                       <DeleteIcon className="text-red group-hover/button:text-secondary" />
                     </Button>

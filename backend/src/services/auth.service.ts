@@ -143,11 +143,13 @@ export class AuthService {
   async updateRefreshToken(
     req: Request,
     res: Response,
-  ): Promise<{ access_token: string }> {
+  ): Promise<{ access_token: string } | UnauthorizedException> {
     const refreshToken = req.cookies?.refresh_token;
+
     const decodedToken: any = this.jwtService.decode(refreshToken);
+    const user = await this.userService.findOneUser({ _id: decodedToken._id });
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { exp, iat, ...payload } = decodedToken;
+    const { tokens, password, __v, ...payload } = user;
 
     const updatedRefreshToken = await this.createJwtToken(payload, 'refresh');
     const updatedAccessToken = await this.createJwtToken(payload, 'access');

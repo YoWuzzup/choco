@@ -13,11 +13,15 @@ const userBookmarksSlice = createSlice({
   name: "userBookmarks",
   initialState: [] as UserBookmarksSlice,
   reducers: {
-    addUserBookmark(state, action) {
+    addToUserBookmarks(state, action) {
+      return [...state, ...action.payload];
+    },
+    renewUserBookmarks(state, action) {
       return [...action.payload];
     },
   },
 });
 
-export const { addUserBookmark } = userBookmarksSlice.actions;
+export const { addToUserBookmarks, renewUserBookmarks } =
+  userBookmarksSlice.actions;
 export default userBookmarksSlice.reducer;
