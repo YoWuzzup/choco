@@ -83,6 +83,7 @@ const Login: React.FC<{
           href={""}
           className="outline-none focus:outline-none focus-visible:outline-none"
         >
+          {/* TODO: change logo */}
           <img className="mx-auto h-10 mb-5" src="/logo.webp" alt="Choco" />
         </Link>{" "}
       </div>
@@ -547,7 +548,7 @@ export default function AuthOverlay({
     >
       <div
         onClick={(e: any) => e.stopPropagation()}
-        className="flex min-h-1/2 w-full sm:w-7/12 md:w-4/12 flex-col justify-center items-center px-6 pt-12 pb-14 lg:px-8 bg-primary"
+        className="flex min-h-1/2 w-full sm:w-7/12 md:w-1/2 lg:w-4/12 flex-col justify-center items-center px-6 pt-12 pb-14 lg:px-8 bg-primary"
         ref={overlayRef}
       >
         {page === "login" ? (

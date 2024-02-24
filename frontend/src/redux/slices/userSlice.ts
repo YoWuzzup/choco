@@ -8,6 +8,7 @@ type SliceState = null | {
   name: string;
   email: string;
   cart: [] | string[];
+  orders: [] | string[];
 };
 
 const userSlice = createSlice({

@@ -4,6 +4,7 @@ import accessTokenReducer from "./slices/accessTokenSlice";
 import productsReducer from "./slices/productsSlice";
 import userBookmarksReducer from "./slices/userBookmarksSlice";
 import userCartReducer from "./slices/userCartSlice";
+import userOrdersReducer from "./slices/userCartSlice";
 
 export const makeStore = () => {
   return configureStore({
@@ -13,6 +14,7 @@ export const makeStore = () => {
       products: productsReducer,
       userBookmarks: userBookmarksReducer,
       userCart: userCartReducer,
+      userOrders: userOrdersReducer,
     },
   });
 };

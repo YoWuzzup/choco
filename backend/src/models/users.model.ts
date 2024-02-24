@@ -8,6 +8,7 @@ export const UsersSchema = new mongoose.Schema({
   likes: { type: [String], default: [] },
   reviews: { type: [{}], default: [] },
   cart: { type: [{}], default: [] },
+  name: { type: String },
 });
 
 export interface Users extends mongoose.Document {
@@ -18,4 +19,5 @@ export interface Users extends mongoose.Document {
   likes: string[];
   reviews: object[];
   cart: object[];
+  name: string;
 }

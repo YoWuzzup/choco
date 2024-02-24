@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { GETProducts } from "@/api/products";
 import { POSTUpdateUser } from "@/api/user";
-import { useAppSelector } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { useReduxAndLocalStorage } from "@/hooks/useReduxAndLocalStorage ";
 import { userUpdate } from "@/redux/slices/userSlice";
 import { renewUserBookmarks } from "@/redux/slices/userBookmarksSlice";
@@ -12,11 +12,12 @@ import { Button, ProfileMenu, Spinner } from "@/components";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function Bookmarks() {
-  const [user, saveUser] = useReduxAndLocalStorage<any>("user");
+  const dispatch = useAppDispatch();
   const [storedAccessToken, saveAccessTokenToReduxAndLocalStorage] =
     useReduxAndLocalStorage("access_token");
   const [storedUserBookmarks, saveUserBookmarksToReduxAndLocalStorage] =
     useReduxAndLocalStorage("userBookmarks");
+  const user = useAppSelector((st) => st.user);
   const likes = useAppSelector((st) => st.user?.likes);
   const userBookmarks = useAppSelector((st) => st.userBookmarks);
   const [loading, setLoading] = useState<boolean>(true);
@@ -40,7 +41,7 @@ export default function Bookmarks() {
       saveAccessTokenToReduxAndLocalStorage
     );
 
-    saveUser(data, userUpdate);
+    dispatch(userUpdate(data));
     setLoading(false);
   };
 

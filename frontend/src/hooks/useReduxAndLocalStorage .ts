@@ -1,7 +1,11 @@
 import { useAppDispatch } from "./redux";
 import useLocalStorage from "./useLocalStorage";
 
-export const useReduxAndLocalStorage = <T>(key: string) => {
+export const useReduxAndLocalStorage: <T>(
+  key: string
+) => readonly [T | null, (data: T, action: (data: any) => any) => void] = <T>(
+  key: string
+) => {
   const dispatch = useAppDispatch();
 
   const [storedValue, setDataToLocalStorage] = useLocalStorage<T | null>(

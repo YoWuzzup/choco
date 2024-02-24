@@ -16,6 +16,7 @@ export class returnUserDto {
   likes: string[] | ObjectId[];
   reviews: object[];
   cart: object[];
+  name: string;
 }
 
 export class UpdateUserDto extends PartialType(userDto) {}

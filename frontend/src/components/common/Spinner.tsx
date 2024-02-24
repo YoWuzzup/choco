@@ -1,11 +1,13 @@
 type TSpinner = {
   contanerStyles?: string;
+  svgStyles?: string;
   bgcolor?: string;
   maincolor?: string;
 };
 
 export const Spinner: React.FC<TSpinner> = ({
   contanerStyles,
+  svgStyles,
   bgcolor,
   maincolor,
 }) => {
@@ -18,7 +20,9 @@ export const Spinner: React.FC<TSpinner> = ({
     >
       <svg
         aria-hidden="true"
-        className="w-16 h-16 animate-spin dark:text-gray-600 fill-blue-600"
+        className={
+          svgStyles || "w-16 h-16 animate-spin dark:text-gray-600 fill-blue-600"
+        }
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
