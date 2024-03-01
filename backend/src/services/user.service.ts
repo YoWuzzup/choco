@@ -122,4 +122,12 @@ export class UserService {
       )
       .exec();
   }
+
+  async updateUserAvatar(_id: ObjectId | string, file: Express.Multer.File) {
+    const user = await this.updateUser({ _id }, { avatar: file });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, tokens, __v, ...userToSend } = user.toObject();
+
+    return userToSend;
+  }
 }

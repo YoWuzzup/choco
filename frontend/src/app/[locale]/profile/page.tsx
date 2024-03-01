@@ -79,7 +79,7 @@ export default function Profile() {
           </div>
         ) : !userRedux?.orders || userRedux?.orders.length === 0 ? (
           <div className="flex justify-center items-center mt-10">
-            There's no items in your cart yet.
+            You don't have any order yet!
           </div>
         ) : (
           <div className="flex flex-col p-2 sm:p-10">

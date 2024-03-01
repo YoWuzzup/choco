@@ -163,8 +163,12 @@ export default function NavBar(): ReactNode {
                   >
                     {user.avatar ? (
                       <img
-                        className="h-8 w-8 rounded-full"
-                        src={`${user.avatar}`}
+                        className="h-full w-full"
+                        src={
+                          typeof user.avatar === "string"
+                            ? user.avatar
+                            : `data:${user.avatar.mimetype};base64,${user.avatar.buffer}`
+                        }
                         alt="avatar"
                       />
                     ) : (

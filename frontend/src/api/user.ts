@@ -3,18 +3,26 @@ import axios from "axios";
 
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
+type AxiosConfig = {
+  headers?: Record<string, string>;
+  withCredentials?: boolean;
+};
+
 export const POSTUpdateUser = async (
   id: string,
   data: {},
   access_token: string,
-  funcToSaveAccessToken: (data: unknown, action: (data: any) => void) => void
+  funcToSaveAccessToken: (data: unknown, action: (data: any) => void) => void,
+  config: AxiosConfig = {
+    withCredentials: true,
+  }
 ): Promise<any> => {
   try {
     const res = await axios.post(
       `${url}user/${id}/update`,
       { ...data, access_token },
       {
-        withCredentials: true,
+        ...config,
       }
     );
 
@@ -31,6 +39,31 @@ export const POSTUpdateUser = async (
 
       return updatedData;
     }
+
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const POSTUpdateUserAvatar = async (
+  id: string,
+  formData: FormData,
+  config: AxiosConfig = {
+    withCredentials: true,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  }
+): Promise<any> => {
+  try {
+    const res = await axios.post(
+      `${url}user/${id}/update-user-avatar`,
+      formData,
+      {
+        ...config,
+      }
+    );
 
     return res.data;
   } catch (error) {

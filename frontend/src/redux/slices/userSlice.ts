@@ -1,9 +1,8 @@
-import { ReactNode } from "react";
 import { createSlice } from "@reduxjs/toolkit";
 
 type SliceState = null | {
   _id: string;
-  avatar: string;
+  avatar: File | any;
   likes: string[];
   name: string;
   email: string;

@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ObjectId } from 'mongoose';
 import { AccessTokenGuard } from 'src/guards/jwt-auth.guard';
 
@@ -12,11 +22,14 @@ export class UserController {
   @Get(':id')
   async findOne(@Param('id') _id: ObjectId | string) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, tokens, ...user } = await this.userService.findOneUser({
+    const user = await this.userService.findOneUser({
       _id,
     });
 
-    return user;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, tokens, avatar, __v, ...userToSend } = user;
+
+    return userToSend;
   }
 
   @UseGuards(AccessTokenGuard)
@@ -28,8 +41,20 @@ export class UserController {
     const updatedUser = (
       await this.userService.updateUser({ _id }, body)
     ).toObject();
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, tokens, ...user } = updatedUser;
+    const { password, tokens, avatar, __v, ...userToSend } = updatedUser;
+
+    return userToSend;
+  }
+
+  @Post(':id/update-user-avatar')
+  @UseInterceptors(FileInterceptor('avatar'))
+  async updateUserAvatar(
+    @Param('id') _id: ObjectId | string,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    const user = await this.userService.updateUserAvatar(_id, file);
 
     return user;
   }

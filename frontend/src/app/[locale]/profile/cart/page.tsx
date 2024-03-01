@@ -9,9 +9,11 @@ import { POSTUpdateUser } from "@/api/user";
 import { userUpdate } from "@/redux/slices/userSlice";
 import { GETProducts } from "@/api/products";
 import { renewUserCart } from "@/redux/slices/userCartSlice";
+import { useAppSelector } from "@/hooks/redux";
 
 export default function Cart() {
   const [user, saveUser] = useReduxAndLocalStorage<any>("user");
+  const userRedux = useAppSelector((st) => st.user);
   const [storedAccessToken, saveAccessTokenToReduxAndLocalStorage] =
     useReduxAndLocalStorage("access_token");
   const [storedUserCart, saveUserCartToReduxAndLocalStorage] =
@@ -25,12 +27,12 @@ export default function Cart() {
     e.preventDefault();
     e.stopPropagation();
 
-    if (!cartId || !user) return;
+    if (!cartId || !userRedux) return;
     setLoading(true);
-    const filteredCart = user.cart.filter((c: string) => c !== cartId);
+    const filteredCart = userRedux.cart.filter((c: string) => c !== cartId);
 
     const data = await POSTUpdateUser(
-      user._id,
+      userRedux._id,
       {
         cart: filteredCart,
       },
@@ -43,11 +45,12 @@ export default function Cart() {
   };
 
   useEffect(() => {
-    if (!user.cart || user.cart.length === 0) return setLoading(false);
+    if (!userRedux || !userRedux.cart || userRedux.cart.length === 0)
+      return setLoading(false);
 
     const fetchCart = async () => {
       try {
-        const ids = user.cart.reduce((acc: any, item: any) => {
+        const ids = userRedux.cart.reduce((acc: any, item: any) => {
           const id = item.split("?");
 
           return [...acc, id[0]];
@@ -74,13 +77,13 @@ export default function Cart() {
           <div className="mt-28">
             <Spinner />
           </div>
-        ) : !user.cart || user.cart.length === 0 ? (
+        ) : !userRedux?.cart || userRedux?.cart?.length === 0 ? (
           <div className="flex justify-center items-center mt-10">
             There's no items in your cart yet.
           </div>
         ) : (
           <div className="flex flex-col p-2 sm:p-10">
-            {user?.cart?.map((l: string, i: number) => {
+            {userRedux?.cart?.map((l: string, i: number) => {
               let obj: any = storedUserCart?.find((item: any) => {
                 return l.includes(`${item._id}`) ? item : null;
               });

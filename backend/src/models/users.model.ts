@@ -9,6 +9,14 @@ export const UsersSchema = new mongoose.Schema({
   reviews: { type: [{}], default: [] },
   cart: { type: [{}], default: [] },
   name: { type: String },
+  avatar: {
+    fieldname: String,
+    originalname: String,
+    encoding: String,
+    mimetype: String,
+    buffer: Buffer,
+    size: Number,
+  },
 });
 
 export interface Users extends mongoose.Document {
@@ -20,4 +28,12 @@ export interface Users extends mongoose.Document {
   reviews: object[];
   cart: object[];
   name: string;
+  avatar: {
+    fieldname: string;
+    originalname: string;
+    encoding: string;
+    mimetype: string;
+    buffer: Buffer;
+    size: number;
+  };
 }
