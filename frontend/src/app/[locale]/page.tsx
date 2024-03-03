@@ -25,7 +25,7 @@ export default function Home() {
 
   // checking if user data exists in local storage and save it to redux
   useEffect(() => {
-    // If access token is present in Redux
+    // If access token is present in local storage
     if (accessToken) {
       const fetchUserData = async () => {
         try {

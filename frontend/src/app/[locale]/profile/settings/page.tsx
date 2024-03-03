@@ -11,9 +11,20 @@ import { Button, Input, ProfileMenu, Spinner } from "@/components";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
+type User = null | {
+  _id: string;
+  avatar: File | {};
+  likes: string[];
+  name: string;
+  email: string;
+  cart: [] | string[];
+  orders: [] | string[];
+};
+
 export default function Settings() {
   const userRedux = useAppSelector((st) => st.user);
-  const [user, saveUser] = useReduxAndLocalStorage("user");
+  const accessTokenRedux = useAppSelector((st) => st.access_token);
+  const [user, saveUser] = useReduxAndLocalStorage<User>("user");
   const [storedAccessToken, saveAccessTokenToReduxAndLocalStorage] =
     useReduxAndLocalStorage("access_token");
   const [loading, setLoading] = useState<boolean>(false);
@@ -92,10 +103,13 @@ export default function Settings() {
 
       const fData = new FormData();
       fData.append("avatar", image);
-      const r = await POSTUpdateUserAvatar(userRedux?._id, fData);
+      const savedAvatar = await POSTUpdateUserAvatar(userRedux?._id, fData);
 
       // save updated user info
-      saveUser(r, userUpdate);
+      saveUser(
+        { ...(user || userRedux || {}), avatar: savedAvatar },
+        userUpdate
+      );
     }
 
     const data = await POSTUpdateUser(
@@ -106,7 +120,10 @@ export default function Settings() {
     );
 
     // save updated user info
-    saveUser(data, userUpdate);
+    saveUser(
+      { ...data, avatar: image || user?.avatar || userRedux.avatar || null },
+      userUpdate
+    );
     setLoading(false);
   };
 
@@ -124,7 +141,7 @@ export default function Settings() {
       <ProfileMenu />
 
       <div className="w-full sm:w-9/12 px-3">
-        <div className="w-full px-3 mt-20 sm:mt-8">
+        <div className="w-full px-3 mt-24 sm:mt-8">
           <h4 className="font-bold">Change your information</h4>
 
           {/* name, avatar and email */}
@@ -137,7 +154,10 @@ export default function Settings() {
               onDrop={(acceptedFiles) => handleImageChange(acceptedFiles)}
             >
               {({ getRootProps, getInputProps }) => (
-                <div {...getRootProps()} className={`cursor-pointer w-2/6`}>
+                <div
+                  {...getRootProps()}
+                  className={`cursor-pointer w-[200px] h-[200px]`}
+                >
                   <input {...getInputProps()} />
                   {image || userRedux?.avatar ? (
                     <>
@@ -150,7 +170,7 @@ export default function Settings() {
                             ? userRedux.avatar
                             : `data:${userRedux?.avatar.mimetype};base64,${userRedux?.avatar.buffer}`
                         }
-                        className="max-w-full max-h-full w-auto h-auto block"
+                        className="object-cover w-full h-full"
                       />
                       {errorImage ? (
                         <p className="text-red mt-4">Too large, max is 2MB</p>
