@@ -12,12 +12,14 @@ import { RefreshTokenStrategy } from 'src/guards/strategies/refreshToken.strateg
 import { RedirectFilter } from 'src/guards/filters/redirect.filter';
 import { UserModule } from './user.module';
 import { JwtModule } from '@nestjs/jwt';
+import { MailModule } from './mail.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'Users', schema: UsersSchema }]),
     UserModule,
     JwtModule,
+    MailModule,
   ],
   controllers: [AuthController],
   providers: [

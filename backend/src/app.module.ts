@@ -6,14 +6,18 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { RolesGuard } from './guards/roles.guard';
+
 import { AuthModule } from 'src/modules/auth.module';
 import { UserModule } from 'src/modules/user.module';
 import { ProductModule } from './modules/product.module';
 import { OrderModule } from './modules/order.module';
+
 import { AuthService } from './services/auth.service';
 import { UserService } from './services/user.service';
+
 import { UsersSchema } from './models/users.model';
+
+import { RolesGuard } from './guards/roles.guard';
 
 @Module({
   imports: [
