@@ -20,6 +20,11 @@ export default function Home() {
   const dispatch = useAppDispatch();
   // access token
   const [accessToken, saveAccessToken] = useLocalStorage("access_token", "");
+  // user avatar
+  const [userAvatarLocal, saveUserAvatarLocal] = useLocalStorage(
+    "userAvatar",
+    null
+  );
   // user
   const [user, saveUser] = useLocalStorage("user", null);
 
@@ -35,6 +40,7 @@ export default function Home() {
           // Save to local storage
           saveAccessToken(access_token);
           saveUser(userData);
+          saveUserAvatarLocal(userData.avatar);
 
           // Save to Redux
           dispatch(saveAccessTokenToRedux(access_token));

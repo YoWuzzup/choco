@@ -165,9 +165,11 @@ export default function NavBar(): ReactNode {
                       <img
                         className="h-full w-full"
                         src={
-                          typeof user.avatar === "string"
-                            ? user.avatar
-                            : `data:${user.avatar.mimetype};base64,${user.avatar.buffer}`
+                          user?.avatar instanceof File
+                            ? URL.createObjectURL(user?.avatar)
+                            : typeof user?.avatar === "object"
+                            ? `data:${user?.avatar.mimetype};base64,${user?.avatar.buffer}`
+                            : `${user?.avatar}`
                         }
                         alt="avatar"
                       />

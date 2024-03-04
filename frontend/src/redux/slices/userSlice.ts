@@ -2,7 +2,17 @@ import { createSlice } from "@reduxjs/toolkit";
 
 type SliceState = null | {
   _id: string;
-  avatar: File | any;
+  avatar:
+    | {
+        fieldname: string;
+        originalname: string;
+        encoding: string;
+        mimetype: string;
+        buffer: string;
+        size: number;
+      }
+    | string
+    | File;
   likes: string[];
   name: string;
   email: string;

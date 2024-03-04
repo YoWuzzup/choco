@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
-import { useAppSelector } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { useReduxAndLocalStorage } from "@/hooks/useReduxAndLocalStorage ";
 import { userUpdate } from "@/redux/slices/userSlice";
 
@@ -10,6 +10,7 @@ import { POSTUpdateUser, POSTUpdateUserAvatar } from "@/api/user";
 import { Button, Input, ProfileMenu, Spinner } from "@/components";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 type User = null | {
   _id: string;
@@ -22,11 +23,15 @@ type User = null | {
 };
 
 export default function Settings() {
+  // redux
+  const dispatch = useAppDispatch();
   const userRedux = useAppSelector((st) => st.user);
-  const accessTokenRedux = useAppSelector((st) => st.access_token);
-  const [user, saveUser] = useReduxAndLocalStorage<User>("user");
+  // local storage
+  const [userLocal, saveUserLocal] = useLocalStorage<User>("user", null);
+  const [userAvatar, saveUserAvatar] = useLocalStorage("userAvatar", null);
   const [storedAccessToken, saveAccessTokenToReduxAndLocalStorage] =
     useReduxAndLocalStorage("access_token");
+  // different states
   const [loading, setLoading] = useState<boolean>(false);
   const [showPasswords, setShowPasswords] = useState<boolean>(false);
   const [errorImage, setErrorImage] = useState<boolean>(false);
@@ -105,10 +110,12 @@ export default function Settings() {
       fData.append("avatar", image);
       const savedAvatar = await POSTUpdateUserAvatar(userRedux?._id, fData);
 
-      // save updated user info
-      saveUser(
-        { ...(user || userRedux || {}), avatar: savedAvatar },
-        userUpdate
+      // save whole image to local storage and redux
+      saveUserAvatar(savedAvatar);
+      dispatch(
+        userUpdate({
+          avatar: savedAvatar,
+        })
       );
     }
 
@@ -120,10 +127,8 @@ export default function Settings() {
     );
 
     // save updated user info
-    saveUser(
-      { ...data, avatar: image || user?.avatar || userRedux.avatar || null },
-      userUpdate
-    );
+    saveUserLocal({ ...(userLocal || userRedux || {}), ...data });
+    dispatch(userUpdate(data));
     setLoading(false);
   };
 
@@ -147,8 +152,8 @@ export default function Settings() {
           {/* name, avatar and email */}
           <div
             className={`w-full p-2 py-7 sm:p-14 my-8 flex flex-row flex-wrap md:flex-nowrap 
-                  gap-8 
-                  items-center justify-between shadow-lg rounded-md`}
+                  gap-8 justify-center
+                  items-center md:justify-between shadow-lg rounded-md`}
           >
             <Dropzone
               onDrop={(acceptedFiles) => handleImageChange(acceptedFiles)}
@@ -166,11 +171,13 @@ export default function Settings() {
                         src={
                           image
                             ? URL.createObjectURL(image)
-                            : typeof userRedux?.avatar === "string"
-                            ? userRedux.avatar
-                            : `data:${userRedux?.avatar.mimetype};base64,${userRedux?.avatar.buffer}`
+                            : userRedux?.avatar instanceof File
+                            ? URL.createObjectURL(userRedux?.avatar)
+                            : typeof userRedux?.avatar === "object"
+                            ? `data:${userRedux?.avatar.mimetype};base64,${userRedux?.avatar.buffer}`
+                            : `${userRedux?.avatar}`
                         }
-                        className="object-cover w-full h-full"
+                        className="object-cover w-full h-full rounded-full"
                       />
                       {errorImage ? (
                         <p className="text-red mt-4">Too large, max is 2MB</p>

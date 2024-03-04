@@ -2,7 +2,11 @@
 import Link from "next/link";
 import { ReactNode, useRef, useState } from "react";
 import { Button, Input } from "..";
-import { POSTLoginData, POSTRegister } from "@/api/authentication";
+import {
+  POSTLoginData,
+  POSTRegister,
+  POSTRestoreAccount,
+} from "@/api/authentication";
 import { useReduxAndLocalStorage } from "@/hooks/useReduxAndLocalStorage ";
 import { saveAccessTokenToRedux } from "@/redux/slices/accessTokenSlice";
 import { userLogin, userRegister } from "@/redux/slices/userSlice";
@@ -436,7 +440,7 @@ const Forgot: React.FC<{
     }));
   };
 
-  const handleDataSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleDataSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -446,8 +450,7 @@ const Forgot: React.FC<{
       return;
     }
 
-    // TODO: register logic
-    console.log("asd");
+    await POSTRestoreAccount(data.email);
   };
 
   return (
@@ -471,7 +474,7 @@ const Forgot: React.FC<{
           label={{
             htmlFor: "email",
             className: `block text-sm font-medium leading-6 text-primary
-        ${emailIsValid ? "text-primary" : "text-red"}`,
+                ${emailIsValid ? "text-primary" : "text-red"}`,
             children: <>Email address</>,
           }}
           input={{

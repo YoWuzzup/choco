@@ -114,6 +114,23 @@ export class AuthService {
     );
   }
 
+  async restore(body: { email: string }) {
+    const { email } = body;
+
+    const user = await this.userService.findOneUser({ email });
+    if (!user) throw new HttpException('Check your email!', HttpStatus.OK);
+    const restoreToken = await this.jwtService.signAsync(
+      { email },
+      {
+        expiresIn: this.configService.get('JWT_RESTORE_EXPIRESIN'),
+        secret: this.configService.get('JWT_SECRET'),
+      },
+    );
+    // TODO:send this token in cookies and send an email with a link
+
+    throw new HttpException('Check your email!', HttpStatus.OK);
+  }
+
   async createJwtToken(
     payload: any,
     type: 'refresh' | 'access',

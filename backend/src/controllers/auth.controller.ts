@@ -3,6 +3,7 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
   Post,
   Req,
   Res,
@@ -52,6 +53,12 @@ export class AuthController {
   @Post('logout')
   async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
     return this.authService.logout(req, res);
+  }
+
+  @HttpCode(200)
+  @Post('restore')
+  async restore(@Body() body: { email: string }) {
+    return await this.authService.restore(body);
   }
 
   @UseGuards(RefreshTokenGuard)

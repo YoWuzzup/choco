@@ -68,3 +68,20 @@ export const POSTRegister = async (data: {
     throw error;
   }
 };
+
+export const POSTRestoreAccount = async (email: string): Promise<any> => {
+  try {
+    const res = await axios.post(
+      `${url}auth/restore`,
+      { email },
+      {
+        withCredentials: true,
+      }
+    );
+    console.log(res);
+
+    return 0;
+  } catch (error) {
+    throw error;
+  }
+};

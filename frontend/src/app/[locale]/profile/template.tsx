@@ -13,16 +13,20 @@ export default function Template({ children }: { children: React.ReactNode }) {
   const userRedux = useAppSelector((st) => st.user);
   const accessTokenRedux = useAppSelector((st) => st.access_token);
   const [accessToken, saveAccessToken] = useLocalStorage("access_token", null);
-  const [user, saveUser] = useLocalStorage("user", null);
+  const [user, saveUser] = useLocalStorage<any>("user", null);
+  const [userAvatarLocal, saveUserAvatarLocal] = useLocalStorage(
+    "userAvatar",
+    null
+  );
 
   // checking if user logged in
   useEffect(() => {
-    // if there's no local storage the user is not logged in
+    // user is not logged in:
     if (!user || !accessToken) return router.push("/");
 
-    // if user logged in but no redux resave the state
+    //resave the state to redux:
     if (!userRedux || !accessTokenRedux) {
-      dispatch(userLogin(user));
+      dispatch(userLogin({ ...user, avatar: userAvatarLocal }));
       dispatch(saveAccessTokenToRedux(accessToken));
     }
   }, []);
