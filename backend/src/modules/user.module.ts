@@ -11,16 +11,24 @@ import { UserController } from 'src/controllers/user.controller';
 
 import { AccessTokenStrategy } from 'src/guards/strategies/jwt-strategy';
 import { RefreshTokenStrategy } from 'src/guards/strategies/refreshToken.strategy';
+import { MailService } from 'src/services/mail.service';
+import { MailModule } from './mail.module';
+import { SubscriptionsSchema } from 'src/models/subscription.model';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: 'Users', schema: UsersSchema }]),
+    MongooseModule.forFeature([
+      { name: 'Users', schema: UsersSchema },
+      { name: 'Subscriptions', schema: SubscriptionsSchema },
+    ]),
     JwtModule,
+    MailModule,
   ],
   controllers: [UserController],
   providers: [
     UserService,
     AuthService,
+    MailService,
     AccessTokenStrategy,
     RefreshTokenStrategy,
   ],

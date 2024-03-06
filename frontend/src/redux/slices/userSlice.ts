@@ -16,7 +16,7 @@ type SliceState = null | {
   likes: string[];
   name: string;
   email: string;
-  cart: [] | string[];
+  cart: string[];
   orders: [] | string[];
 };
 

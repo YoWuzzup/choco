@@ -13,10 +13,16 @@ import { RedirectFilter } from 'src/guards/filters/redirect.filter';
 import { UserModule } from './user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { MailModule } from './mail.module';
+import { MailService } from 'src/services/mail.service';
+import { UserService } from 'src/services/user.service';
+import { SubscriptionsSchema } from 'src/models/subscription.model';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: 'Users', schema: UsersSchema }]),
+    MongooseModule.forFeature([
+      { name: 'Users', schema: UsersSchema },
+      { name: 'Subscriptions', schema: SubscriptionsSchema },
+    ]),
     UserModule,
     JwtModule,
     MailModule,
@@ -24,8 +30,10 @@ import { MailModule } from './mail.module';
   controllers: [AuthController],
   providers: [
     AuthService,
+    MailService,
     AccessTokenStrategy,
     RefreshTokenStrategy,
+    UserService,
     LocalStrategy,
     {
       provide: APP_FILTER,

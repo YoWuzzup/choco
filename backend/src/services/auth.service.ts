@@ -14,6 +14,7 @@ import * as bcrypt from 'bcrypt';
 import { UserService } from './user.service';
 import { LoginDto } from 'src/dtos/authData.dto';
 import { returnUserDto } from 'src/dtos/user.dto';
+import { MailService } from './mail.service';
 
 @Injectable()
 export class AuthService {
@@ -21,6 +22,7 @@ export class AuthService {
     private configService: ConfigService,
     private readonly jwtService: JwtService,
     private userService: UserService,
+    private mailService: MailService,
   ) {}
 
   async validateUser(
@@ -31,7 +33,7 @@ export class AuthService {
 
     if (user && (await bcrypt.compare(password, user.password))) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, tokens, __v, ...result } = user;
+      const { password, tokens, __v, avatar, ...result } = user;
 
       return result;
     }
@@ -119,9 +121,30 @@ export class AuthService {
 
     const user = await this.userService.findOneUser({ email });
     if (!user) throw new HttpException('Check your email!', HttpStatus.OK);
-    // TODO:send this token in cookies and send an email with a link
+
+    const newPassword = await this.generateRandomPassword(8);
+    const hashedPassword = await bcrypt.hash(newPassword, 8);
+
+    await this.userService.updateUser({ email }, { password: hashedPassword });
+    await this.mailService.sendEmail(
+      { password: newPassword },
+      'restore password',
+      email,
+    );
 
     throw new HttpException('Check your email!', HttpStatus.OK);
+  }
+
+  async generateRandomPassword(length: number): Promise<string> {
+    const charset =
+      'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,.<>?';
+    let password = '';
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * charset.length);
+      password += charset[randomIndex];
+    }
+
+    return password;
   }
 
   async createJwtToken(
@@ -159,7 +182,7 @@ export class AuthService {
     const decodedToken: any = this.jwtService.decode(refreshToken);
     const user = await this.userService.findOneUser({ _id: decodedToken._id });
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { tokens, password, __v, ...payload } = user;
+    const { tokens, password, avatar, __v, ...payload } = user;
 
     const updatedRefreshToken = await this.createJwtToken(payload, 'refresh');
     const updatedAccessToken = await this.createJwtToken(payload, 'access');

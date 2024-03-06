@@ -15,11 +15,13 @@ type singleProduct = {
 
 type ProductsState = {
   singleProduct: singleProduct | null;
+  bestSellerProducts: singleProduct[] | null;
   listOfProducts: singleProduct[] | null;
 };
 
 const initialState: ProductsState = {
   singleProduct: null,
+  bestSellerProducts: null,
   listOfProducts: null,
 };
 
@@ -27,6 +29,12 @@ const productsSlice = createSlice({
   name: "products",
   initialState,
   reducers: {
+    addBestSellerProducts(state, action) {
+      return { ...state, bestSellerProducts: [...action.payload] };
+    },
+    removeBestSellerProducts(state) {
+      return { ...state, bestSellerProducts: null };
+    },
     addListOfProducts(state, action) {
       return { ...state, listOfProducts: [...action.payload] };
     },
@@ -39,6 +47,11 @@ const productsSlice = createSlice({
   },
 });
 
-export const { addListOfProducts, removeListOfProducts, addSingleProduct } =
-  productsSlice.actions;
+export const {
+  addListOfProducts,
+  removeListOfProducts,
+  addSingleProduct,
+  addBestSellerProducts,
+  removeBestSellerProducts,
+} = productsSlice.actions;
 export default productsSlice.reducer;

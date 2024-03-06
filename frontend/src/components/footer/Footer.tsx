@@ -3,6 +3,7 @@ import { useTranslations } from "next-intl";
 import { ReactNode } from "react";
 
 import InstagramIcon from "@mui/icons-material/Instagram";
+import FacebookIcon from "@mui/icons-material/Facebook";
 
 const customerLinks = [
   {
@@ -76,13 +77,17 @@ const companyLinks = [
 const socialMediaLinks = [
   {
     name: "instagram",
-    href: "/",
-    icon: <InstagramIcon className="text-base transition-all duration-300" />,
+    href: `${process.env.NEXT_PUBLIC_INSTAGRAM_LINK}`,
+    icon: (
+      <InstagramIcon className="text-primary hover:text-colorful text-2lg transition-all duration-300" />
+    ),
   },
   {
-    name: "instagram",
-    href: "#",
-    icon: <InstagramIcon className="text-base transition-all duration-300" />,
+    name: "facebook",
+    href: `${process.env.NEXT_PUBLIC_FACEBOOK_LINK}`,
+    icon: (
+      <FacebookIcon className="text-primary hover:text-colorful text-2lg transition-all duration-300" />
+    ),
   },
 ];
 
@@ -102,16 +107,17 @@ export default function Footer(): ReactNode {
       >
         <div className="flex items-center mb-4">
           <Link href={"/"}>
+            {/* TODO: change logo */}
             <img className="h-8 w-auto" src="/logo.webp" alt="Choco" />
           </Link>
         </div>
         <div className="text-primary text-sm text-center font-bold mb-8 md:text-left">
-          Subscribe our newsletter and get discount 30% off
+          Subscribe our newsletter and get discount 10% off
         </div>
         <div className="flex flex-row flex-nowrap justify-center items-center gap-3">
           {socialMediaLinks.map((m, index) => (
             <Link href={`${m.href}`} key={`${m.name}_${index}`}>
-              <div className="text-primary hover:text-colorful">{m.icon}</div>
+              {m.icon}
             </Link>
           ))}
         </div>

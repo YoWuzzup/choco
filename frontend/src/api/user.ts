@@ -70,3 +70,17 @@ export const POSTUpdateUserAvatar = async (
     throw error;
   }
 };
+
+export const POSTSubscribeToNews = async (email: string): Promise<any> => {
+  try {
+    const res = await axios.post(`${url}email/subscribetonews`, { email });
+
+    return res.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error.response?.data;
+    } else {
+      throw error;
+    }
+  }
+};

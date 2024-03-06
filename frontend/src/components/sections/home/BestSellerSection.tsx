@@ -1,17 +1,24 @@
-import { Product } from "@/components";
-
-const TODO = [
-  { src: "/home/TODO.webp" },
-  {},
-  { src: "/home/TODO.webp" },
-  {},
-  { src: "/home/TODO.webp" },
-  { src: "/home/TODO.webp" },
-  { src: "/home/TODO.webp" },
-  { src: "/home/TODO.webp" },
-];
+"use client";
+import { GETProducts } from "@/api/products";
+import { Product, Spinner } from "@/components";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { addBestSellerProducts } from "@/redux/slices/productsSlice";
+import { useEffect } from "react";
 
 export const BestSellerSection: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const products = useAppSelector((st) => st.products.bestSellerProducts);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const res = await GETProducts({ productsPerPage: 6 });
+
+      dispatch(addBestSellerProducts(res));
+    };
+
+    fetchProducts();
+  }, []);
+
   return (
     <section
       className={`w-full flex flex-col text-center justify-center items-center py-14 text-primary bg-primary`}
@@ -21,10 +28,14 @@ export const BestSellerSection: React.FC = () => {
         Best Seller Product This Week!
       </div>
 
-      <div className="w-full px-2 lg:px-8 flex flex-wrap justify-center items-center gap-4 lg:gap-16 lg:justify-evenly">
-        {TODO.map((p: any, i: number) => (
-          <Product key={`${p}_${i}`} p={p} />
-        ))}
+      <div className="w-full px-2 lg:px-8 flex flex-row flex-wrap justify-center items-center gap-6 lg:justify-evenly">
+        {products ? (
+          products.map((p: any, i: number) => (
+            <Product key={`${p.name}_${i}`} product={p} />
+          ))
+        ) : (
+          <Spinner />
+        )}
       </div>
     </section>
   );

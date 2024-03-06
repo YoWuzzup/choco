@@ -14,7 +14,7 @@ const menu = () => {
         {
           text: `dashboard`,
           icon: `<DashboardOutlinedIcon />`,
-          url: "/profile/",
+          url: "/profile",
           name: "dashboard",
         },
         {

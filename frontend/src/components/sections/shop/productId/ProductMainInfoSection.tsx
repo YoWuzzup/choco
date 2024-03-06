@@ -253,7 +253,7 @@ const RightInfoSide: React.FC = () => {
           <FavoriteBorderOutlinedIcon
             className={`w-10 h-10 p-2 transition-all duration-300 rounded-full shadow-md
                   ${
-                    user?.likes?.includes(product?._id || "")
+                    user?.likes?.includes(product?._id)
                       ? "bg-colorful hover:bg-primary text-secondary hover:text-primary"
                       : "bg-primary hover:bg-colorful text-primary hover:text-secondary"
                   }`}

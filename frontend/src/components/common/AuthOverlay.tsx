@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { ReactNode, useRef, useState } from "react";
-import { Button, Input } from "..";
+import { Button, Input, Spinner } from "..";
 import {
   POSTLoginData,
   POSTRegister,
@@ -423,7 +423,12 @@ const Forgot: React.FC<{
     page: "register" | "login" | "forgot"
   ) => void;
 }> = ({ handlePageChange }) => {
+  const [loading, setLoading] = useState<boolean>(false);
   const [emailIsValid, setEmailIsValid] = useState<boolean>(true);
+  const [res, setRes] = useState<null | {
+    statusCode: number;
+    message: string;
+  }>(null);
 
   const [data, setData] = useState<{
     email: string;
@@ -442,6 +447,7 @@ const Forgot: React.FC<{
 
   const handleDataSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     // Check if email is valid
@@ -449,8 +455,12 @@ const Forgot: React.FC<{
       setEmailIsValid(false);
       return;
     }
+    setLoading(true);
 
-    await POSTRestoreAccount(data.email);
+    await POSTRestoreAccount(data.email).then((r) => {
+      setRes(r);
+      setLoading(false);
+    });
   };
 
   return (
@@ -491,15 +501,22 @@ const Forgot: React.FC<{
           }}
         />
 
+        {res && <div className="text-green">{res.message}</div>}
+
         <div>
           <Button
             type={"submit"}
+            disabled={loading}
             buttonClasses={`flex w-full h-14 mb-5 justify-center items-center bg-secondary 
               text-md font-semibold leading-6 text-secondary shadow-sm 
               outline-none focus:outline-none focus-visible:outline-none`}
             handleClick={handleDataSubmit}
           >
-            Submit
+            {loading ? (
+              <Spinner svgStyles="w-7 h-7 animate-spin dark:text-gray-600" />
+            ) : (
+              "Submit"
+            )}
           </Button>
 
           <Button

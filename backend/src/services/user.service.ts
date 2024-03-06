@@ -13,6 +13,7 @@ import * as bcrypt from 'bcrypt';
 
 import { RegistrationDto } from 'src/dtos/authData.dto';
 import { Users } from 'src/models/users.model';
+import { MailService } from './mail.service';
 
 @Injectable()
 export class UserService {
@@ -20,6 +21,7 @@ export class UserService {
     @InjectModel('Users') private usersModel: Model<Users>,
     private jwtService: JwtService,
     private configService: ConfigService,
+    private mailService: MailService,
   ) {}
 
   async findOneUser(idOrEmail: {
@@ -64,9 +66,21 @@ export class UserService {
     });
     const savedUser = await newUser.save();
 
+    // send email with confirmation letter
+    await this.mailService.sendEmail(
+      {
+        username: data.email,
+        confirmationLink: `${this.configService.get(
+          'FRONTEND_URL',
+        )}/auth/email/confirmation/${savedUser._id}`,
+      },
+      'confirmation',
+      data.email,
+    );
+
     // use toObject() to remove mongoose data and get only user data
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, tokens, __v, ...result } = savedUser.toObject();
+    const { password, tokens, avatar, __v, ...result } = savedUser.toObject();
 
     const refreshToken = await this.jwtService.signAsync(
       {

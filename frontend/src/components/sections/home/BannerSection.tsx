@@ -1,6 +1,9 @@
 import { Button } from "@/components";
+import { useRouter } from "next/navigation";
 
 export const BannerSection: React.FC = () => {
+  const router = useRouter();
+
   return (
     <section className="w-full text-secondary bg-primary flex flex-col md:flex-row mx-auto">
       <div
@@ -21,7 +24,7 @@ export const BannerSection: React.FC = () => {
           buttonClasses={`text-secondary bg-colorful border-2 w-40 h-12 uppercase transition-all duration-300 ease-in-out
                       outline-none focus:outline-none focus-visible:outline-none text-primary
                       hover:text-colorful hover:bg-primary`}
-          handleClick={(e: any) => console.log("asd")}
+          handleClick={() => router.push("/shop")}
         >
           Shop now
         </Button>

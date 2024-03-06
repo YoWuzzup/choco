@@ -4,6 +4,7 @@ export const UsersSchema = new mongoose.Schema({
   email: { type: String, unique: true, required: true },
   password: { type: String, required: true },
   tokens: { refresh_token: { type: String, default: '' } },
+  emailVerified: { type: Boolean, default: false },
   orders: [{ type: mongoose.Schema.Types.Mixed }],
   likes: { type: [String], default: [] },
   reviews: { type: [{}], default: [] },
@@ -22,6 +23,7 @@ export const UsersSchema = new mongoose.Schema({
 export interface Users extends mongoose.Document {
   email: string;
   password: string;
+  emailVerified: boolean;
   tokens: { refresh_token: string };
   orders: object[];
   likes: string[];

@@ -78,9 +78,20 @@ export const POSTRestoreAccount = async (email: string): Promise<any> => {
         withCredentials: true,
       }
     );
-    console.log(res);
 
-    return 0;
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const POSTConfirmEmail = async (id: string): Promise<any> => {
+  try {
+    const res = await axios.post(`${url}email/confirm/${id}`, {
+      withCredentials: true,
+    });
+
+    return res.data;
   } catch (error) {
     throw error;
   }
