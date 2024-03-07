@@ -5,6 +5,7 @@ export const ProductsSchema = new mongoose.Schema({
   price: { type: Number },
   description: { type: String },
   reviews: [{}],
+  categories: [''],
 });
 
 export interface Products extends mongoose.Document {
@@ -12,4 +13,5 @@ export interface Products extends mongoose.Document {
   price: number;
   description: string;
   reviews: object[];
+  categories: string[];
 }

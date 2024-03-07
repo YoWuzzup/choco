@@ -3,11 +3,15 @@ import { GETProducts } from "@/api/products";
 import { Product, Spinner } from "@/components";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { addBestSellerProducts } from "@/redux/slices/productsSlice";
+import { currentCurency } from "@/utils/common";
+import { useLocale } from "next-intl";
 import { useEffect } from "react";
 
 export const BestSellerSection: React.FC = () => {
+  const locale = useLocale();
   const dispatch = useAppDispatch();
   const products = useAppSelector((st) => st.products.bestSellerProducts);
+  const selectedCurrency = currentCurency(locale) || "zł";
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -31,7 +35,11 @@ export const BestSellerSection: React.FC = () => {
       <div className="w-full px-2 lg:px-8 flex flex-row flex-wrap justify-center items-center gap-6 lg:justify-evenly">
         {products ? (
           products.map((p: any, i: number) => (
-            <Product key={`${p.name}_${i}`} product={p} />
+            <Product
+              key={`${p.name}_${i}`}
+              product={p}
+              currency={selectedCurrency}
+            />
           ))
         ) : (
           <Spinner />

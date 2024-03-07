@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 type singleProduct = {
+  _id: string;
   name: string;
   img: string | null | undefined;
   price: number | string;
@@ -10,7 +11,9 @@ type singleProduct = {
   tastes: string[];
   colors: string[];
   categories: string[];
-  _id: string;
+  images: string[];
+  cart: string[];
+  likes: string[];
 };
 
 type ProductsState = {

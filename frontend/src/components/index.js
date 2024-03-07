@@ -32,6 +32,7 @@ export { default as SlideOver } from "./slide-overs/SlideOver";
 export { Button } from "./common/Button";
 export { Spinner } from "./common/Spinner";
 export { Slider } from "./common/Slider";
+export { Pagination } from "./common/Pagination";
 export { Product } from "./common/Product";
 export { Input } from "./common/Input";
 export { Breadcrumb } from "./common/Breadcrumb";

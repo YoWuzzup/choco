@@ -22,13 +22,41 @@ export class ProductService {
   }
 
   async getProducts(query: any): Promise<Products[]> {
-    const { sort, page, productsPerPage, ...data } = query;
+    const {
+      sort,
+      page,
+      productsPerPage,
+      search,
+      categories,
+      minprice,
+      maxprice,
+      ...data
+    } = query;
     const skipAmount =
       page && productsPerPage ? (page - 1) * productsPerPage : 0;
-    const nameRegex = new RegExp(data.name, 'i');
+
+    const filter: any = {};
+
+    if (search) {
+      const seachStringRegex = new RegExp(search, 'i');
+      filter.$or = [
+        { name: { $regex: seachStringRegex } },
+        { description: { $regex: seachStringRegex } },
+      ];
+    }
+
+    if (minprice || maxprice) {
+      filter.price = { $gte: minprice || 0, $lte: maxprice || 10000 };
+    }
+
+    if (categories) {
+      filter.categories = { $in: categories };
+    }
+
+    const finalFilter = { ...filter, ...data };
 
     const products: Products[] = await this.productsModel
-      .find({ ...data, name: { $regex: nameRegex } })
+      .find(finalFilter)
       .sort(sort)
       .skip(skipAmount)
       .limit(productsPerPage || 0)

@@ -23,14 +23,16 @@ type TPropduct = {
   likes: string[];
 };
 
-export const Product: React.FC<{ product: TPropduct }> = ({ product }) => {
+export const Product: React.FC<{ product: TPropduct; currency?: string }> = ({
+  product,
+  currency,
+}) => {
   const userRedux = useAppSelector((st) => st.user);
   const [user, saveUserToReduxAndLocalStorage] =
     useReduxAndLocalStorage<any>("user");
   const [storedAccessToken, saveAccessTokenToReduxAndLocalStorage] =
     useReduxAndLocalStorage("access_token");
   const [showAuthOverlay, setShowAuthOverlay] = useState<boolean>(false);
-  const currency = "zl";
 
   const handleAddToCart = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -130,7 +132,7 @@ export const Product: React.FC<{ product: TPropduct }> = ({ product }) => {
             <Link href={`shop/${product?._id}`}>{product?.name}</Link>
           </div>
           <div className="text-colorful">
-            {currency} {product?.price}
+            {currency || "zł"} {product?.price}
           </div>
         </div>
 
@@ -148,7 +150,7 @@ export const Product: React.FC<{ product: TPropduct }> = ({ product }) => {
             <FavoriteBorderOutlinedIcon
               className={`w-11 h-11 p-2 rounded-full shadow-md
                     transition-all duration-300 ${
-                      userRedux?.likes.includes(product?._id)
+                      userRedux?.likes?.includes(product?._id)
                         ? "text-secondary bg-[#bc8157]"
                         : "text-primary bg-primary "
                     } hover:text-secondary hover:bg-[#bc8157]`}
@@ -163,7 +165,7 @@ export const Product: React.FC<{ product: TPropduct }> = ({ product }) => {
             <ShoppingBagOutlinedIcon
               className={`w-11 h-11 p-2 transition-all duration-300 rounded-full shadow-md
                     ${
-                      userRedux?.cart.includes(product?._id)
+                      userRedux?.cart?.includes(product?._id)
                         ? "text-secondary bg-[#bc8157]"
                         : "text-primary bg-primary "
                     } hover:text-secondary hover:bg-[#bc8157]`}
