@@ -1,6 +1,6 @@
 "use client";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { useLocale, useTranslations } from "next-intl";
 
 import { Button, Input, Product, Spinner, Pagination } from "@/components";
@@ -13,6 +13,7 @@ import { GETProducts } from "@/api/products";
 import { currentCurency } from "@/utils/common";
 
 const listOfCategories = ["cake", "cake to go", "bento", "mochi"];
+const productsPerPage = 6;
 
 const headerStyles = `w-full font-bold text-lg py-1 pl-2 mb-5 border-l-4 flex flex-row flex-nowrap items-center gap-3 after:content-[''] after:border-b-2 after:border-solid after:border-[#e6e6e6] after:w-full`;
 
@@ -25,6 +26,7 @@ const FilterSection: React.FC = () => {
   const categoriesQueryParam = searchParams.get("categories");
   const minpriceQueryParam = searchParams.get("minprice");
   const maxpriceQueryParam = searchParams.get("maxprice");
+  const pageQueryParam = searchParams.get("page");
   const t = useTranslations();
 
   const createQueryString = useCallback(
@@ -58,6 +60,11 @@ const FilterSection: React.FC = () => {
     let timer: NodeJS.Timeout;
     const delay = 1000;
 
+    // set current page
+    if (!pageQueryParam) {
+      router.replace(`${pathname}?${createQueryString("page", "1")}`);
+    }
+
     timer = setTimeout(() => {
       const fetchData = async () => {
         try {
@@ -66,6 +73,8 @@ const FilterSection: React.FC = () => {
             categories: categoriesQueryParam,
             minprice: minpriceQueryParam,
             maxprice: maxpriceQueryParam,
+            page: pageQueryParam || 1,
+            productsPerPage,
           };
 
           const res = await GETProducts(queryParams);
@@ -182,9 +191,11 @@ const ResultSection: React.FC = () => {
   const reduxListOfProducts = useAppSelector(
     (st) => st.products.listOfProducts
   );
+  const router = useRouter();
+  const pathname = usePathname();
   const locale = useLocale();
   const searchParams = useSearchParams();
-  const [currentPage, setCurrentPage] = useState(1);
+  const pageQueryParam = searchParams.get("page");
 
   const selectedCurrency = currentCurency(locale) || "$";
 
@@ -198,10 +209,14 @@ const ResultSection: React.FC = () => {
     [searchParams]
   );
 
+  const handleFilterChange = (name: string, value: string) => {
+    router.replace(`${pathname}?${createQueryString(name, value)}`);
+  };
+
   return (
     <div className="basis-full flex flex-col">
       <div
-        className="flex flex-row flex-wrap items-center gap-3 
+        className="flex flex-row flex-wrap items-center gap-3 mb-7
           sm:items-start justify-evenly"
       >
         {reduxListOfProducts && reduxListOfProducts.length > 0 ? (
@@ -215,16 +230,23 @@ const ResultSection: React.FC = () => {
         ) : reduxListOfProducts?.length === 0 ? (
           <>No results found</>
         ) : (
-          <Spinner />
+          <Spinner contanerStyles="mt-20 w-full h-full flex justify-center items-center" />
         )}
       </div>
 
       {/* pagination */}
-      <Pagination
-        currentPage={currentPage}
-        onPageChange={setCurrentPage}
-        totalPages={10}
-      />
+      {reduxListOfProducts && (
+        <Pagination
+          onPageChange={handleFilterChange}
+          itemsLength={reduxListOfProducts.length}
+          itemsPerPage={productsPerPage}
+          totalPages={
+            reduxListOfProducts?.length >= productsPerPage
+              ? Number(pageQueryParam) + 1
+              : Number(pageQueryParam)
+          }
+        />
+      )}
     </div>
   );
 };
