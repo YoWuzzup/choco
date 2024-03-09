@@ -1,11 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-type singleProduct = {
+type TsingleProduct = {
   _id: string;
   name: string;
-  img: string | null | undefined;
   price: number | string;
-  description: string;
+  description: { en: string; ru: string; pl: string };
   reviews: { rating: number; author: string; comment: string }[];
   sizes: string[];
   tastes: string[];
@@ -17,9 +16,9 @@ type singleProduct = {
 };
 
 type ProductsState = {
-  singleProduct: singleProduct | null;
-  bestSellerProducts: singleProduct[] | null;
-  listOfProducts: singleProduct[] | null;
+  singleProduct: TsingleProduct | null;
+  bestSellerProducts: TsingleProduct[] | null;
+  listOfProducts: TsingleProduct[] | null;
 };
 
 const initialState: ProductsState = {

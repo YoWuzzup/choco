@@ -17,6 +17,7 @@ import {
   Rating,
   Skeleton,
   Slider,
+  Tooltip,
 } from "@/components";
 
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
@@ -26,7 +27,7 @@ import { GETOneProduct } from "@/api/products";
 import { POSTUpdateUser } from "@/api/user";
 import { userUpdate } from "@/redux/slices/userSlice";
 import { useReduxAndLocalStorage } from "@/hooks/useReduxAndLocalStorage ";
-import { currentCurency } from "@/utils/common";
+import { currentCurency, getColorsByTaste } from "@/utils/common";
 
 const BreadcrumbAndNExtPrevBtns: React.FC = () => {
   const product = useAppSelector((st) => st.products.singleProduct);
@@ -126,9 +127,11 @@ const RightInfoSide: React.FC = () => {
     useReduxAndLocalStorage("access_token");
   const router = useRouter();
   const locale = useLocale();
+  const localeKey = product?.description
+    ? (locale as keyof typeof product.description)
+    : "en";
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const colorQueryParam = searchParams.get("color");
   const sizeQueryParam = searchParams.get("size");
   const tasteQueryParam = searchParams.get("taste");
   let amountQueryParam = searchParams.get("amount") || 1;
@@ -211,11 +214,9 @@ const RightInfoSide: React.FC = () => {
       saveUserToReduxAndLocalStorage(data, userUpdate);
     }
   };
-  // TODO: backend doesn't dive description to product
-  console.log(product);
 
   return (
-    <div className="flex flex-col justify-start items-center [&>*:basis-full]">
+    <div className="flex flex-col justify-start items-center gap-3 [&>*:basis-full]">
       {/* name and like */}
       <div className="flex justify-between items-center w-full mb-2">
         <h3 className="text-2xl font-bold text-primary capitalize flex justify-center items-center">
@@ -265,8 +266,12 @@ const RightInfoSide: React.FC = () => {
 
       {/*  info para */}
       <div className="flex flex-col justify-center items-start w-full pb-5">
-        {product?.description ? (
-          <p className="text-sm text-[#a8a8a8]">{product.description}</p>
+        {product && !product.description ? (
+          <></>
+        ) : product?.description ? (
+          <p className="text-sm text-[#a8a8a8]">
+            {product.description[localeKey]}
+          </p>
         ) : (
           ["", "", ""].map((_, i) => (
             <Skeleton
@@ -278,13 +283,13 @@ const RightInfoSide: React.FC = () => {
         )}
       </div>
 
-      {/* options */}
+      {/* sizes */}
       {product?.sizes && (
         <div className="w-full mb-5 flex flex-row flex-nowrap gap-2">
           <div
             className="text-[11px] w-6 text-primary font-bold uppercase relative mr-5 pb-2 h-fit
-          after:bottom-0 after:left-0 after:absolute after:content-[''] 
-          after:w-10 after:border-b"
+              after:bottom-0 after:left-0 after:absolute after:content-[''] 
+              after:w-10 after:border-b"
           >
             size
           </div>
@@ -293,8 +298,11 @@ const RightInfoSide: React.FC = () => {
               key={`${s}_${i}`}
               buttonClasses={`py-2 px-4 border-solid border-[1px] border-black cursor-pointer
               transition-all duration-300 hover:bg-secondary hover:text-secondary
-              ${sizeQueryParam === s ? "bg-secondary" : "bg-primary"}
-              ${sizeQueryParam === s ? "text-secondary" : "text-primary"}`}
+              ${
+                sizeQueryParam === s
+                  ? "bg-secondary text-secondary"
+                  : "bg-primary text-primary"
+              }`}
               handleClick={(e) => handleFilterChange(e)}
               value={s}
               id="size"
@@ -306,47 +314,50 @@ const RightInfoSide: React.FC = () => {
         </div>
       )}
 
-      {/* colors */}
-      {product?.colors && (
+      {/* tastes */}
+      {product?.tastes && (
         <div className="w-full mb-5 flex flex-row flex-nowrap gap-6">
           <div
             className="text-[11px] w-6 text-primary font-bold uppercase relative mr-5 pb-2 h-fit
           after:bottom-0 after:left-0 after:absolute after:content-[''] 
           after:w-10 after:border-b"
           >
-            color
+            tastes
           </div>
-          {product?.colors.map((c, i) => {
-            const colorArray = c.split("-");
-            const arrayLength = colorArray.length;
-            const gradientColors = colorArray
-              .map((color, index) => {
+          {product?.tastes.map((t, i) => {
+            const tasteArray = t.split("-");
+            const arrayLength = tasteArray.length;
+            const colorsArray = getColorsByTaste(tasteArray);
+
+            const gradientTaste = colorsArray
+              .map((col: any, index: number) => {
                 const mindegrees = (index / arrayLength) * 360;
                 const maxdegrees = (360 / arrayLength) * (index + 1);
 
-                return `${color} ${mindegrees}deg ${maxdegrees}deg`;
+                return `${col} ${mindegrees}deg ${maxdegrees}deg`;
               })
               .join(",");
 
             return (
-              <Button
-                key={`${c}_${i}`}
-                buttonClasses={`relative rounded-full cursor-pointer transition-all duration-300 w-9 h-9 p-2
-                        ${
-                          colorQueryParam === c
-                            ? `after:bottom-1/2 after:left-1/2 after:absolute after:content-[''] 
-                        after:w-12 after:h-12 after:rounded-full after:border-2 after:border-[#b0b0b0]
-                        after:-translate-x-1/2 after:translate-y-1/2`
-                            : ""
-                        }`}
-                style={{
-                  background: `conic-gradient(${gradientColors})`,
-                }}
-                type={"button"}
-                id="color"
-                value={c}
-                handleClick={(e) => handleFilterChange(e)}
-              />
+              <Tooltip message={`${t}`} key={`${t}_${i}`}>
+                <Button
+                  buttonClasses={`relative rounded-full cursor-pointer transition-all duration-300 w-9 h-9 p-2
+                    after:bottom-1/2 after:left-1/2 after:absolute after:content-[''] 
+                    after:w-12 after:h-12 after:rounded-full after:border-2 after:-translate-x-1/2 after:translate-y-1/2      
+                    ${
+                      tasteQueryParam === t
+                        ? `after:border-colorfulColor`
+                        : "after:border-secondary"
+                    }`}
+                  style={{
+                    background: `conic-gradient(${gradientTaste})`,
+                  }}
+                  type={"button"}
+                  id="taste"
+                  value={t}
+                  handleClick={(e) => handleFilterChange(e)}
+                />
+              </Tooltip>
             );
           })}
         </div>
@@ -417,7 +428,8 @@ const RightInfoSide: React.FC = () => {
                 key={`${c}_${i}`}
                 className="text-[#bfbfbf] hover:text-colorful cursor-pointer"
               >
-                {c},{" "}
+                {c}
+                {i !== product.categories.length - 1 && ", "}
               </span>
             ))}
           </div>

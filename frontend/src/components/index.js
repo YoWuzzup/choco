@@ -34,6 +34,7 @@ export { Spinner } from "./common/Spinner";
 export { Slider } from "./common/Slider";
 export { Pagination } from "./common/Pagination";
 export { Product } from "./common/Product";
+export { Tooltip } from "./common/Tooltip";
 export { Input } from "./common/Input";
 export { Breadcrumb } from "./common/Breadcrumb";
 export { Skeleton } from "./common/Skeleton";

@@ -16,7 +16,7 @@ export const GETProducts = async (query: unknown) => {
   }
 };
 
-export const GETOneProduct = async (id: unknown) => {
+export const GETOneProduct = async (id: string | string[]) => {
   try {
     const res = await axios.get(`${url}products/${id}`, {
       withCredentials: true,

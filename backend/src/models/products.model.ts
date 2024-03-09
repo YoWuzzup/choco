@@ -3,7 +3,9 @@ import mongoose from 'mongoose';
 export const ProductsSchema = new mongoose.Schema({
   name: { type: String, required: true },
   price: { type: Number },
-  description: { type: String },
+  description: {
+    type: { en: { type: String }, ru: { type: String }, pl: { type: String } },
+  },
   reviews: [{}],
   categories: [''],
 });
@@ -11,7 +13,7 @@ export const ProductsSchema = new mongoose.Schema({
 export interface Products extends mongoose.Document {
   name: string;
   price: number;
-  description: string;
+  description: { en: string; ru: string; pl: string };
   reviews: object[];
   categories: string[];
 }
