@@ -10,26 +10,33 @@ import {
   AvatarPlaceholder,
 } from "../../../public/svgs/index";
 import { useAppSelector } from "@/hooks/redux";
-import { AuthOverlay, Button } from "..";
 import { useOnClickOutside } from "usehooks-ts";
+import { AuthOverlay, Button } from "..";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import { usePathname } from "next/navigation";
 
-const links = [
-  {
-    name: "home",
-    href: "/",
-    current: true,
-  },
-  {
-    name: "shop",
-    href: "/shop",
-    current: false,
-  },
-  {
-    name: "about us",
-    href: "/about",
-    current: false,
-  },
-];
+const links = () => {
+  // TODO: translation
+  const t = useTranslations("");
+
+  return [
+    {
+      text: `home`,
+      name: "home",
+      href: "/",
+    },
+    {
+      text: `shop`,
+      name: "shop",
+      href: "/shop",
+    },
+    {
+      text: `about us`,
+      name: "about",
+      href: "/about",
+    },
+  ];
+};
 
 const dropdown = [
   {
@@ -47,6 +54,7 @@ const dropdown = [
 ];
 
 export default function NavBar(): ReactNode {
+  const path = usePathname();
   const profileMenuRef = useRef(null);
   const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
   const [profileMenuIsOpen, setProfileMenuIsOpen] = useState<boolean>(false);
@@ -101,7 +109,7 @@ export default function NavBar(): ReactNode {
             </div>
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4 text-primary uppercase">
-                {links.map((l, index) => (
+                {links().map((l, index) => (
                   <Link
                     href={l.href}
                     key={`${l.name}_${index}`}
@@ -111,7 +119,9 @@ export default function NavBar(): ReactNode {
                     after:bg-colorful after:bottom-0 after:left-0
                     after:transition-all"
                   >
-                    {t(`links.${l.name}`)}
+                    {/* TODO: translation */}
+                    {/* {t(`links.${l.name}`)} */}
+                    {l.text}
                   </Link>
                 ))}
               </div>
@@ -119,19 +129,19 @@ export default function NavBar(): ReactNode {
           </div>
 
           {/* Notification and profile buttons */}
-          <div className="absolute inset-y-0 right-0 flex items-center sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+          <div className="absolute inset-y-0 right-0 flex items-center justify-center sm:static sm:inset-auto sm:ml-6 sm:pr-0">
             {/* Profile dropdown */}
             {/* if no user show log in/up form/overlay if user is logged in show use menu */}
             {!user ? (
-              <div className="relative w-10 h-10 overflow-hidden bg-gray rounded-full dark:bg-gray">
+              <div className="relative w-auto h-10 overflow-hidden">
                 <Button
                   type={"button"}
-                  buttonClasses={
-                    "w-full h-full outline-none focus:outline-none focus-visible:outline-none"
-                  }
+                  buttonClasses={`h-full outline-none focus:outline-none focus-visible:outline-none
+                    p-2 flex items-center juntify-center duration-200 text-primary hover:text-colorful
+                    text-2xl sm:text-4xl`}
                   handleClick={() => setShowAuthOverlay(true)}
                 >
-                  <AvatarPlaceholder />
+                  <AccountCircleOutlinedIcon fontSize="inherit" />
                 </Button>
               </div>
             ) : (
@@ -214,28 +224,30 @@ export default function NavBar(): ReactNode {
       {/* Mobile menu, show/hide based on menu state. */}
       <div
         className={`w-full overflow-hidden transition-all duration-500 ease-in-out ${
-          menuIsOpen ? "h-40" : "h-0"
-        }
-        ${menuIsOpen ? "opacity-1" : "opacity-0"}`}
+          menuIsOpen ? "h-40 opacity-1" : "h-0 opacity-0"
+        } block sm:hidden`}
         id="mobile-menu"
       >
         <div className="flex flex-1 flex-col space-y-1 px-2 pb-3 pt-2">
-          {links.map(
+          {links().map(
             (
-              l: { name: string; href: string; current: boolean },
+              l: { name: string; href: string; text: string },
               index: number
             ) => (
               <Link
                 href={l.href}
                 key={`${l.name}_${index}`}
-                className={`bg-${l.current ? "secondary" : "pramary"} text-${
-                  l.current ? "colorful" : "primary"
-                }
-                block rounded-md px-3 py-2 font-medium
+                className={`${
+                  path.includes(l.name)
+                    ? "bg-secondary text-colorful"
+                    : "bg-pramary text-primary"
+                } block rounded-md px-3 py-2 font-medium
                 hover:bg-colorful hover:text-primary`}
-                aria-current={l.current ? "page" : undefined}
+                aria-current={path.includes(l.name) ? "page" : undefined}
               >
-                {t(`links.${l.name}`)}
+                {/* TODO: translation */}
+                {/* {t(`links.${l.name}`)} */}
+                {l.text}
               </Link>
             )
           )}

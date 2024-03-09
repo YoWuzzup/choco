@@ -75,9 +75,9 @@ export const InstagramSection: React.FC = () => {
                         flex justify-center items-center transition-all duration-500
                         group-hover:opacity-70"
             />
-            <Link href={"/"}>
+            <Link href={`${process.env.NEXT_PUBLIC_INSTAGRAM_LINK}`}>
               <InstagramIcon
-                className="absolute text-4xl top-1/2 left-1/2 
+                className="absolute top-1/2 left-1/2 text-5xl
                         -translate-x-1/2 -translate-y-1/2
                         text-secondary transition-all duration-500"
               />

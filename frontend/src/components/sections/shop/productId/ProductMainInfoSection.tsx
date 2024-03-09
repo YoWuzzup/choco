@@ -26,14 +26,7 @@ import { GETOneProduct } from "@/api/products";
 import { POSTUpdateUser } from "@/api/user";
 import { userUpdate } from "@/redux/slices/userSlice";
 import { useReduxAndLocalStorage } from "@/hooks/useReduxAndLocalStorage ";
-
-const currencies: {
-  readonly [key: string]: string;
-} = {
-  en: "$",
-  pl: "zł",
-  ru: "zł",
-};
+import { currentCurency } from "@/utils/common";
 
 const BreadcrumbAndNExtPrevBtns: React.FC = () => {
   const product = useAppSelector((st) => st.products.singleProduct);
@@ -76,9 +69,9 @@ const BreadcrumbAndNExtPrevBtns: React.FC = () => {
   );
 };
 
-// TODO: get some pics for products
 const LeftPictureSide: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const product = useAppSelector((st) => st.products.singleProduct);
 
   return (
     <div className="flex flex-col justify-start items-center mb-5 dm:mb-0">
@@ -87,7 +80,7 @@ const LeftPictureSide: React.FC = () => {
           dots: true,
           arrows: false,
           // for rewriting default class of dots and then add my dots
-          dotsClass: `flex flex-row justify-between w-full static gap-3`,
+          dotsClass: `flex flex-row justify-center w-full static gap-3`,
           appendDots: (dots: any) => (
             <ul>
               {dots.map((d: any, index: number) => {
@@ -102,7 +95,7 @@ const LeftPictureSide: React.FC = () => {
                   ? "border-solid border-2 border-colorfulColor"
                   : ""
               }`}
-              src="/home/slide1.1.webp"
+              src={product?.images[i]}
               alt="first slide"
             />
           ),
@@ -111,34 +104,15 @@ const LeftPictureSide: React.FC = () => {
           },
         }}
       >
-        <div className={`relative mb-2`}>
-          <img
-            className="object-cover"
-            src="/home/slide1.1.webp"
-            alt="first slide"
-          />
-        </div>
-        <div className={`relative`}>
-          <img
-            className="object-cover"
-            src="/home/slide1.1.webp"
-            alt="first slide"
-          />
-        </div>
-        <div className={`relative`}>
-          <img
-            className="object-cover"
-            src="/home/slide1.1.webp"
-            alt="first slide"
-          />
-        </div>
-        <div className={`relative`}>
-          <img
-            className="object-cover"
-            src="/home/slide1.1.webp"
-            alt="first slide"
-          />
-        </div>
+        {product?.images.map((imageUrl, index) => (
+          <div className="relative mb-2 h-[400px] overflow-hidden" key={index}>
+            <img
+              className="object-cover w-full h-full"
+              src={imageUrl}
+              alt={`product slide ${index}`}
+            />
+          </div>
+        ))}
       </Slider>
     </div>
   );
@@ -158,7 +132,7 @@ const RightInfoSide: React.FC = () => {
   const sizeQueryParam = searchParams.get("size");
   const tasteQueryParam = searchParams.get("taste");
   let amountQueryParam = searchParams.get("amount") || 1;
-  const selectedCurrency = currencies[locale] || "$";
+  const selectedCurrency = currentCurency(locale) || "zł";
   const [showAuthOverlay, setShowAuthOverlay] = useState<boolean>(false);
 
   const createQueryString = useCallback(
@@ -237,6 +211,8 @@ const RightInfoSide: React.FC = () => {
       saveUserToReduxAndLocalStorage(data, userUpdate);
     }
   };
+  // TODO: backend doesn't dive description to product
+  console.log(product);
 
   return (
     <div className="flex flex-col justify-start items-center [&>*:basis-full]">
