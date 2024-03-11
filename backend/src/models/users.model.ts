@@ -7,7 +7,7 @@ export const UsersSchema = new mongoose.Schema({
   emailVerified: { type: Boolean, default: false },
   orders: [{ type: mongoose.Schema.Types.Mixed }],
   likes: { type: [String], default: [] },
-  reviews: { type: [{}], default: [] },
+  reviews: { type: [String], default: [] },
   cart: { type: [{}], default: [] },
   name: { type: String },
   avatar: {
@@ -27,7 +27,7 @@ export interface Users extends mongoose.Document {
   tokens: { refresh_token: string };
   orders: object[];
   likes: string[];
-  reviews: object[];
+  reviews: string[];
   cart: object[];
   name: string;
   avatar: {

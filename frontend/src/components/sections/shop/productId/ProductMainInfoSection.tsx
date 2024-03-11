@@ -28,6 +28,8 @@ import { POSTUpdateUser } from "@/api/user";
 import { userUpdate } from "@/redux/slices/userSlice";
 import { useReduxAndLocalStorage } from "@/hooks/useReduxAndLocalStorage ";
 import { currentCurency, getColorsByTaste } from "@/utils/common";
+import { GETReviews } from "@/api/reviews";
+import { addReviews } from "@/redux/slices/reviewsSlice";
 
 const BreadcrumbAndNExtPrevBtns: React.FC = () => {
   const product = useAppSelector((st) => st.products.singleProduct);
@@ -76,51 +78,57 @@ const LeftPictureSide: React.FC = () => {
 
   return (
     <div className="flex flex-col justify-start items-center mb-5 dm:mb-0">
-      <Slider
-        propSettings={{
-          dots: true,
-          arrows: false,
-          // for rewriting default class of dots and then add my dots
-          dotsClass: `flex flex-row justify-center w-full static gap-3`,
-          appendDots: (dots: any) => (
-            <ul>
-              {dots.map((d: any, index: number) => {
-                return <li key={index}>{d.props.children}</li>;
-              })}
-            </ul>
-          ),
-          customPaging: (i: number) => (
-            <img
-              className={`w-36 h-16 sm:h-28 md:h-36 object-cover cursor-pointer ${
-                i === currentSlide
-                  ? "border-solid border-2 border-colorfulColor"
-                  : ""
-              }`}
-              src={product?.images[i]}
-              alt="first slide"
-            />
-          ),
-          beforeChange: (prev: number, next: number) => {
-            setCurrentSlide(next);
-          },
-        }}
-      >
-        {product?.images.map((imageUrl, index) => (
-          <div className="relative mb-2 h-[400px] overflow-hidden" key={index}>
-            <img
-              className="object-cover w-full h-full"
-              src={imageUrl}
-              alt={`product slide ${index}`}
-            />
-          </div>
-        ))}
-      </Slider>
+      {product?.images && product?.images.length !== 0 ? (
+        <Slider
+          propSettings={{
+            dots: true,
+            arrows: false,
+            // for rewriting default class of dots and then add my dots
+            dotsClass: `flex flex-row justify-center w-full static gap-3`,
+            appendDots: (dots: any) => (
+              <ul>
+                {dots.map((d: any, index: number) => {
+                  return <li key={index}>{d.props.children}</li>;
+                })}
+              </ul>
+            ),
+            customPaging: (i: number) => (
+              <img
+                className={`w-36 h-16 sm:h-28 md:h-36 object-cover cursor-pointer ${
+                  i === currentSlide
+                    ? "border-solid border-2 border-colorfulColor"
+                    : ""
+                }`}
+                src={product?.images[i]}
+                alt="first slide"
+              />
+            ),
+            beforeChange: (prev: number, next: number) => {
+              setCurrentSlide(next);
+            },
+          }}
+        >
+          {product?.images?.map((imageUrl, index) => (
+            <div
+              className="relative mb-2 h-[400px] overflow-hidden"
+              key={index}
+            >
+              <img
+                className="object-cover w-full h-full"
+                src={imageUrl}
+                alt={`product slide ${index}`}
+              />
+            </div>
+          ))}
+        </Slider>
+      ) : null}
     </div>
   );
 };
 
 const RightInfoSide: React.FC = () => {
   const product = useAppSelector((st) => st.products.singleProduct);
+  const reviews = useAppSelector((st) => st.reviews);
   const [user, saveUserToReduxAndLocalStorage] =
     useReduxAndLocalStorage<any>("user");
   const [storedAccessToken, saveAccessTokenToReduxAndLocalStorage] =
@@ -247,10 +255,10 @@ const RightInfoSide: React.FC = () => {
           {selectedCurrency} {product?.price || <Skeleton width="16" />}
         </div>
         <div className="text-xs text-[#999] font-normal flex justify-start items-center gap-5">
-          {product?.reviews ? (
+          {reviews ? (
             <>
-              <Rating data={product.reviews.map((r) => r.rating)} />{" "}
-              {product.reviews.length} reviews
+              <Rating data={reviews?.map((r) => r?.rating || 5)} />{" "}
+              {reviews.length} review{reviews.length === 1 ? "" : "s"}
             </>
           ) : (
             <>
@@ -445,6 +453,7 @@ const RightInfoSide: React.FC = () => {
 
 export const ProductMainInfoSection: React.FC = () => {
   const dispatch = useAppDispatch();
+  const product = useAppSelector((st) => st.products.singleProduct);
   const params = useParams();
 
   useEffect(() => {
@@ -454,8 +463,12 @@ export const ProductMainInfoSection: React.FC = () => {
     timer = setTimeout(() => {
       const fetchData = async () => {
         try {
-          const res = await GETOneProduct(params.id);
-          dispatch(addSingleProduct(res));
+          await GETOneProduct(params.id).then(async (r) => {
+            dispatch(addSingleProduct(r));
+            // get and save to redux reviews of observable product
+            const reviews = await GETReviews({ _id: r.reviews });
+            dispatch(addReviews(reviews));
+          });
         } catch (error) {
           console.log(`something wrong shop/useEffect ${error}`);
         }
@@ -466,7 +479,7 @@ export const ProductMainInfoSection: React.FC = () => {
     return () => {
       clearTimeout(timer);
     };
-  }, []);
+  }, [product?.reviews.length]);
 
   return (
     <section

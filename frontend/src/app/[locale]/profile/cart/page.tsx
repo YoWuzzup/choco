@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 
-import { Button, ProfileMenu, Spinner } from "@/components";
+import { Button, ProfileMenu, Skeleton, Spinner } from "@/components";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useEffect, useState } from "react";
 import { useReduxAndLocalStorage } from "@/hooks/useReduxAndLocalStorage ";
@@ -10,8 +10,10 @@ import { userUpdate } from "@/redux/slices/userSlice";
 import { GETProducts } from "@/api/products";
 import { renewUserCart } from "@/redux/slices/userCartSlice";
 import { useAppSelector } from "@/hooks/redux";
+import { useLocale } from "next-intl";
 
 export default function Cart() {
+  const locale = useLocale();
   const [user, saveUser] = useReduxAndLocalStorage<any>("user");
   const userRedux = useAppSelector((st) => st.user);
   const [storedAccessToken, saveAccessTokenToReduxAndLocalStorage] =
@@ -88,6 +90,10 @@ export default function Cart() {
                 return l.includes(`${item._id}`) ? item : null;
               });
 
+              const localeKey = obj?.description
+                ? (locale as keyof typeof obj.description)
+                : "en";
+
               return (
                 <Link
                   href={`/shop/${l}`}
@@ -107,7 +113,17 @@ export default function Cart() {
                       <div className="text-lg capitalize text-primary group-hover:text-colorful">
                         {obj?.name}
                       </div>
-                      <div className="text-paraPrimary">{obj?.description}</div>
+                      <div className="text-paraPrimary">
+                        {obj?.description
+                          ? obj.description[locale || "en"]
+                          : ["", "", ""].map((_, i) => (
+                              <Skeleton
+                                width="full"
+                                key={`${i}`}
+                                containerClassName="w-3/4 animate-pulse flex justify-start items-center mb-2"
+                              />
+                            ))}
+                      </div>
                     </div>
                     <Button
                       type={"button"}

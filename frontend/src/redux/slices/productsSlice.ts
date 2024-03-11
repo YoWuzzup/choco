@@ -5,7 +5,7 @@ type TsingleProduct = {
   name: string;
   price: number | string;
   description: { en: string; ru: string; pl: string };
-  reviews: { rating: number; author: string; comment: string }[];
+  reviews: string[];
   sizes: string[];
   tastes: string[];
   colors: string[];

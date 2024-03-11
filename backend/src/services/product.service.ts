@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
-import { productDto, partialProductDto } from 'src/dtos/product.dto';
+import { productDto } from 'src/dtos/product.dto';
 
 import { Products } from 'src/models/products.model';
 
@@ -76,7 +76,7 @@ export class ProductService {
     }
   }
 
-  async updateProduct(_id: ObjectId | string, payload: partialProductDto) {
+  async updateProduct(_id: ObjectId | string, payload: any) {
     try {
       return await this.productsModel
         .findOneAndUpdate({ _id }, payload, { new: true })

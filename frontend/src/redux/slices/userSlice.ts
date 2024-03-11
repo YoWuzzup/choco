@@ -17,6 +17,7 @@ type SliceState = null | {
   name: string;
   email: string;
   cart: string[];
+  reviews: string[];
   orders: [] | string[];
 };
 

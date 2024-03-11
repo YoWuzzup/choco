@@ -3,25 +3,27 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
-import { AuthOverlay, Button, Input } from "@/components";
-import { POSTUpdateProductReviews } from "@/api/products";
+import { AuthOverlay, Button, Input, Tooltip } from "@/components";
 import { POSTUpdateUser } from "@/api/user";
 import { addSingleProduct } from "@/redux/slices/productsSlice";
 import { useReduxAndLocalStorage } from "@/hooks/useReduxAndLocalStorage ";
+import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
+import { DELETEReview, POSTCreateProductReviews } from "@/api/reviews";
+import { userUpdate } from "@/redux/slices/userSlice";
+import { addReviews } from "@/redux/slices/reviewsSlice";
 
-// TODO: write the correct href paths for these links
 const links = [
   {
-    name: "Returns & Refunds",
-    href: "#",
+    name: "Aboout Us",
+    href: "/about",
   },
   {
-    name: "Payments",
-    href: "#",
+    name: "Your Cart",
+    href: "/profile/cart",
   },
   {
     name: "Your Orders",
-    href: "/profile/orders",
+    href: "/profile",
   },
 ];
 
@@ -90,6 +92,7 @@ const AddInformation: React.FC = () => {
       </div>
 
       <div>
+        {/* TODO: add image */}
         <img
           className="object-cover h-full w-full"
           src="/home/slide1.1.webp"
@@ -103,6 +106,7 @@ const AddInformation: React.FC = () => {
 const Reviews: React.FC = () => {
   const dispatch = useAppDispatch();
   const product = useAppSelector((st) => st.products.singleProduct);
+  const reviews = useAppSelector((st) => st.reviews);
   const user = useAppSelector((st) => st.user);
   const [access_token, saveAccessTokenToReduxAndLocalStorage] =
     useReduxAndLocalStorage("access_token");
@@ -135,23 +139,13 @@ const Reviews: React.FC = () => {
     e.preventDefault();
 
     if (product?._id && user?._id) {
-      const updatedReviews = [...(product.reviews || []), review];
-
       // update product with a new review
-      const data = await POSTUpdateProductReviews(
-        product?._id,
-        { review },
+      const data = await POSTCreateProductReviews(
+        { ...review, userId: user?._id, productId: product._id },
         access_token as string
       );
-      dispatch(addSingleProduct(data));
 
-      // update user that wrote new review
-      await POSTUpdateUser(
-        user?._id,
-        { reviews: updatedReviews },
-        access_token as string,
-        saveAccessTokenToReduxAndLocalStorage
-      );
+      dispatch(addSingleProduct(data));
     }
 
     // reset inputs
@@ -159,8 +153,23 @@ const Reviews: React.FC = () => {
       title: "",
       comment: "",
       rating: 5,
-      author: user?.name || "unknown",
+      author: user?.name || user?.email || "unknown",
     });
+  };
+
+  const handleDeleteReview = async (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    reviewId: string
+  ) => {
+    e.preventDefault();
+
+    if (product?._id && user?._id) {
+      // update product with a new review
+      const data = await DELETEReview(reviewId, access_token as string);
+      // updating the state
+      dispatch(userUpdate({ reviews: data.userReviews }));
+      dispatch(addSingleProduct({ reviews: data.productReviews }));
+    }
   };
 
   return (
@@ -171,18 +180,49 @@ const Reviews: React.FC = () => {
       <h4 className="basis-full text-sm">Customer Reviews</h4>
 
       <div className="basis-full">
-        {product?.reviews && product?.reviews?.length > 0 ? (
-          product?.reviews?.map((r, i) => (
+        {reviews && reviews?.length > 0 ? (
+          reviews?.map((r, i) => (
             <div
               key={`${r.author}_${i}`}
               className="flex flex-row flex-nowrap justify-between items-center 
                     border-b-[1px] border-[#e7e7e7] border-solid pb-4 mb-4"
             >
               <div className="flex flex-col grow">
-                <div className="capitalize">{r.author}</div>
-                <div className="text-paraPrimary">{r.comment}</div>
+                <div>{r.author}</div>
+                <div className="text-paraPrimary flex flex-col">
+                  {r.comment}
+
+                  {/* delete review button */}
+                  {user?.reviews.includes(r._id) ||
+                  r.author === (user?.email || user?.name) ? (
+                    <Button
+                      handleClick={(e) => handleDeleteReview(e, r._id)}
+                      type={"button"}
+                      buttonClasses={"self-center mt-4"}
+                    >
+                      <Tooltip
+                        message="delete your review"
+                        containerStyles="group/tooltip w-5 self-center relative 
+                        flex justify-center items-center cursor-pointer text-red"
+                      >
+                        <HighlightOffOutlinedIcon className="w-10" />
+                      </Tooltip>
+                    </Button>
+                  ) : null}
+                </div>
               </div>
-              <div>{r.rating}</div>
+              <div className="flex justify-center items-center text-2xl w-auto gap-2">
+                {r.rating}
+                <svg
+                  className={`w-8 h-8 ms-1 text-yellow`}
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 22 20"
+                >
+                  <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                </svg>
+              </div>
             </div>
           ))
         ) : (
@@ -231,12 +271,9 @@ const Reviews: React.FC = () => {
                   }}
                 ></Input>
               ))}
-              {/* <Rating
-                data={Array.from({ length: 5 }, (x, index) => 4) || [5]}
-              /> */}
             </div>
             <div className="text-[13px]">
-              Raview Title
+              Review Title
               <Input
                 input={{
                   id: "title",

@@ -20,6 +20,7 @@ import { MailModule } from './modules/mail.module';
 import { MailService } from './services/mail.service';
 import { UserService } from './services/user.service';
 import { SubscriptionsSchema } from './models/subscription.model';
+import { ReviewModule } from './modules/review.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { SubscriptionsSchema } from './models/subscription.model';
     ProductModule,
     OrderModule,
     MailModule,
+    ReviewModule,
   ],
   controllers: [AppController],
   providers: [

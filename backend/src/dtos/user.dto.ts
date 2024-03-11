@@ -14,7 +14,7 @@ export class returnUserDto {
   email: string;
   orders: object[];
   likes: string[] | ObjectId[];
-  reviews: object[];
+  reviews: string[] | ObjectId[];
   cart: object[];
   name: string;
 }

@@ -15,7 +15,8 @@ export class AccessTokenGuard extends AuthGuard('jwt') {
   }
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    const accessToken = request.body.access_token;
+    const accessToken =
+      request.body.access_token || request.headers.authorization.split(' ')[1];
 
     if (!accessToken) {
       throw new UnauthorizedException('Unauthorized');

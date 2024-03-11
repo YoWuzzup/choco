@@ -17,8 +17,6 @@ import { OrderService } from 'src/services/order.service';
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
-  // @Roles('admin')
-  // @UseGuards(RolesGuard)
   @Get()
   async getOrders(@Query() query: partialOrderDto) {
     return await this.orderService.getOrders(query);

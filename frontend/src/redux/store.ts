@@ -5,6 +5,7 @@ import productsReducer from "./slices/productsSlice";
 import userBookmarksReducer from "./slices/userBookmarksSlice";
 import userCartReducer from "./slices/userCartSlice";
 import userOrdersReducer from "./slices/userCartSlice";
+import reviewsSliceReducer from "./slices/reviewsSlice";
 
 export const makeStore = () => {
   return configureStore({
@@ -15,6 +16,7 @@ export const makeStore = () => {
       userBookmarks: userBookmarksReducer,
       userCart: userCartReducer,
       userOrders: userOrdersReducer,
+      reviews: reviewsSliceReducer,
     },
   });
 };
