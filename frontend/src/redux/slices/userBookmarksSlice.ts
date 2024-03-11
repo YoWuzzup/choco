@@ -6,7 +6,8 @@ type UserBookmarksSlice =
       _id: string;
       name: string;
       price: number;
-      description: string;
+      description: { en: string; ru: string; pl: string };
+      images: string[];
     }[];
 
 const userBookmarksSlice = createSlice({

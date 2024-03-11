@@ -10,8 +10,10 @@ import { renewUserBookmarks } from "@/redux/slices/userBookmarksSlice";
 
 import { Button, ProfileMenu, Spinner } from "@/components";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useLocale } from "next-intl";
 
 export default function Bookmarks() {
+  const locale = useLocale();
   const dispatch = useAppDispatch();
   const [storedAccessToken, saveAccessTokenToReduxAndLocalStorage] =
     useReduxAndLocalStorage("access_token");
@@ -77,6 +79,10 @@ export default function Bookmarks() {
         ) : (
           <div className="flex flex-col p-2 sm:p-10">
             {userBookmarks?.map((b, i) => {
+              const localeKey = b?.description
+                ? (locale as keyof typeof b.description)
+                : "en";
+
               return (
                 <Link
                   href={`/shop/${b._id}`}
@@ -87,16 +93,18 @@ export default function Bookmarks() {
                   <>
                     {/* TODO: add picture */}
                     <img
-                      src={``}
+                      src={`${b?.images[0] || ""}`}
                       alt={`like picture ${i}`}
-                      className=""
+                      className="w-[150px] h-[150px]"
                       style={{ objectFit: "cover" }}
                     />
                     <div className="flex flex-col grow">
-                      <div className="text-lg capitalize text-primary group-hover:text-colorful">
+                      <div className="text-lg mb-4 capitalize text-primary group-hover:text-colorful">
                         {b.name}
                       </div>
-                      <div className="text-paraPrimary">{b.description}</div>
+                      <div className="text-paraPrimary">
+                        {b.description && b.description[localeKey]}
+                      </div>
                     </div>
 
                     <Button

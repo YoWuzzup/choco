@@ -102,27 +102,18 @@ export default function Cart() {
                     shadow-lg rounded-md hover:-translate-y-2 duration-200 group"
                 >
                   <>
-                    {/* TODO:add correct image */}
                     <img
-                      src={`${obj?.image || ""}`}
+                      src={`${obj?.images[0] || ""}`}
                       alt={`like picture ${i}`}
-                      className=""
+                      className="w-[150px] h-[150px]"
                       style={{ objectFit: "cover" }}
                     />
                     <div className="flex flex-col grow">
-                      <div className="text-lg capitalize text-primary group-hover:text-colorful">
+                      <div className="text-lg mb-4 capitalize text-primary group-hover:text-colorful">
                         {obj?.name}
                       </div>
                       <div className="text-paraPrimary">
-                        {obj?.description
-                          ? obj.description[locale || "en"]
-                          : ["", "", ""].map((_, i) => (
-                              <Skeleton
-                                width="full"
-                                key={`${i}`}
-                                containerClassName="w-3/4 animate-pulse flex justify-start items-center mb-2"
-                              />
-                            ))}
+                        {obj.description && obj.description[localeKey]}
                       </div>
                     </div>
                     <Button
