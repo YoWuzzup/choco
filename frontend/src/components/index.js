@@ -38,5 +38,6 @@ export { Tooltip } from "./common/Tooltip";
 export { Input } from "./common/Input";
 export { Breadcrumb } from "./common/Breadcrumb";
 export { Skeleton } from "./common/Skeleton";
+export { BackToTop } from "./common/BackToTop";
 export { Rating } from "./common/Rating";
 export { default as AuthOverlay } from "./common/AuthOverlay";

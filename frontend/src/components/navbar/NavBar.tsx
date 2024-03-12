@@ -4,7 +4,6 @@ import { useTranslations } from "next-intl";
 import { ReactNode, useRef, useState } from "react";
 
 import {
-  Notification,
   ClosedMenu,
   OpenMenu,
   AvatarPlaceholder,
@@ -13,7 +12,7 @@ import { useAppSelector } from "@/hooks/redux";
 import { useOnClickOutside } from "usehooks-ts";
 import { AuthOverlay, Button } from "..";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const links = () => {
   // TODO: translation
@@ -54,6 +53,7 @@ const dropdown = [
 ];
 
 export default function NavBar(): ReactNode {
+  const router = useRouter();
   const path = usePathname();
   const profileMenuRef = useRef(null);
   const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
@@ -128,7 +128,7 @@ export default function NavBar(): ReactNode {
             </div>
           </div>
 
-          {/* Notification and profile buttons */}
+          {/* cart and profile buttons */}
           <div className="absolute inset-y-0 right-0 flex items-center justify-center sm:static sm:inset-auto sm:ml-6 sm:pr-0">
             {/* Profile dropdown */}
             {/* if no user show log in/up form/overlay if user is logged in show use menu */}
@@ -146,20 +146,34 @@ export default function NavBar(): ReactNode {
               </div>
             ) : (
               // user menu
-              <div className="ml-3 flex flex-row flex-nowrap gap-3">
+              <div className="ml-3 flex flex-row flex-nowrap gap-5">
                 <Button
                   type={"button"}
                   buttonClasses={
-                    "outline-none focus:outline-none focus-visible:outline-none text-primary"
+                    "relative outline-none focus:outline-none focus-visible:outline-none text-primary"
                   }
-                  handleClick={(e) => {
-                    console.log("TODO");
-                  }}
+                  handleClick={() => router.push("/profile/cart")}
                 >
-                  <span className="sr-only">
-                    {t(`notifications.notifications`)}
-                  </span>
-                  {<Notification className="h-6 w-6" />}
+                  <div className="absolute left-4 top-4">
+                    <p className="sr-only">{t(`links.cart`)}</p>
+                    <p className="flex h-2 w-2 items-center justify-center rounded-full bg-red p-3 text-xs text-white">
+                      {user?.cart?.length}
+                    </p>
+                  </div>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    className="file: h-8 w-8"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"
+                    />
+                  </svg>
                 </Button>
 
                 <div className="relative w-10 h-10 overflow-hidden bg-gray rounded-full dark:bg-gray">

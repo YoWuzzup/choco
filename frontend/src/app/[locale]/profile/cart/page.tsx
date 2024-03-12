@@ -1,7 +1,13 @@
 "use client";
 import Link from "next/link";
 
-import { Button, ProfileMenu, Skeleton, Spinner } from "@/components";
+import {
+  BackToTop,
+  Button,
+  ProfileMenu,
+  Skeleton,
+  Spinner,
+} from "@/components";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useEffect, useState } from "react";
 import { useReduxAndLocalStorage } from "@/hooks/useReduxAndLocalStorage ";
@@ -11,9 +17,11 @@ import { GETProducts } from "@/api/products";
 import { renewUserCart } from "@/redux/slices/userCartSlice";
 import { useAppSelector } from "@/hooks/redux";
 import { useLocale } from "next-intl";
+import { useRouter } from "next/navigation";
 
 export default function Cart() {
   const locale = useLocale();
+  const router = useRouter();
   const [user, saveUser] = useReduxAndLocalStorage<any>("user");
   const userRedux = useAppSelector((st) => st.user);
   const [storedAccessToken, saveAccessTokenToReduxAndLocalStorage] =
@@ -71,7 +79,7 @@ export default function Cart() {
   }, []);
 
   return (
-    <div className="h-screen flex flex-row gap-2 flex-nowrap items-start justify-end pt-[4rem]">
+    <div className="h-screen relative flex flex-row gap-2 flex-nowrap items-start justify-end pt-[4rem]">
       <ProfileMenu />
 
       <div className="w-full sm:w-9/12 px-3 mt-24 sm:mt-0">
@@ -98,23 +106,23 @@ export default function Cart() {
                 <Link
                   href={`/shop/${l}`}
                   key={`${obj?.name}_${i}`}
-                  className="w-full px-7 py-14 mb-8 flex flex-row flex-nowrap gap-8 items-center justify-start
+                  className="w-full px-1 sm:px-7 py-6 sm:py-10 mb-8 flex flex-col lg:flex-row flex-nowrap gap-8 items-center justify-between
                     shadow-lg rounded-md hover:-translate-y-2 duration-200 group"
                 >
                   <>
                     <img
                       src={`${obj?.images[0] || ""}`}
                       alt={`like picture ${i}`}
-                      className="w-[150px] h-[150px]"
+                      className="w-[100px] h-[100px] flex-none"
                       style={{ objectFit: "cover" }}
                     />
-                    <div className="flex flex-col grow">
+                    <div className="flex flex-col w-10/12 lg:w-1/2">
                       <div className="text-lg mb-4 capitalize text-primary group-hover:text-colorful">
                         {obj?.name}
                       </div>
-                      <div className="text-paraPrimary">
-                        {obj.description && obj.description[localeKey]}
-                      </div>
+                      <p className="text-paraPrimary flex-1 whitespace-nowrap overflow-hidden text-ellipsis">
+                        {obj?.description && obj.description[localeKey]}
+                      </p>
                     </div>
                     <Button
                       type={"button"}
@@ -131,6 +139,8 @@ export default function Cart() {
           </div>
         )}
       </div>
+
+      <BackToTop />
     </div>
   );
 }

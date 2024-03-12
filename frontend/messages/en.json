@@ -3,7 +3,8 @@
     "home": "home",
     "shop": "shop",
     "about us": "about us",
-    "products": "products"
+    "products": "products",
+    "cart": "cart"
   },
   "notifications": {
     "notifications": "view notifications"
