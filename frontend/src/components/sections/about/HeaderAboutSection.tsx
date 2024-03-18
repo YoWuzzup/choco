@@ -7,7 +7,7 @@ export const HeaderAboutSection: React.FC = () => {
   return (
     <section
       className="w-full text-secondary bg-[#f2f2f2] flex flex-col mx-auto
-                py-32 justify-center items-center"
+                py-32 mt-[4rem] justify-center items-center"
     >
       {/* header name */}
       <div className={`text-primary text-4xl font-bold mb-3 capitalize`}>

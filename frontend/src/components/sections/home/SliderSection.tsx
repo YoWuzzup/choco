@@ -13,11 +13,12 @@ export const SliderSection: React.FC = () => {
 
   return (
     <Slider
-      containerStyles={`w-full`}
+      containerStyles={`w-full mt-[4rem]`}
       propSettings={{
         dotsClass:
           "absolute w-full bottom-10 flex flex-row justify-center space-x-4",
         fade: true,
+        arrows: false,
       }}
     >
       {/* first slide */}

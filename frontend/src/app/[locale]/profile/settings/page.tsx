@@ -37,21 +37,46 @@ export default function Settings() {
   const [errorImage, setErrorImage] = useState<boolean>(false);
   const [errorPasswords, setErrorPasswords] = useState<string | null>(null);
   const [errorEmail, setErrorEmail] = useState<string | null>(null);
+  const [errorAddress, setErrorAddress] = useState<string | null>(null);
   const [image, setImage] = useState<File | null>(null);
   const [formData, setFormData] = useState<{
     name: string;
     email: string;
     password: string;
     confirmPassword: string;
+    contacts: {
+      lineOne: string;
+      lineTwo: string;
+      city: string;
+      zip: string;
+      phoneNumber: string;
+    };
   }>({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
+    contacts: { lineOne: "", lineTwo: "", city: "", zip: "", phoneNumber: "" },
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+
+    if (name.startsWith("contacts.")) {
+      const contactsField = name.split(".")[1];
+      setFormData((prev) => ({
+        ...prev,
+        contacts: {
+          ...prev.contacts,
+          [contactsField]: value,
+        },
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleImageChange = async (acceptedFiles: File[]) => {
@@ -67,6 +92,7 @@ export default function Settings() {
     setErrorImage(false);
     setErrorPasswords(null);
     setErrorEmail(null);
+    setErrorAddress(null);
 
     // check if user logged in
     if (!userRedux) return setLoading(false);
@@ -75,6 +101,17 @@ export default function Settings() {
     const nonEmptyValues = Object.fromEntries(
       Object.entries(formData).filter(([key, value]) => value)
     );
+
+    // Check if any field in contacts exists while others don't
+    const contactsExist = Object.values(formData.contacts).some((val) => val);
+    const allContactsExist = Object.values(formData.contacts).every(
+      (val) => val
+    );
+
+    if (contactsExist && !allContactsExist) {
+      setLoading(false);
+      return setErrorAddress("Please complete other address fields");
+    }
 
     // check passwords
     if (nonEmptyValues.password && nonEmptyValues.confirmPassword) {
@@ -95,8 +132,17 @@ export default function Settings() {
       }
     }
 
-    // getting only existing key/values
+    // Filter out empty values from the contacts object
+    const filteredContacts = Object.fromEntries(
+      Object.entries(nonEmptyValues.contacts).filter(([key, value]) => value)
+    );
+
+    // Construct the dataToSend object with filtered contacts
     const { confirmPassword, ...dataToSend } = nonEmptyValues;
+    const dataToSendWithFilteredContacts = {
+      ...dataToSend,
+      contacts: filteredContacts,
+    };
 
     if (image) {
       // if more then 2MB return
@@ -121,7 +167,7 @@ export default function Settings() {
 
     const data = await POSTUpdateUser(
       userRedux?._id,
-      { ...dataToSend },
+      { ...dataToSendWithFilteredContacts },
       storedAccessToken as string,
       saveAccessTokenToReduxAndLocalStorage
     );
@@ -232,6 +278,117 @@ export default function Settings() {
                 }}
               />
             </div>
+          </div>
+
+          {/* contact info */}
+          <div
+            className={`w-full p-2 py-7 sm:p-14 my-8 flex flex-row flex-wrap gap-4
+                  items-center shadow-lg rounded-md justify-between`}
+          >
+            <h4 className="capitalize basis-full">
+              Contact and shipping information
+            </h4>
+            <Input
+              handleChange={handleChange}
+              classNameContainer="flex flex-col relative w-full md:w-5/12"
+              input={{
+                name: "contacts.lineOne",
+                id: "contacts.lineOne",
+                value: formData.contacts.lineOne,
+                autoComplete: "address-line1",
+                placeholder: userRedux?.contacts.lineOne || "address line one",
+                type: "text",
+                className: `border rounded-lg p-3 text-paraPrimary
+                    ${errorAddress ? "border-red" : "border-grey"}`,
+              }}
+              label={{
+                htmlFor: "contacts.lineOne",
+                children: <>Address line one</>,
+                className: "capitalize mb-4 text-sm text-paraPrimary",
+              }}
+            />
+
+            <Input
+              handleChange={handleChange}
+              classNameContainer="flex flex-col relative w-full md:w-5/12"
+              input={{
+                name: "contacts.lineTwo",
+                id: "contacts.lineTwo",
+                value: formData.contacts.lineTwo,
+                autoComplete: "address-line2",
+                placeholder: userRedux?.contacts.lineTwo || "address line two",
+                type: "text",
+                className: `border rounded-lg p-3 text-paraPrimary`,
+              }}
+              label={{
+                htmlFor: "contacts.lineTwo",
+                children: <>Address line two</>,
+                className: "capitalize mb-4 text-sm text-paraPrimary",
+              }}
+            />
+
+            <Input
+              handleChange={handleChange}
+              classNameContainer="flex flex-col relative w-full md:w-5/12"
+              input={{
+                name: "contacts.city",
+                id: "contacts.city",
+                value: formData.contacts.city,
+                autoComplete: "home city",
+                placeholder: userRedux?.contacts.city || "city",
+                type: "text",
+                className: `border rounded-lg p-3 text-paraPrimary ${
+                  errorAddress ? "border-red" : "border-grey"
+                }`,
+              }}
+              label={{
+                htmlFor: "contacts.city",
+                children: <>city</>,
+                className: "capitalize mb-4 text-sm text-paraPrimary",
+              }}
+            />
+
+            <Input
+              handleChange={handleChange}
+              classNameContainer="flex flex-col relative w-full md:w-5/12"
+              input={{
+                name: "contacts.zip",
+                id: "contacts.zip",
+                value: formData.contacts.zip,
+                autoComplete: "postal-code",
+                placeholder: userRedux?.contacts.zip || "zip/postal code",
+                type: "text",
+                className: `border rounded-lg p-3 text-paraPrimary ${
+                  errorAddress ? "border-red" : "border-grey"
+                }`,
+              }}
+              label={{
+                htmlFor: "contacts.zip",
+                children: <>zip</>,
+                className: "capitalize mb-4 text-sm text-paraPrimary",
+              }}
+            />
+
+            <Input
+              handleChange={handleChange}
+              classNameContainer="flex flex-col relative w-full md:w-5/12"
+              input={{
+                name: "contacts.phoneNumber",
+                id: "contacts.phoneNumber",
+                value: formData.contacts.phoneNumber,
+                autoComplete: "tel",
+                placeholder: userRedux?.contacts.phoneNumber || "phone number",
+                type: "text",
+                className: `border rounded-lg p-3 text-paraPrimary ${
+                  errorAddress ? "border-red" : "border-grey"
+                }`,
+              }}
+              label={{
+                htmlFor: "contacts.phoneNumber",
+                children: <>phone number</>,
+                className: "capitalize mb-4 text-sm text-paraPrimary",
+              }}
+            />
           </div>
 
           {/* passwords */}

@@ -15,6 +15,13 @@ type SliceState = null | {
     | File;
   likes: string[];
   name: string;
+  contacts: {
+    lineOne: string;
+    lineTwo: string;
+    city: string;
+    zip: string;
+    phoneNumber: string;
+  };
   email: string;
   cart: string[];
   reviews: string[];

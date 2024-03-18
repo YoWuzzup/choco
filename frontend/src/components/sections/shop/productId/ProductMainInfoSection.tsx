@@ -484,7 +484,7 @@ export const ProductMainInfoSection: React.FC = () => {
   return (
     <section
       className="w-full text-primary bg-primary flex flex-col mx-auto
-                pb-16 pt-4 px-3 content-center"
+                pb-16 pt-4 px-3 content-center mt-[4rem]"
     >
       <BreadcrumbAndNExtPrevBtns />
       <div className="flex flex-col md:flex-row flex-nowrap justify-between [&>*]:w-full md:[&>*]:w-[48%]">

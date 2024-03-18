@@ -47,6 +47,7 @@ export class AuthService {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, email, ...payload } = data;
     const validatedUser = await this.validateUser(email, password);
+
     if (!validatedUser)
       throw new BadRequestException('User does not exist or wrong credentials');
 

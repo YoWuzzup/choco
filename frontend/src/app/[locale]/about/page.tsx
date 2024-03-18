@@ -7,7 +7,7 @@ import {
 
 export default function About() {
   return (
-    <main className="flex flex-col items-center justify-between mt-[4rem]">
+    <main className="flex flex-col items-center justify-between">
       <HeaderAboutSection />
       <OurTeamSection />
       <WhyUsSection />

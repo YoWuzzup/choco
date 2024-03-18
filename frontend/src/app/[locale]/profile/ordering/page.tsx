@@ -73,6 +73,8 @@ export default function Ordering() {
   }, []);
 
   return (
-    <div className="h-screen relative flex flex-row gap-2 flex-nowrap items-start justify-end pt-[4rem]">asd</div>
+    <div className="h-screen relative flex flex-row gap-2 flex-nowrap items-start justify-end pt-[4rem]">
+      asd
+    </div>
   );
 }

@@ -84,7 +84,7 @@ export default function NavBar(): ReactNode {
   );
 
   return (
-    <nav className={`bg-primary w-full fixed z-20`}>
+    <nav className={`bg-primary w-screen fixed z-20`}>
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
           {/* Mobile menu button with icons*/}
@@ -156,7 +156,7 @@ export default function NavBar(): ReactNode {
                 >
                   <div className="absolute left-4 top-4">
                     <p className="sr-only">{t(`links.cart`)}</p>
-                    <p className="flex h-2 w-2 items-center justify-center rounded-full bg-red p-3 text-xs text-white">
+                    <p className="flex h-2 w-2 items-center justify-center rounded-full bg-colorful p-3 text-xs text-white">
                       {user?.cart?.length}
                     </p>
                   </div>

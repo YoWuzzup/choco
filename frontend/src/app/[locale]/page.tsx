@@ -56,7 +56,7 @@ export default function Home() {
   }, [accessToken]);
 
   return (
-    <main className="flex flex-col items-center justify-between mt-[4rem]">
+    <main className="flex flex-col items-center justify-between">
       <SliderSection />
       <AboutUsSection />
       <BestSellerSection />

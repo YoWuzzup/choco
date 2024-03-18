@@ -1,5 +1,16 @@
 import * as mongoose from 'mongoose';
 
+const contactSchema = new mongoose.Schema(
+  {
+    lineOne: String,
+    lineTwo: String,
+    city: String,
+    zip: String,
+    phoneNumber: String,
+  },
+  { _id: false },
+);
+
 export const UsersSchema = new mongoose.Schema({
   email: { type: String, unique: true, required: true },
   password: { type: String, required: true },
@@ -10,6 +21,7 @@ export const UsersSchema = new mongoose.Schema({
   reviews: { type: [String], default: [] },
   cart: { type: [{}], default: [] },
   name: { type: String },
+  contacts: contactSchema,
   avatar: {
     fieldname: String,
     originalname: String,
@@ -30,6 +42,13 @@ export interface Users extends mongoose.Document {
   reviews: string[];
   cart: object[];
   name: string;
+  contacts: {
+    lineOne: string;
+    lineTwo: string;
+    city: string;
+    zip: string;
+    phoneNumber: string;
+  };
   avatar: {
     fieldname: string;
     originalname: string;

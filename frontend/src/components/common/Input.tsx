@@ -18,11 +18,7 @@ export const Input: React.FC<TInput> = ({
   return (
     <div className={classNameContainer}>
       {label ? (
-        <label
-          htmlFor={label.htmlFor}
-          className={label.className || "sr-only"}
-          {...label}
-        >
+        <label className={label.className || "sr-only"} {...label}>
           {label.children}
         </label>
       ) : null}
