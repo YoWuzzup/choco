@@ -133,7 +133,7 @@ export default function Cart() {
       <ProfileMenu />
 
       {/* main information */}
-      <div className="w-full sm:w-9/12 px-6 mt-24 sm:mt-0 flex flex-col gap-6">
+      <div className="w-full sm:w-9/12 px-2 sm:px-6 mt-24 sm:mt-0 flex flex-col gap-6">
         {loading ? (
           <div className="mt-28">
             <Spinner />
@@ -174,7 +174,7 @@ export default function Cart() {
                   >
                     <td className="p-2">
                       <div className="flex items-center gap-7">
-                        <Link href={`/shop/${c}`}>
+                        <Link href={`/shop/${c}`} className="hidden sm:block">
                           <img
                             src={obj?.images[0] || ""}
                             alt={`product ${i}`}
@@ -200,7 +200,7 @@ export default function Cart() {
                     </td>
                     <td className="py-2">
                       <div className="flex justify-center items-center">
-                        <div className="grid grid-cols-2 grid-rows-2 w-20 border-solid border-black border-2 font-bold">
+                        <div className="grid grid-cols-2 grid-rows-2 w-14 sm:w-20 border-solid border-black border-2 font-bold">
                           <div className="flex justify-center items-center border-r col-span-1 row-span-2">
                             {amount}
                           </div>
@@ -234,11 +234,11 @@ export default function Cart() {
                       <div className="flex items-center justify-center">
                         <Button
                           type={"button"}
-                          buttonClasses={`group/button p-2 border border-red bg-primary rounded-full duration-300
+                          buttonClasses={`group/button w-6 h-6 p-1 sm:w-10 sm:h-10 sm:p-2 flex justify-center items-center border border-red bg-primary rounded-full duration-300
                             hover:bg-red`}
                           handleClick={(e) => handleRemoveCart(e, c)}
                         >
-                          <DeleteIcon className="text-red group-hover/button:text-secondary" />
+                          <DeleteIcon className="w-full h-full text-red group-hover/button:text-secondary" />
                         </Button>
                       </div>
                     </td>
@@ -250,13 +250,13 @@ export default function Cart() {
         )}
 
         {/* user message */}
-        <div className="shadow-lg p-10 rounded-lg">
+        <div className="shadow-lg p-3 sm:p-10 rounded-lg">
           <label htmlFor="message to order">Leave us a message:</label>
           <textarea
             id="message to order"
             placeholder="Write some details of your order..."
             rows={6}
-            className="w-full resize-none block my-3 p-2.5 text-sm text-primary bg-primary 
+            className="w-full resize-none block mt-3 mb-8 p-2.5 text-sm text-primary bg-primary 
               rounded-lg border border-gray focus:ring-blue focus:border-blue"
           ></textarea>
           <div>
@@ -264,24 +264,34 @@ export default function Cart() {
               Contact and shipping information
             </h4>
             <div className="flex flex-1 flex-row flex-wrap items-start py-5 pl-5 overflow-hidden">
-              <ul className="grow">
-                <li className="text-xs text-gray-600 uppercase ">Receiver</li>
-                <li>{userRedux?.name}</li>
-                <li>
-                  {userRedux?.contacts?.lineOne} {userRedux?.contacts?.lineTwo}
-                </li>
-                <li>
-                  {userRedux?.contacts?.zip} {userRedux?.contacts?.city}
-                </li>
-              </ul>
+              {userRedux?.contacts &&
+              Object.values(userRedux?.contacts).some((v) => v) ? (
+                <>
+                  <ul className="grow">
+                    <li className="text-xs text-gray-600 uppercase ">
+                      Receiver
+                    </li>
+                    <li>{userRedux?.name}</li>
+                    <li>
+                      {userRedux?.contacts?.lineOne}{" "}
+                      {userRedux?.contacts?.lineTwo}
+                    </li>
+                    <li>
+                      {userRedux?.contacts?.zip} {userRedux?.contacts?.city}
+                    </li>
+                  </ul>
 
-              <ul className="grow">
-                <li className="text-xs text-gray-600 uppercase">
-                  Phone number
-                </li>
-                <li>{userRedux?.contacts?.phoneNumber}</li>
-              </ul>
-
+                  <ul className="grow">
+                    <li className="text-xs text-gray-600 uppercase">
+                      Phone number
+                    </li>
+                    <li>{userRedux?.contacts?.phoneNumber}</li>
+                  </ul>
+                </>
+              ) : (
+                // TODO:Write address
+                "Pick up at "
+              )}
               <div className="w-full my-4">
                 You can change your delivery address in{" "}
                 <Link href={"/profile/settings"} className="text-colorful">
@@ -294,13 +304,13 @@ export default function Cart() {
 
         {/* button to buy */}
         <div
-          className={`w-full px-7 py-14 my-8 flex flex-row flex-nowrap gap-8 
+          className={`w-full px-2 py-4 sm:py-10 my-8 flex flex-row flex-nowrap gap-8 
                   items-center justify-center shadow-lg rounded-md`}
         >
           {loading ? (
             <Spinner
               contanerStyles="h-12 w-full flex justify-center items-center"
-              svgStyles="w-10 h-10 animate-spin dark:text-gray-600 fill-blue-600"
+              svgStyles="w-10 h-10 animate-spin dark:text-gray fill-blue"
             />
           ) : (
             <Button

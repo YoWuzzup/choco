@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { useReduxAndLocalStorage } from "@/hooks/useReduxAndLocalStorage ";
+import useLocalStorage from "@/hooks/useLocalStorage";
 import { userUpdate } from "@/redux/slices/userSlice";
 
 import { POSTUpdateUser, POSTUpdateUserAvatar } from "@/api/user";
@@ -10,7 +11,6 @@ import { POSTUpdateUser, POSTUpdateUserAvatar } from "@/api/user";
 import { Button, Input, ProfileMenu, Spinner } from "@/components";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import useLocalStorage from "@/hooks/useLocalStorage";
 
 type User = null | {
   _id: string;
@@ -40,43 +40,34 @@ export default function Settings() {
   const [errorAddress, setErrorAddress] = useState<string | null>(null);
   const [image, setImage] = useState<File | null>(null);
   const [formData, setFormData] = useState<{
-    name: string;
-    email: string;
-    password: string;
-    confirmPassword: string;
-    contacts: {
-      lineOne: string;
-      lineTwo: string;
-      city: string;
-      zip: string;
-      phoneNumber: string;
-    };
+    name?: string;
+    email?: string;
+    password?: string;
+    confirmPassword?: string;
+    "contacts.lineOne": string;
+    "contacts.lineTwo": string;
+    "contacts.city": string;
+    "contacts.zip": string;
+    "contacts.phoneNumber": string;
   }>({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
-    contacts: { lineOne: "", lineTwo: "", city: "", zip: "", phoneNumber: "" },
+    "contacts.lineOne": "",
+    "contacts.lineTwo": "",
+    "contacts.city": "",
+    "contacts.zip": "",
+    "contacts.phoneNumber": "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    if (name.startsWith("contacts.")) {
-      const contactsField = name.split(".")[1];
-      setFormData((prev) => ({
-        ...prev,
-        contacts: {
-          ...prev.contacts,
-          [contactsField]: value,
-        },
-      }));
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handleImageChange = async (acceptedFiles: File[]) => {
@@ -102,17 +93,6 @@ export default function Settings() {
       Object.entries(formData).filter(([key, value]) => value)
     );
 
-    // Check if any field in contacts exists while others don't
-    const contactsExist = Object.values(formData.contacts).some((val) => val);
-    const allContactsExist = Object.values(formData.contacts).every(
-      (val) => val
-    );
-
-    if (contactsExist && !allContactsExist) {
-      setLoading(false);
-      return setErrorAddress("Please complete other address fields");
-    }
-
     // check passwords
     if (nonEmptyValues.password && nonEmptyValues.confirmPassword) {
       const matchedPasswords = formData.password === formData.confirmPassword;
@@ -124,7 +104,7 @@ export default function Settings() {
     }
     // check email
     if (nonEmptyValues.email) {
-      const matchedEmail = formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+      const matchedEmail = formData?.email?.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
       if (!matchedEmail) {
         setErrorEmail("Email is not correct");
         setLoading(false);
@@ -132,17 +112,8 @@ export default function Settings() {
       }
     }
 
-    // Filter out empty values from the contacts object
-    const filteredContacts = Object.fromEntries(
-      Object.entries(nonEmptyValues.contacts).filter(([key, value]) => value)
-    );
-
     // Construct the dataToSend object with filtered contacts
     const { confirmPassword, ...dataToSend } = nonEmptyValues;
-    const dataToSendWithFilteredContacts = {
-      ...dataToSend,
-      contacts: filteredContacts,
-    };
 
     if (image) {
       // if more then 2MB return
@@ -167,7 +138,7 @@ export default function Settings() {
 
     const data = await POSTUpdateUser(
       userRedux?._id,
-      { ...dataToSendWithFilteredContacts },
+      { ...dataToSend },
       storedAccessToken as string,
       saveAccessTokenToReduxAndLocalStorage
     );
@@ -286,7 +257,7 @@ export default function Settings() {
                   items-center shadow-lg rounded-md justify-between`}
           >
             <h4 className="capitalize basis-full">
-              Contact and shipping information
+              Contact and delivery information
             </h4>
             <Input
               handleChange={handleChange}
@@ -294,9 +265,9 @@ export default function Settings() {
               input={{
                 name: "contacts.lineOne",
                 id: "contacts.lineOne",
-                value: formData.contacts.lineOne,
+                value: formData ? formData["contacts.lineOne"] : "",
                 autoComplete: "address-line1",
-                placeholder: userRedux?.contacts.lineOne || "address line one",
+                placeholder: userRedux?.contacts?.lineOne || "address line one",
                 type: "text",
                 className: `border rounded-lg p-3 text-paraPrimary
                     ${errorAddress ? "border-red" : "border-grey"}`,
@@ -314,9 +285,9 @@ export default function Settings() {
               input={{
                 name: "contacts.lineTwo",
                 id: "contacts.lineTwo",
-                value: formData.contacts.lineTwo,
+                value: formData ? formData["contacts.lineTwo"] : "",
                 autoComplete: "address-line2",
-                placeholder: userRedux?.contacts.lineTwo || "address line two",
+                placeholder: userRedux?.contacts?.lineTwo || "address line two",
                 type: "text",
                 className: `border rounded-lg p-3 text-paraPrimary`,
               }}
@@ -333,9 +304,9 @@ export default function Settings() {
               input={{
                 name: "contacts.city",
                 id: "contacts.city",
-                value: formData.contacts.city,
+                value: formData ? formData["contacts.city"] : "",
                 autoComplete: "home city",
-                placeholder: userRedux?.contacts.city || "city",
+                placeholder: userRedux?.contacts?.city || "city",
                 type: "text",
                 className: `border rounded-lg p-3 text-paraPrimary ${
                   errorAddress ? "border-red" : "border-grey"
@@ -354,9 +325,9 @@ export default function Settings() {
               input={{
                 name: "contacts.zip",
                 id: "contacts.zip",
-                value: formData.contacts.zip,
+                value: formData ? formData["contacts.zip"] : "",
                 autoComplete: "postal-code",
-                placeholder: userRedux?.contacts.zip || "zip/postal code",
+                placeholder: userRedux?.contacts?.zip || "zip/postal code",
                 type: "text",
                 className: `border rounded-lg p-3 text-paraPrimary ${
                   errorAddress ? "border-red" : "border-grey"
@@ -375,9 +346,9 @@ export default function Settings() {
               input={{
                 name: "contacts.phoneNumber",
                 id: "contacts.phoneNumber",
-                value: formData.contacts.phoneNumber,
+                value: formData ? formData["contacts.phoneNumber"] : "",
                 autoComplete: "tel",
-                placeholder: userRedux?.contacts.phoneNumber || "phone number",
+                placeholder: userRedux?.contacts?.phoneNumber || "phone number",
                 type: "text",
                 className: `border rounded-lg p-3 text-paraPrimary ${
                   errorAddress ? "border-red" : "border-grey"
