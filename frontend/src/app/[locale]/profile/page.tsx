@@ -57,6 +57,7 @@ export default function Profile() {
           return [...acc, id[0]];
         }, []);
 
+        // TODO: rewrite to orders
         const res = await GETProducts({ _id: ids });
 
         saveUserOrdersToReduxAndLocalStorage(res, renewUserOrders);

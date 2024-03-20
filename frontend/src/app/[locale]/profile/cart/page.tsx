@@ -1,5 +1,8 @@
 "use client";
 import Link from "next/link";
+import React, { useEffect, useState } from "react";
+import { useLocale } from "next-intl";
+import { useRouter } from "next/navigation";
 
 import {
   Button,
@@ -10,18 +13,17 @@ import {
   Input,
 } from "@/components";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useEffect, useState } from "react";
 import { useReduxAndLocalStorage } from "@/hooks/useReduxAndLocalStorage ";
 import { POSTUpdateUser } from "@/api/user";
-import { userUpdate } from "@/redux/slices/userSlice";
 import { GETProducts } from "@/api/products";
+import { userUpdate } from "@/redux/slices/userSlice";
 import { renewUserCart } from "@/redux/slices/userCartSlice";
-import { useAppSelector } from "@/hooks/redux";
-import { useLocale } from "next-intl";
-import { useRouter } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { currentCurency } from "@/utils/common";
+import { addToUserOrders } from "@/redux/slices/userOrdersSlice";
 
 export default function Cart() {
+  const dispatch = useAppDispatch();
   const locale = useLocale();
   const router = useRouter();
   const [user, saveUser] = useReduxAndLocalStorage<any>("user");
@@ -31,7 +33,12 @@ export default function Cart() {
   const [storedUserCart, saveUserCartToReduxAndLocalStorage] =
     useReduxAndLocalStorage<[]>("userCart");
   const [loading, setLoading] = useState<boolean>(true);
+  const [data, setData] = useState<{ message: string; selfPickup: boolean }>({
+    message: "",
+    selfPickup: false,
+  });
   const selectedCurrency = currentCurency(locale) || "zł";
+  let totalPrice = 0;
 
   const handleIncrementAmount = async (item: string) => {
     const [productId, query] = item.split("?");
@@ -102,7 +109,41 @@ export default function Cart() {
     setLoading(false);
   };
 
-  const handleInfoChange = async () => {};
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    const newOrder = [
+      {
+        items: [...(userRedux?.cart ?? [])],
+        additionalData: data,
+        contacts: {
+          ...(userRedux?.contacts ?? {}),
+        },
+      },
+    ];
+
+    dispatch(addToUserOrders(newOrder));
+
+    router.push("/profile/ordering");
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    const { name, value, type } = e.target;
+
+    if (type === "checkbox") {
+      setData((prevState) => ({
+        ...prevState,
+        [name]: (e.target as HTMLInputElement).checked ? true : false,
+      }));
+    } else {
+      setData((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
+  };
 
   useEffect(() => {
     if (!userRedux || !userRedux.cart || userRedux.cart.length === 0)
@@ -159,13 +200,16 @@ export default function Cart() {
               {userRedux?.cart?.map((c, i) => {
                 const [productId, query] = c.split("?");
                 const urlParams = new URLSearchParams(query);
-                const amount = urlParams.get("amount") || 1;
+                const amount = Number(urlParams.get("amount")) || 1;
                 const taste = urlParams.get("taste") || "";
                 const size = urlParams.get("size") || "";
 
                 let obj: any = storedUserCart?.find((item: any) => {
                   return c.includes(`${item._id}`) ? item : null;
                 });
+
+                const totalPriceForItems = amount * obj?.price;
+                totalPrice += totalPriceForItems;
 
                 return (
                   <tr
@@ -193,7 +237,6 @@ export default function Cart() {
                     </td>
                     <td className="py-2">
                       <div className="flex justify-center items-center">
-                        {/* TODO: rework price */}
                         {selectedCurrency}{" "}
                         {obj?.price || <Skeleton width="16" />}
                       </div>
@@ -226,7 +269,7 @@ export default function Cart() {
 
                     <td className="py-2">
                       <div className="flex items-center justify-center">
-                        {selectedCurrency} {Number(amount) * obj?.price}
+                        {selectedCurrency} {totalPriceForItems}
                       </div>
                     </td>
 
@@ -249,23 +292,53 @@ export default function Cart() {
           </table>
         )}
 
+        {/* total price */}
+        <div className="w-full p-10">
+          Total price: {selectedCurrency}
+          {totalPrice}
+        </div>
+
         {/* user message */}
         <div className="shadow-lg p-3 sm:p-10 rounded-lg">
           <label htmlFor="message to order">Leave us a message:</label>
           <textarea
             id="message to order"
+            name="message"
+            onChange={handleChange}
             placeholder="Write some details of your order..."
             rows={6}
             className="w-full resize-none block mt-3 mb-8 p-2.5 text-sm text-primary bg-primary 
               rounded-lg border border-gray focus:ring-blue focus:border-blue"
           ></textarea>
           <div>
-            <h4 className="capitalize basis-full">
+            <h4 className="capitalize basis-full flex justify-start items-center gap-10">
               Contact and shipping information
             </h4>
             <div className="flex flex-1 flex-row flex-wrap items-start py-5 pl-5 overflow-hidden">
+              <div className="mb-5 basis-full flex justify-start items-center">
+                <label className="inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="selfPickup"
+                    onChange={handleChange}
+                    value={data.selfPickup.toString()}
+                    className="sr-only peer"
+                  />
+                  <div
+                    className="relative w-11 h-6 bg-gray peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full 
+                      rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white 
+                      after:content-[''] after:absolute after:top-[2px] after:start-[2px] 
+                      after:bg-white after:border-gray after:border after:rounded-full 
+                      after:h-5 after:w-5 after:transition-all peer-checked:bg-colorfulColor"
+                  />
+                  <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                    self pick up
+                  </span>
+                </label>
+              </div>
               {userRedux?.contacts &&
-              Object.values(userRedux?.contacts).some((v) => v) ? (
+              Object.values(userRedux?.contacts).some((v) => v) &&
+              !data.selfPickup ? (
                 <>
                   <ul className="grow">
                     <li className="text-xs text-gray-600 uppercase ">
@@ -292,7 +365,7 @@ export default function Cart() {
                 // TODO:Write address
                 "Pick up at "
               )}
-              <div className="w-full my-4">
+              <div className="basis-full my-4">
                 You can change your delivery address in{" "}
                 <Link href={"/profile/settings"} className="text-colorful">
                   the settings
@@ -316,7 +389,7 @@ export default function Cart() {
             <Button
               type={"button"}
               buttonClasses={`bg-colorful w-16 sm:w-44 h-16 rounded-full text-secondary`}
-              handleClick={() => router.push("/profile/ordering")}
+              handleClick={handleSubmit}
             >
               Buy
             </Button>

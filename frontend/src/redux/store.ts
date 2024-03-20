@@ -4,7 +4,7 @@ import accessTokenReducer from "./slices/accessTokenSlice";
 import productsReducer from "./slices/productsSlice";
 import userBookmarksReducer from "./slices/userBookmarksSlice";
 import userCartReducer from "./slices/userCartSlice";
-import userOrdersReducer from "./slices/userCartSlice";
+import userOrdersReducer from "./slices/userOrdersSlice";
 import reviewsSliceReducer from "./slices/reviewsSlice";
 
 export const makeStore = () => {

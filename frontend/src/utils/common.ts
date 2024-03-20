@@ -7,7 +7,7 @@ export const currentCurency = (locale: string) => {
     ru: "zł",
   };
 
-  return currencies[locale];
+  return currencies[locale] || "zł";
 };
 
 export const getColorsByTaste = (tastes: string[]): (string | undefined)[] => {
