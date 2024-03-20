@@ -10,7 +10,6 @@ import {
   ProfileMenu,
   Skeleton,
   Spinner,
-  Input,
 } from "@/components";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useReduxAndLocalStorage } from "@/hooks/useReduxAndLocalStorage ";
@@ -19,8 +18,8 @@ import { GETProducts } from "@/api/products";
 import { userUpdate } from "@/redux/slices/userSlice";
 import { renewUserCart } from "@/redux/slices/userCartSlice";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
-import { currentCurency } from "@/utils/common";
-import { addToUserOrders } from "@/redux/slices/userOrdersSlice";
+import { currentCurency, findObjectsById } from "@/utils/common";
+import { addToNewOrder } from "@/redux/slices/newOrderSlice";
 
 export default function Cart() {
   const dispatch = useAppDispatch();
@@ -33,12 +32,16 @@ export default function Cart() {
   const [storedUserCart, saveUserCartToReduxAndLocalStorage] =
     useReduxAndLocalStorage<[]>("userCart");
   const [loading, setLoading] = useState<boolean>(true);
-  const [data, setData] = useState<{ message: string; selfPickup: boolean }>({
+  const [data, setData] = useState<{
+    message: string;
+    selfPickup: boolean;
+    totalPrice: number;
+  }>({
     message: "",
-    selfPickup: false,
+    selfPickup: true,
+    totalPrice: 0,
   });
   const selectedCurrency = currentCurency(locale) || "zł";
-  let totalPrice = 0;
 
   const handleIncrementAmount = async (item: string) => {
     const [productId, query] = item.split("?");
@@ -112,17 +115,16 @@ export default function Cart() {
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    const newOrder = [
-      {
-        items: [...(userRedux?.cart ?? [])],
-        additionalData: data,
-        contacts: {
-          ...(userRedux?.contacts ?? {}),
-        },
+    const newOrder = {
+      items: [...(userRedux?.cart ?? [])],
+      additionalData: data,
+      contacts: {
+        ...(userRedux?.contacts ?? {}),
       },
-    ];
+      date: new Date().toString(),
+    };
 
-    dispatch(addToUserOrders(newOrder));
+    dispatch(addToNewOrder(newOrder));
 
     router.push("/profile/ordering");
   };
@@ -169,6 +171,28 @@ export default function Cart() {
     setLoading(false);
   }, []);
 
+  // calculate total price
+  useEffect(() => {
+    const prices = userRedux?.cart?.map((i) => {
+      const [productId, query] = i.split("?");
+      const urlParams = new URLSearchParams(query);
+      const amount = Number(urlParams.get("amount")) || 1;
+
+      const obj = findObjectsById(i, storedUserCart as []);
+      const tPrice = amount * obj?.price;
+
+      return tPrice;
+    });
+
+    const totalPrice = prices?.reduce((prev, curr) => {
+      return prev + (curr || 0);
+    }, 0);
+
+    setData((p) => {
+      return { ...p, totalPrice: totalPrice || 0 };
+    });
+  }, [userRedux?.cart]);
+
   return (
     <div className="h-screen relative flex flex-row gap-2 flex-nowrap items-start justify-end pt-[4rem]">
       <ProfileMenu />
@@ -204,12 +228,9 @@ export default function Cart() {
                 const taste = urlParams.get("taste") || "";
                 const size = urlParams.get("size") || "";
 
-                let obj: any = storedUserCart?.find((item: any) => {
-                  return c.includes(`${item._id}`) ? item : null;
-                });
+                let obj: any = findObjectsById(c, storedUserCart as []);
 
                 const totalPriceForItems = amount * obj?.price;
-                totalPrice += totalPriceForItems;
 
                 return (
                   <tr
@@ -295,7 +316,7 @@ export default function Cart() {
         {/* total price */}
         <div className="w-full p-10">
           Total price: {selectedCurrency}
-          {totalPrice}
+          {data.totalPrice}
         </div>
 
         {/* user message */}
@@ -321,7 +342,7 @@ export default function Cart() {
                     type="checkbox"
                     name="selfPickup"
                     onChange={handleChange}
-                    value={data.selfPickup.toString()}
+                    checked={data.selfPickup}
                     className="sr-only peer"
                   />
                   <div
