@@ -105,6 +105,7 @@ export default function Settings() {
     // check email
     if (nonEmptyValues.email) {
       const matchedEmail = formData?.email?.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+
       if (!matchedEmail) {
         setErrorEmail("Email is not correct");
         setLoading(false);

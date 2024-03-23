@@ -124,17 +124,25 @@ export class UserService {
     },
     updateUserDto: any,
   ) {
-    return await this.usersModel
-      .findOneAndUpdate(
-        {
-          $or: [{ _id: idOrEmail._id }, { email: idOrEmail.email }],
-        },
-        updateUserDto,
-        {
-          new: true,
-        },
-      )
-      .exec();
+    try {
+      return await this.usersModel
+        .findOneAndUpdate(
+          {
+            $or: [{ _id: idOrEmail._id }, { email: idOrEmail.email }],
+          },
+          updateUserDto,
+          {
+            new: true,
+          },
+        )
+        .exec();
+    } catch (error) {
+      if (error.code === 11000) {
+        throw new Error('Email is already in use');
+      } else {
+        throw error;
+      }
+    }
   }
 
   async updateUserAvatar(_id: ObjectId | string, file: Express.Multer.File) {
