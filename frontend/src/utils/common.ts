@@ -26,7 +26,7 @@ export const getColorsByTaste = (tastes: string[]): (string | undefined)[] => {
 };
 
 export const findObjectsById = (_id: string, arrayOfObjects: any[]) => {
-  const obj: any = arrayOfObjects.find((item: any) =>
+  const obj: any = arrayOfObjects?.find((item: any) =>
     _id.includes(`${item._id}`)
   );
 

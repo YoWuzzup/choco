@@ -120,6 +120,8 @@ export default function Cart() {
       additionalData: data,
       contacts: {
         ...(userRedux?.contacts ?? {}),
+        email: userRedux?.email,
+        userId: userRedux?._id,
       },
       date: new Date().toString(),
     };

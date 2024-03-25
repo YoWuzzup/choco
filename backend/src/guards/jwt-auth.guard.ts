@@ -6,11 +6,15 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { RedirectException } from './exceptions/redirect.exception';
 
-import { AuthService } from 'src/services/auth.service';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AccessTokenGuard extends AuthGuard('jwt') {
-  constructor(private authService: AuthService) {
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
+  ) {
     super();
   }
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -22,8 +26,12 @@ export class AccessTokenGuard extends AuthGuard('jwt') {
       throw new UnauthorizedException('Unauthorized');
     }
 
-    const validatingAccessToken =
-      await this.authService.validateJwtToken(accessToken);
+    const validatingAccessToken = await this.jwtService.verifyAsync(
+      accessToken,
+      {
+        secret: `${this.configService.get('JWT_SECRET')}`,
+      },
+    );
     const isValid =
       (await validatingAccessToken?.response?.error) === 'Unauthorized'
         ? false

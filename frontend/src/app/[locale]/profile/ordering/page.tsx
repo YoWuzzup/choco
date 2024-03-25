@@ -1,31 +1,60 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useLocale } from "next-intl";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 import { useReduxAndLocalStorage } from "@/hooks/useReduxAndLocalStorage ";
-import { useAppSelector } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 
-import MoneyOffIcon from "@mui/icons-material/MoneyOff";
 import { Button, Spinner, Tooltip } from "@/components";
-import { useRouter } from "next/navigation";
+import MoneyOffIcon from "@mui/icons-material/MoneyOff";
+import DoneIcon from "@mui/icons-material/Done";
+import CloseIcon from "@mui/icons-material/Close";
 import { currentCurency } from "@/utils/common";
-import { useLocale } from "next-intl";
+import { POSTMakeNewOrder } from "@/api/orders";
+import { userUpdate } from "@/redux/slices/userSlice";
+import { clearUserCart } from "@/redux/slices/userCartSlice";
 
 export default function Ordering() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const userRedux = useAppSelector((st) => st.user);
   const orderRedux = useAppSelector((st) => st.newOrder);
+  const accessTokenRedux = useAppSelector((st) => st.access_token);
   const locale = useLocale();
-  const [storedAccessToken, saveAccessTokenToReduxAndLocalStorage] =
-    useReduxAndLocalStorage("access_token");
-  const [storedUserCart, saveUserCartToReduxAndLocalStorage] =
-    useReduxAndLocalStorage<[]>("userCart");
+  const [storedUser, saveUserToReduxAndLocalStorage] =
+    useReduxAndLocalStorage("user");
   const [loading, setLoading] = useState<boolean>(false);
+  const [success, setSuccess] = useState<null | boolean>(null);
+  const [error, setError] = useState<null | Error>(null);
   const selectedCurrency = currentCurency(locale) || "zł";
 
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    console.log("TODO");
+    setLoading(true);
+
+    if (success) return setLoading(false);
+
+    await POSTMakeNewOrder(orderRedux, accessTokenRedux as string)
+      .then((res) => {
+        saveUserToReduxAndLocalStorage(
+          {
+            orders: [...(userRedux?.orders || []), res._id],
+          },
+          userUpdate
+        );
+
+        setSuccess(true);
+        saveUserToReduxAndLocalStorage({ cart: [] }, userUpdate);
+        dispatch(clearUserCart());
+      })
+      .catch((e) => {
+        setError(e);
+        setSuccess(false);
+      })
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
@@ -78,8 +107,39 @@ export default function Ordering() {
               </ul>
             </div>
           )}
+          <div className="basis-full my-4">
+            You can change your delivery address in{" "}
+            <Link href={"/profile/settings"} className="text-colorful">
+              the settings
+            </Link>
+          </div>
         </div>
       </div>
+
+      {/* res status */}
+      {(error || success) && (
+        <div
+          className={`w-full sm:w-9/12 p-4 flex flex-row flex-wrap gap-8 
+                  items-center justify-center shadow-lg rounded-md transition-all duration-300
+                  ${error || success ? "h-[250px]" : "h-0 invisible"}`}
+        >
+          {success ? (
+            <>
+              Ordered Successfully! Check your email for confirmation letter.
+              <DoneIcon className="text-success" />
+            </>
+          ) : (
+            <>
+              Something went wrong! Try again later.
+              <CloseIcon className="text-error" />
+            </>
+          )}
+
+          <Link href={"/"} className="text-colorful">
+            Link to go home
+          </Link>
+        </div>
+      )}
 
       {/* button to confirm */}
       <div

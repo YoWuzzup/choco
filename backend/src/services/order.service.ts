@@ -35,8 +35,16 @@ export class OrderService {
   }
 
   async createOrder(payload: {
-    buyer: ObjectId | string;
-    products: { name: string; price: number; quantity: number }[];
+    items: ObjectId[] | string[];
+    additionalInfo?: any;
+    contacts?: {
+      city?: string;
+      lineOne?: string;
+      phoneNumber?: string;
+      zip?: string;
+      email: string;
+      userId: ObjectId | string;
+    };
     date: Date;
   }): Promise<any> {
     try {
@@ -47,13 +55,14 @@ export class OrderService {
 
       // updating user
       const { orders } = await this.userService.findOneUser({
-        _id: payload.buyer,
+        _id: payload.contacts.userId,
+        email: payload.contacts.email,
       });
       await this.userService.updateUser(
         {
-          _id: payload.buyer,
+          _id: payload.contacts.userId,
         },
-        { orders: [...orders, newOrder] },
+        { orders: [...orders, newOrder._id], cart: [] },
       );
 
       return await newOrder.save();

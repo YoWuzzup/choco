@@ -1,17 +1,29 @@
 import mongoose, { ObjectId } from 'mongoose';
 
 export const OrdersSchema = new mongoose.Schema({
-  buyer: { type: mongoose.Types.ObjectId || String },
-  products: [
-    {
-      type: { name: String, price: Number, quantity: Number },
-    },
-  ],
+  items: [{ type: mongoose.Schema.Types.ObjectId || String, ref: 'products' }],
+  additionalInfo: { type: mongoose.Schema.Types.Mixed },
+  contacts: {
+    city: String,
+    lineOne: String,
+    phoneNumber: String,
+    zip: String,
+    email: String,
+    userId: mongoose.Types.ObjectId || String,
+  },
   date: { type: Date, default: Date.now },
 });
 
 export interface Orders extends mongoose.Document {
-  buyer: ObjectId | string;
-  products: { name: string; price: number; quantity: number }[];
+  items: ObjectId | string;
+  additionalInfo: Record<string, any>;
+  contacts: {
+    city: string;
+    lineOne: string;
+    phoneNumber: string;
+    zip: string;
+    email: string;
+    userId: ObjectId | string;
+  };
   date: Date;
 }
