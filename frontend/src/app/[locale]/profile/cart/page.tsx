@@ -385,8 +385,7 @@ export default function Cart() {
                   </ul>
                 </>
               ) : (
-                // TODO:Write address
-                "Pick up at "
+                <>{`Pick up at ${process.env.NEXT_PUBLIC_ADDRESS}`}</>
               )}
               <div className="basis-full my-4">
                 You can change your delivery address in{" "}

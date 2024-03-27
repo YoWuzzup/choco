@@ -32,7 +32,41 @@ import { GETReviews } from "@/api/reviews";
 import { addReviews } from "@/redux/slices/reviewsSlice";
 
 const BreadcrumbAndNExtPrevBtns: React.FC = () => {
+  const router = useRouter();
   const product = useAppSelector((st) => st.products.singleProduct);
+  const productsArray = useAppSelector((st) => st.products.listOfProducts);
+
+  const handleNextProd = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    const currentProdIndex =
+      productsArray?.findIndex((i) => i?._id === product?._id) ?? -1;
+    let nextProd;
+
+    if (currentProdIndex !== -1) {
+      nextProd = productsArray?.[currentProdIndex + 1];
+    }
+
+    if (nextProd) {
+      router.push(`/shop/${nextProd._id}`);
+    }
+  };
+
+  const handlePrevProd = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    const currentProdIndex =
+      productsArray?.findIndex((i) => i?._id === product?._id) ?? -1;
+    let prevProd;
+
+    if (currentProdIndex !== -1) {
+      prevProd = productsArray?.[currentProdIndex - 1];
+    }
+
+    if (prevProd) {
+      router.push(`/shop/${prevProd._id}`);
+    }
+  };
 
   return (
     <div className="w-full mb-8 flex flex-wrap sm:flex-nowrap justify-center sm:justify-between items-center">
@@ -52,7 +86,7 @@ const BreadcrumbAndNExtPrevBtns: React.FC = () => {
           type={"button"}
           buttonClasses={`capitalize text-[10px] mr-4 flex flex-nowrap justify-center 
               items-center hover:text-colorful transition-all duration-300`}
-          handleClick={() => console.log("TODO")}
+          handleClick={handlePrevProd}
         >
           <NavigateBeforeIcon />
           PREV
@@ -62,7 +96,7 @@ const BreadcrumbAndNExtPrevBtns: React.FC = () => {
           type={"button"}
           buttonClasses={`capitalize text-[10px] ml-4 flex flex-nowrap justify-center 
               items-center hover:text-colorful transition-all duration-300`}
-          handleClick={() => console.log("TODO")}
+          handleClick={handleNextProd}
         >
           NEXT
           <NavigateNextIcon />

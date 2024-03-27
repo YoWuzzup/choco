@@ -17,3 +17,17 @@ export const POSTMakeNewOrder = async (
     throw error;
   }
 };
+
+export const GETOrders = async (query: unknown) => {
+  try {
+    const res = await axios.get(`${url}orders`, {
+      params: query,
+      withCredentials: true,
+    });
+    const { data } = res;
+
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};

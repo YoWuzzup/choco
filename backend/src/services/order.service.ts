@@ -19,19 +19,27 @@ export class OrderService {
     private productService: ProductService,
   ) {}
 
-  async getOrders(query: any): Promise<Orders[]> {
-    const { sort, page, productsPerPage, ...data } = query;
-    const skipAmount =
-      page && productsPerPage ? (page - 1) * productsPerPage : 0;
-
+  async getOrders(query: any): Promise<any[]> {
     const orders = await this.ordersModel
-      .find({ ...data })
-      .sort(sort)
-      .skip(skipAmount)
-      .limit(productsPerPage || 0)
+      .find({ ...query })
+      .lean()
       .exec();
 
-    return orders;
+    // replace order items ids with actual objects
+    const newOrdersPromises = orders.map(async (o) => {
+      const ids = o.items;
+      const productData = await this.productService.getProducts({
+        _id: ids,
+        sort: { age: 1 },
+      });
+
+      return { ...o, items: productData };
+    });
+
+    // wait for all promises to resolve
+    const newOrders = await Promise.all(newOrdersPromises);
+
+    return newOrders;
   }
 
   async createOrder(payload: {

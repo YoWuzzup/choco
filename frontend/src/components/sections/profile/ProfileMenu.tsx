@@ -56,8 +56,8 @@ export const ProfileMenu: React.FC = () => {
 
   return (
     <div
-      className="flex flex-row flex-wrap gap-2 h-auto w-full shadow-xl fixed top-0 left-0 px-3 pt-[4rem] 
-            xl:w-2/12 sm:flex-col sm:h-screen sm:w-3/12"
+      className="flex flex-row sm:flex-col flex-wrap gap-2 h-auto w-full shadow-xl fixed top-0 left-0 px-3 pt-[4rem] pb-2 
+            xl:w-2/12 sm:h-screen sm:w-3/12 bg-primary"
     >
       {menu().map((m, i) => {
         return (
@@ -65,13 +65,13 @@ export const ProfileMenu: React.FC = () => {
             <h3 className="text-colorful capitalize mb-2 text-lg hidden sm:block">
               {m.header}
             </h3>
-            <div className="w-full flex flex-row sm:flex-col">
+            <div className="w-full flex flex-row justify-start items-start sm:flex-col">
               {m.tabs?.map((t, idx) => {
                 return (
                   <Link
                     key={`${t.name}_${idx}`}
                     href={`${t.url}`}
-                    className={`capitalize p-2 mb-1 text-sm duration-200 rounded-md hover:bg-secondary hover:text-colorful
+                    className={`w-full capitalize p-2 text-sm duration-200 rounded-md hover:bg-secondary hover:text-colorful
                     ${
                       path.includes(t.name)
                         ? "bg-secondary text-colorful"

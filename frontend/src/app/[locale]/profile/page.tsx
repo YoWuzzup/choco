@@ -11,10 +11,12 @@ import { GETProducts } from "@/api/products";
 
 import { Button, ProfileMenu, Spinner } from "@/components";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { GETOrders } from "@/api/orders";
 
 export default function Profile() {
   const dispatch = useAppDispatch();
   const userRedux = useAppSelector((st) => st.user);
+  const ordersRedux = useAppSelector((st) => st.userOrders);
   const [storedUserOrders, saveUserOrdersToReduxAndLocalStorage] =
     useReduxAndLocalStorage<[]>("userOrders");
   const [storedAccessToken, saveAccessTokenToReduxAndLocalStorage] =
@@ -51,14 +53,7 @@ export default function Profile() {
 
     const fetchOrders = async () => {
       try {
-        const ids = userRedux.orders.reduce((acc: any, item: any) => {
-          const id = item.split("?");
-
-          return [...acc, id[0]];
-        }, []);
-
-        // TODO: rewrite to orders
-        const res = await GETProducts({ _id: ids });
+        const res = await GETOrders({ _id: userRedux?.orders });
 
         saveUserOrdersToReduxAndLocalStorage(res, renewUserOrders);
       } catch (error) {
@@ -71,9 +66,12 @@ export default function Profile() {
   }, []);
 
   return (
-    <div className="h-screen flex flex-row gap-2 flex-nowrap items-start justify-end pt-[4rem]">
+    <div className="h-screen flex flex-row gap-2 flex-nowrap items-start justify-center sm:justify-end pt-[4rem]">
       <ProfileMenu />
-      <div className="w-9/12 px-3">
+      <div className="w-full sm:w-9/12 px-3">
+        <h3 className="flex justify-center items-center mt-10">
+          History of purchasing
+        </h3>
         {loading ? (
           <div className="mt-28">
             <Spinner />
@@ -84,44 +82,36 @@ export default function Profile() {
           </div>
         ) : (
           <div className="flex flex-col p-2 sm:p-10">
-            {userRedux?.orders?.map((l: string, i: number) => {
-              let obj: any = storedUserOrders?.find((item: any) => {
-                return l.includes(`${item._id}`) ? item : null;
-              });
-
-              return (
-                <Link
-                  href={`/shop/${l}`}
-                  key={`${obj?.name}_${i}`}
-                  className="w-full px-7 py-14 mb-8 flex flex-row flex-nowrap gap-8 items-center justify-start
-                    shadow-lg rounded-md hover:-translate-y-2 duration-200 group"
+            {ordersRedux?.map((o: any, i: number) =>
+              o.items && o.items.length > 0 ? (
+                <div
+                  key={`${o?.date}_${i}`}
+                  className="w-full px-7 py-14 mb-8 flex flex-row flex-wrap gap-8 
+                      items-center justify-center sm:justify-start shadow-lg rounded-md"
                 >
-                  <>
-                    {/* TODO:add correct image */}
-                    <img
-                      src={`${obj?.image || ""}`}
-                      alt={`like picture ${i}`}
-                      className=""
-                      style={{ objectFit: "cover" }}
-                    />
-                    <div className="flex flex-col grow">
-                      <div className="text-lg capitalize text-primary group-hover:text-colorful">
-                        {obj?.name}
+                  <h4 className="basis-full">
+                    {`Date of order: ${new Date(o.date).toLocaleDateString(
+                      "en-GB"
+                    )}`}
+                  </h4>
+                  {o.items?.map((item: any, itemIndex: number) => (
+                    <div key={`${item.name}_${itemIndex}`}>
+                      <img
+                        src={`${item.images[0] || ""}`}
+                        alt={`picture ${i}`}
+                        className="w-[100px] h-[100px]"
+                        style={{ objectFit: "cover" }}
+                      />
+                      <div className="flex flex-col grow">
+                        <div className="text-sm capitalize text-primary my-3">
+                          {item?.name}
+                        </div>
                       </div>
-                      <div className="text-paraPrimary">{obj?.description}</div>
                     </div>
-                    <Button
-                      type={"button"}
-                      buttonClasses={`group/button p-2 border border-red bg-primary rounded-full duration-300 
-                        hover:bg-red`}
-                      handleClick={(e) => handleRemoveOrder(e, l)}
-                    >
-                      <DeleteIcon className="text-red group-hover/button:text-secondary" />
-                    </Button>
-                  </>
-                </Link>
-              );
-            })}
+                  ))}
+                </div>
+              ) : null
+            )}
           </div>
         )}
       </div>

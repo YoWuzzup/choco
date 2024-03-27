@@ -87,11 +87,10 @@ export default function Bookmarks() {
                 <Link
                   href={`/shop/${b._id}`}
                   key={`${b.name}_${i}`}
-                  className="w-full px-7 py-14 mb-8 flex flex-row flex-nowrap gap-8 items-center justify-start
+                  className="w-full px-7 py-14 mb-8 flex flex-col sm:flex-row flex-nowrap gap-8 items-center justify-start
                     shadow-lg rounded-md hover:-translate-y-2 duration-200 group"
                 >
                   <>
-                    {/* TODO: add picture */}
                     <img
                       src={`${b?.images[0] || ""}`}
                       alt={`like picture ${i}`}
@@ -103,7 +102,10 @@ export default function Bookmarks() {
                         {b.name}
                       </div>
                       <div className="text-paraPrimary">
-                        {b.description && b.description[localeKey]}
+                        {b.description &&
+                          (b.description[localeKey].length > 100
+                            ? `${b.description[localeKey].slice(0, 100)}...`
+                            : b.description[localeKey])}
                       </div>
                     </div>
 

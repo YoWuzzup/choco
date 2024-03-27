@@ -82,8 +82,9 @@ export default function Ordering() {
         <div className="">
           Delivery address:
           {orderRedux?.additionalData?.selfPickup ? (
-            // TODO: write correct address
-            <div className="mt-4">Self pickup at </div>
+            <div className="mt-4">
+              Self pickup at {`${process.env.NEXT_PUBLIC_ADDRESS}`}
+            </div>
           ) : (
             <div className="mt-4 flex flex-row flex-nowrap items-start">
               <ul className="grow">
