@@ -19,7 +19,7 @@ export const Datepicking: React.FC<DatepickingProps> = ({
 }) => {
   return (
     <div className="w-full h-full">
-      <Datepicker value={value} onChange={handleChange} {...props} /> dsa
+      <Datepicker value={value} onChange={handleChange} {...props} />
     </div>
   );
 };
