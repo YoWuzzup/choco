@@ -10,6 +10,7 @@ import {
   ProfileMenu,
   Skeleton,
   Spinner,
+  Datepicking,
 } from "@/components";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useReduxAndLocalStorage } from "@/hooks/useReduxAndLocalStorage ";
@@ -20,8 +21,11 @@ import { renewUserCart } from "@/redux/slices/userCartSlice";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { currentCurency, findObjectsById } from "@/utils/common";
 import { addToNewOrder } from "@/redux/slices/newOrderSlice";
+import { DateValueType } from "react-tailwindcss-datepicker";
 
 export default function Cart() {
+  const currentDate = new Date();
+  const maxDate = new Date(currentDate.getTime() + 14 * 24 * 60 * 60 * 1000);
   const dispatch = useAppDispatch();
   const locale = useLocale();
   const router = useRouter();
@@ -32,6 +36,10 @@ export default function Cart() {
   const [storedUserCart, saveUserCartToReduxAndLocalStorage] =
     useReduxAndLocalStorage<[]>("userCart");
   const [loading, setLoading] = useState<boolean>(true);
+  const [chosenDate, setChosenDate] = useState({
+    startDate: new Date(),
+    endDate: new Date(),
+  });
   const [data, setData] = useState<{
     message: string;
     selfPickup: boolean;
@@ -129,6 +137,10 @@ export default function Cart() {
     dispatch(addToNewOrder(newOrder));
 
     router.push("/profile/ordering");
+  };
+
+  const handleDateChange = (e: any) => {
+    setChosenDate(e);
   };
 
   const handleChange = (
@@ -319,6 +331,23 @@ export default function Cart() {
         <div className="w-full p-10">
           Total price: {selectedCurrency}
           {data.totalPrice}
+        </div>
+
+        <div className="shadow-lg p-3 sm:p-10 rounded-lg">
+          <Datepicking
+            i18n={`${locale}`}
+            handleChange={handleDateChange}
+            value={chosenDate}
+            startFrom={currentDate}
+            minDate={currentDate}
+            maxDate={maxDate}
+            asSingle={true}
+            useRange={false}
+            popoverDirection="down"
+            primaryColor="pink"
+            placeholder="Date to deliver"
+            inputClassName="w-full p-4 border-2 rounded-md focus:ring-0 font-normal"
+          />
         </div>
 
         {/* user message */}

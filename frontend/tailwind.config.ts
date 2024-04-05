@@ -1,11 +1,15 @@
 import type { Config } from "tailwindcss";
 
+import colors from "tailwindcss/colors";
+
 const config: Config = {
   darkMode: "class",
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/**/*.{js,jsx,ts,tsx}",
+    "./node_modules/react-tailwindcss-datepicker/dist/index.esm.js",
   ],
   theme: {
     screens: {
@@ -15,20 +19,8 @@ const config: Config = {
       xl: "1200px",
     },
     colors: {
-      blue: "#007bff",
-      pink: "#e83e8c",
-      orange: "#fd7e14",
-      green: "#28a745",
+      ...colors,
       "gray-dark": "#343a40",
-      gray: "#6c757d",
-      indigo: "#6610f2",
-      purple: "#6f42c1",
-      red: "#dc3545",
-      yellow: "#ffc107",
-      teal: "#20c997",
-      cyan: "#17a2b8",
-      white: "#fff",
-      black: "#000",
       primary: "#007bff",
       secondary: "#6c757d",
       success: "#28a745",
