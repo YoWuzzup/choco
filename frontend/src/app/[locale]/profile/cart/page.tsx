@@ -21,11 +21,11 @@ import { renewUserCart } from "@/redux/slices/userCartSlice";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { currentCurency, findObjectsById } from "@/utils/common";
 import { addToNewOrder } from "@/redux/slices/newOrderSlice";
-import { DateValueType } from "react-tailwindcss-datepicker";
 
 export default function Cart() {
   const currentDate = new Date();
   const maxDate = new Date(currentDate.getTime() + 14 * 24 * 60 * 60 * 1000);
+  const minDate = new Date(currentDate.getTime() + 2 * 24 * 60 * 60 * 1000);
   const dispatch = useAppDispatch();
   const locale = useLocale();
   const router = useRouter();
@@ -37,8 +37,8 @@ export default function Cart() {
     useReduxAndLocalStorage<[]>("userCart");
   const [loading, setLoading] = useState<boolean>(true);
   const [chosenDate, setChosenDate] = useState({
-    startDate: new Date(),
-    endDate: new Date(),
+    startDate: minDate.toString(),
+    endDate: new Date().toString(),
   });
   const [data, setData] = useState<{
     message: string;
@@ -125,7 +125,7 @@ export default function Cart() {
 
     const newOrder = {
       items: [...(userRedux?.cart ?? [])],
-      additionalData: data,
+      additionalData: { ...data, dateToMakeOrder: chosenDate },
       contacts: {
         ...(userRedux?.contacts ?? {}),
         email: userRedux?.email,
@@ -339,7 +339,7 @@ export default function Cart() {
             handleChange={handleDateChange}
             value={chosenDate}
             startFrom={currentDate}
-            minDate={currentDate}
+            minDate={minDate}
             maxDate={maxDate}
             asSingle={true}
             useRange={false}

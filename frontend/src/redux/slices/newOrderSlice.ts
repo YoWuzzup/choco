@@ -6,6 +6,10 @@ type SliceState = null | {
     message: string;
     selfPickup: boolean;
     totalPrice: number;
+    dateToMakeOrder: {
+      startDate: string;
+      endDate: string;
+    };
   };
   contacts: {};
   date: string;

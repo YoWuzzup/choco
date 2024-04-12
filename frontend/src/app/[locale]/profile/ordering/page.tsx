@@ -30,6 +30,21 @@ export default function Ordering() {
   const [error, setError] = useState<null | Error>(null);
   const selectedCurrency = currentCurency(locale) || "zł";
 
+  const getOrderDay = () => {
+    const startDateStr =
+      orderRedux?.additionalData?.dateToMakeOrder?.startDate ||
+      Date.now() + 2 * 24 * 60 * 60 * 1000;
+    const startDate = new Date(startDateStr);
+
+    // Get year, month, and day
+    const year = startDate.getFullYear();
+    const month = String(startDate.getMonth() + 1).padStart(2, "0");
+    const day = String(startDate.getDate()).padStart(2, "0");
+
+    // Create the formatted date string
+    return `${year}/${month}/${day}`;
+  };
+
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
@@ -108,6 +123,9 @@ export default function Ordering() {
               </ul>
             </div>
           )}
+          <div className="basis-full my-4">
+            Delivery day: {`${getOrderDay()}`}
+          </div>
           <div className="basis-full my-4">
             You can change your delivery address in{" "}
             <Link href={"/profile/settings"} className="text-colorful">

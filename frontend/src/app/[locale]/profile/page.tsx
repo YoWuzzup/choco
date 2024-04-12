@@ -1,51 +1,19 @@
 "use client";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useAppSelector } from "@/hooks/redux";
 import { useReduxAndLocalStorage } from "@/hooks/useReduxAndLocalStorage ";
-import { userUpdate } from "@/redux/slices/userSlice";
 import { renewUserOrders } from "@/redux/slices/userOrdersSlice";
-import { POSTUpdateUser } from "@/api/user";
-import { GETProducts } from "@/api/products";
 
-import { Button, ProfileMenu, Spinner } from "@/components";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { ProfileMenu, Spinner } from "@/components";
 import { GETOrders } from "@/api/orders";
 
 export default function Profile() {
-  const dispatch = useAppDispatch();
   const userRedux = useAppSelector((st) => st.user);
   const ordersRedux = useAppSelector((st) => st.userOrders);
   const [storedUserOrders, saveUserOrdersToReduxAndLocalStorage] =
     useReduxAndLocalStorage<[]>("userOrders");
-  const [storedAccessToken, saveAccessTokenToReduxAndLocalStorage] =
-    useReduxAndLocalStorage("access_token");
   const [loading, setLoading] = useState<boolean>(true);
-
-  const handleRemoveOrder = async (
-    e: React.MouseEvent<HTMLButtonElement>,
-    orderId: string
-  ) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    if (!orderId || !userRedux) return;
-    setLoading(true);
-    const filteredOrders = userRedux.cart.filter((c: string) => c !== orderId);
-
-    const data = await POSTUpdateUser(
-      userRedux._id,
-      {
-        orders: filteredOrders,
-      },
-      storedAccessToken as string,
-      saveAccessTokenToReduxAndLocalStorage
-    );
-
-    dispatch(userUpdate(data));
-    setLoading(false);
-  };
 
   useEffect(() => {
     if (!userRedux?.orders || userRedux?.orders.length === 0)

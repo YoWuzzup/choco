@@ -87,8 +87,7 @@ const Login: React.FC<{
           href={""}
           className="outline-none focus:outline-none focus-visible:outline-none"
         >
-          {/* TODO: change logo */}
-          <img className="mx-auto h-10 mb-5" src="/logo.webp" alt="Choco" />
+          <img className="mx-auto mb-5" src="/logo.png" alt="Choco" />
         </Link>{" "}
       </div>
 
@@ -276,7 +275,7 @@ const Register: React.FC<{
           href={""}
           className="outline-none focus:outline-none focus-visible:outline-none"
         >
-          <img className="mx-auto h-10 mb-5" src="/logo.webp" alt="Choco" />
+          <img className="mx-auto mb-5" src="/logo.png" alt="Choco" />
         </Link>{" "}
       </div>
 
@@ -470,7 +469,7 @@ const Forgot: React.FC<{
           href={""}
           className="outline-none focus:outline-none focus-visible:outline-none"
         >
-          <img className="mx-auto h-10 mb-5" src="/logo.webp" alt="Choco" />
+          <img className="mx-auto mb-5" src="/logo.png" alt="Choco" />
         </Link>{" "}
       </div>
 

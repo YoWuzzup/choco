@@ -107,8 +107,7 @@ export default function Footer(): ReactNode {
       >
         <div className="flex items-center mb-4">
           <Link href={"/"}>
-            {/* TODO: change logo */}
-            <img className="h-8 w-auto" src="/logo.webp" alt="Choco" />
+            <img className="h-32 w-auto" src="/logo.png" alt="Choco" />
           </Link>
         </div>
         <div className="text-primary text-sm text-center font-bold mb-8 md:text-left">

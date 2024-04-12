@@ -6,6 +6,11 @@
     "products": "products",
     "cart": "cart"
   },
+  "languages": {
+    "ru": "ru",
+    "pl": "pl",
+    "en": "en"
+  },
   "notifications": {
     "notifications": "view notifications"
   },

@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { ReactNode, useRef, useState } from "react";
 
 import {
@@ -37,6 +37,8 @@ const links = () => {
   ];
 };
 
+const languagesDropdown = ["en", "ru", "pl"];
+
 const dropdown = [
   {
     name: "my profile",
@@ -55,9 +57,12 @@ const dropdown = [
 export default function NavBar(): ReactNode {
   const router = useRouter();
   const path = usePathname();
+  const locale = useLocale();
   const profileMenuRef = useRef(null);
+  const languageMenuRef = useRef(null);
   const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
   const [profileMenuIsOpen, setProfileMenuIsOpen] = useState<boolean>(false);
+  const [languageMenuIsOpen, setLanguageMenuIsOpen] = useState<boolean>(false);
   const [showAuthOverlay, setShowAuthOverlay] = useState<boolean>(false);
   const user = useAppSelector((st) => st.user);
 
@@ -67,6 +72,12 @@ export default function NavBar(): ReactNode {
     setMenuIsOpen((prev) => !prev);
   };
 
+  const handleLanguages = (e: React.MouseEvent<any>) => {
+    e.preventDefault();
+
+    setLanguageMenuIsOpen((prev) => !prev);
+  };
+
   const handleProfileMenuClick = (e: React.MouseEvent<any>) => {
     e.preventDefault();
 
@@ -74,6 +85,14 @@ export default function NavBar(): ReactNode {
   };
 
   const t = useTranslations("");
+
+  useOnClickOutside(
+    languageMenuRef,
+    () => {
+      setLanguageMenuIsOpen(false);
+    },
+    "mouseup"
+  );
 
   useOnClickOutside(
     profileMenuRef,
@@ -104,10 +123,10 @@ export default function NavBar(): ReactNode {
           <div className="flex flex-1 items-center justify-center sm:items-stretch">
             <div className="flex flex-shrink-0 items-center">
               <Link href={"/"}>
-                <img className="h-8 w-auto" src="/logo.webp" alt="Choco" />
+                <img className="w-auto h-16" src="/logo.png" alt="Choco" />
               </Link>
             </div>
-            <div className="hidden sm:ml-6 sm:block">
+            <div className="hidden sm:ml-6 sm:flex justify-center items-center">
               <div className="flex space-x-4 text-primary uppercase">
                 {links().map((l, index) => (
                   <Link
@@ -119,8 +138,6 @@ export default function NavBar(): ReactNode {
                     after:bg-colorful after:bottom-0 after:left-0
                     after:transition-all"
                   >
-                    {/* TODO: translation */}
-                    {/* {t(`links.${l.name}`)} */}
                     {l.text}
                   </Link>
                 ))}
@@ -128,8 +145,52 @@ export default function NavBar(): ReactNode {
             </div>
           </div>
 
-          {/* cart and profile buttons */}
+          {/* cart, language and profile buttons */}
           <div className="absolute inset-y-0 right-0 flex items-center justify-center sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+            {/* language dropdown */}
+            <div className="relative w-auto h-10">
+              <div className="relative w-10 h-10 overflow-hidden rounded-full border-2 border-colorfulColor">
+                <span className="sr-only">{t(`languages.${locale}`)}</span>
+                <Button
+                  type={"button"}
+                  buttonClasses={
+                    "w-full h-full outline-none focus:outline-none focus-visible:outline-none"
+                  }
+                  handleClick={handleLanguages}
+                >
+                  {locale}
+                </Button>
+              </div>
+
+              {languageMenuIsOpen ? (
+                <div
+                  className="absolute right-0 top-10 z-10 mt-2 w-48 origin-top-right rounded-md 
+                      bg-primary py-1 shadow-lg ring-1 ring-black ring-opacity-5 text-primary
+                      focus:outline-none"
+                  role="language"
+                  aria-orientation="vertical"
+                  aria-labelledby="user-language-button"
+                  tabIndex={-1}
+                  ref={languageMenuRef}
+                  onClick={(e) => handleLanguages(e)}
+                >
+                  {/* TODO: make changing language to keep the page */}
+                  {languagesDropdown.map((l, index) => (
+                    <Link
+                      href={`/${l}`}
+                      key={`${l}_${index}`}
+                      className="block px-4 py-2 text-sm hover:text-colorful capitalize"
+                      role="menuitem"
+                      tabIndex={-1}
+                      id={`user-language-${l}`}
+                    >
+                      {t(`languages.${l}`)}
+                    </Link>
+                  ))}
+                </div>
+              ) : null}
+            </div>
+
             {/* Profile dropdown */}
             {/* if no user show log in/up form/overlay if user is logged in show use menu */}
             {!user ? (
@@ -259,8 +320,6 @@ export default function NavBar(): ReactNode {
                 hover:bg-colorful hover:text-primary`}
                 aria-current={path.includes(l.name) ? "page" : undefined}
               >
-                {/* TODO: translation */}
-                {/* {t(`links.${l.name}`)} */}
                 {l.text}
               </Link>
             )
