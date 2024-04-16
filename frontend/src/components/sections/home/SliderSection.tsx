@@ -1,9 +1,10 @@
-"use client";
 import { Button, Slider } from "@/components";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
 export const SliderSection: React.FC = () => {
   const router = useRouter();
+  const t = useTranslations("");
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -45,7 +46,7 @@ export const SliderSection: React.FC = () => {
               hover:text-colorful hover:border-white`}
             handleClick={handleClick}
           >
-            Shop now
+            {t("pages.home.shop now")}
           </Button>
         </div>
       </div>
@@ -74,7 +75,7 @@ export const SliderSection: React.FC = () => {
               hover:text-colorful hover:border-white`}
             handleClick={handleClick}
           >
-            Shop now
+            {t("pages.home.shop now")}
           </Button>
         </div>
       </div>

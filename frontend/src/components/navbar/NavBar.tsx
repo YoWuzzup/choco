@@ -3,34 +3,34 @@ import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { ReactNode, useRef, useState } from "react";
 
+import { useAppSelector } from "@/hooks/redux";
+import { useOnClickOutside } from "usehooks-ts";
+import { usePathname, useRouter } from "next/navigation";
+import { AuthOverlay, Button } from "..";
+
 import {
   ClosedMenu,
   OpenMenu,
   AvatarPlaceholder,
 } from "../../../public/svgs/index";
-import { useAppSelector } from "@/hooks/redux";
-import { useOnClickOutside } from "usehooks-ts";
-import { AuthOverlay, Button } from "..";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import { usePathname, useRouter } from "next/navigation";
 
 const links = () => {
-  // TODO: translation
   const t = useTranslations("");
 
   return [
     {
-      text: `home`,
+      text: `${t(`links.home`)}`,
       name: "home",
       href: "/",
     },
     {
-      text: `shop`,
+      text: `${t(`links.shop`)}`,
       name: "shop",
       href: "/shop",
     },
     {
-      text: `about us`,
+      text: `${t(`links.about us`)}`,
       name: "about",
       href: "/about",
     },
@@ -103,7 +103,7 @@ export default function NavBar(): ReactNode {
   );
 
   return (
-    <nav className={`bg-primary w-screen fixed z-20`}>
+    <nav className={`bg-primary w-screen fixed z-20 top-0`}>
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
           {/* Mobile menu button with icons*/}
@@ -164,7 +164,7 @@ export default function NavBar(): ReactNode {
 
               {languageMenuIsOpen ? (
                 <div
-                  className="absolute right-0 top-10 z-10 mt-2 w-48 origin-top-right rounded-md 
+                  className="absolute right-0 top-10 z-10 mt-2 w-16 origin-top-right rounded-md 
                       bg-primary py-1 shadow-lg ring-1 ring-black ring-opacity-5 text-primary
                       focus:outline-none"
                   role="language"
@@ -179,7 +179,7 @@ export default function NavBar(): ReactNode {
                     <Link
                       href={`/${l}`}
                       key={`${l}_${index}`}
-                      className="block px-4 py-2 text-sm hover:text-colorful capitalize"
+                      className="flex justify-center items-center px-4 py-2 text-sm hover:text-colorful"
                       role="menuitem"
                       tabIndex={-1}
                       id={`user-language-${l}`}
@@ -317,7 +317,7 @@ export default function NavBar(): ReactNode {
                     ? "bg-secondary text-colorful"
                     : "bg-pramary text-primary"
                 } block rounded-md px-3 py-2 font-medium
-                hover:bg-colorful hover:text-primary`}
+                    hover:bg-colorful hover:text-primary`}
                 aria-current={path.includes(l.name) ? "page" : undefined}
               >
                 {l.text}

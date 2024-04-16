@@ -2,9 +2,11 @@
 import { POSTSubscribeToNews } from "@/api/user";
 import { Button, Input } from "@/components";
 import TelegramIcon from "@mui/icons-material/Telegram";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 export const SubscribeSection: React.FC = () => {
+  const t = useTranslations("");
   const [emailValue, setEmailValue] = useState<string>("");
   const [res, setRes] = useState<{
     message: string;
@@ -37,9 +39,11 @@ export const SubscribeSection: React.FC = () => {
   return (
     <section className="w-full text-primary bg-[#f2f2f2] flex flex-col justify-between md:flex-row mx-auto px-10 py-28 lg:px-8">
       <div className={`pb-4 md:pb-0 flex flex-col items-center sm:items-start`}>
-        <h3 className={`text-3xl font-bold`}>GET UPDATE</h3>
-        <p className="text-paraPrimary text-center sm:text-left">
-          Subscribe our newsletter and get discount 10% off
+        <h3 className={`text-3xl font-bold uppercase`}>
+          {t(`pages.home.sub.header`)}
+        </h3>
+        <p className="text-paraPrimary text-center sm:text-left first-letter:uppercase">
+          {t(`pages.home.sub.subheader`)}
         </p>
       </div>
 
@@ -54,7 +58,7 @@ export const SubscribeSection: React.FC = () => {
             type: "subscribeEmail",
             id: "subscribeEmail",
             name: "subscribeEmail",
-            placeholder: "Enter your email...",
+            placeholder: t(`pages.home.sub.email input`),
             autoComplete: "email",
             required: true,
             value: emailValue,

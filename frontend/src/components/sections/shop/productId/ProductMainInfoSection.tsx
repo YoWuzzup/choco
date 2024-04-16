@@ -6,7 +6,7 @@ import {
   useSearchParams,
 } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { addSingleProduct } from "@/redux/slices/productsSlice";
@@ -32,6 +32,7 @@ import { GETReviews } from "@/api/reviews";
 import { addReviews } from "@/redux/slices/reviewsSlice";
 
 const BreadcrumbAndNExtPrevBtns: React.FC = () => {
+  const t = useTranslations("");
   const router = useRouter();
   const product = useAppSelector((st) => st.products.singleProduct);
   const productsArray = useAppSelector((st) => st.products.listOfProducts);
@@ -72,8 +73,8 @@ const BreadcrumbAndNExtPrevBtns: React.FC = () => {
     <div className="w-full mb-8 flex flex-wrap sm:flex-nowrap justify-center sm:justify-between items-center">
       <Breadcrumb
         crumbs={[
-          { name: "home", href: "/" },
-          { name: "shop", href: "/shop" },
+          { name: t("links.home"), href: "/" },
+          { name: t("links.shop"), href: "/shop" },
           { name: product?.name || "", href: "/" },
         ]}
       />
@@ -84,21 +85,21 @@ const BreadcrumbAndNExtPrevBtns: React.FC = () => {
       >
         <Button
           type={"button"}
-          buttonClasses={`capitalize text-[10px] mr-4 flex flex-nowrap justify-center 
+          buttonClasses={`uppercase text-[10px] mr-4 flex flex-nowrap justify-center 
               items-center hover:text-colorful transition-all duration-300`}
           handleClick={handlePrevProd}
         >
           <NavigateBeforeIcon />
-          PREV
+          {t("buttons.prev")}
         </Button>
         <div className="after:content-[''] after:border-2 after:border-gray" />
         <Button
           type={"button"}
-          buttonClasses={`capitalize text-[10px] ml-4 flex flex-nowrap justify-center 
+          buttonClasses={`uppercase text-[10px] ml-4 flex flex-nowrap justify-center 
               items-center hover:text-colorful transition-all duration-300`}
           handleClick={handleNextProd}
         >
-          NEXT
+          {t("buttons.next")}
           <NavigateNextIcon />
         </Button>
       </div>
@@ -161,6 +162,7 @@ const LeftPictureSide: React.FC = () => {
 };
 
 const RightInfoSide: React.FC = () => {
+  const t = useTranslations("");
   const product = useAppSelector((st) => st.products.singleProduct);
   const reviews = useAppSelector((st) => st.reviews);
   const [user, saveUserToReduxAndLocalStorage] =
@@ -292,7 +294,10 @@ const RightInfoSide: React.FC = () => {
           {reviews ? (
             <>
               <Rating data={reviews?.map((r) => r?.rating || 5)} />{" "}
-              {reviews.length} review{reviews.length === 1 ? "" : "s"}
+              {reviews.length}{" "}
+              {reviews.length === 1
+                ? t("pages.shop.review")
+                : t("pages.shop.reviews")}
             </>
           ) : (
             <>
@@ -300,7 +305,7 @@ const RightInfoSide: React.FC = () => {
                 data={[]}
                 containerClasses="flex justrify-center items-center mr-4"
               />{" "}
-              No reviews
+              {t("pages.shop.no reviews")}
             </>
           )}
         </div>
@@ -333,7 +338,7 @@ const RightInfoSide: React.FC = () => {
               after:bottom-0 after:left-0 after:absolute after:content-[''] 
               after:w-10 after:border-b"
           >
-            size
+            {t("pages.shop.size")}
           </div>
           {product?.sizes.map((s, i) => (
             <Button
@@ -364,7 +369,7 @@ const RightInfoSide: React.FC = () => {
           after:bottom-0 after:left-0 after:absolute after:content-[''] 
           after:w-10 after:border-b"
           >
-            tastes
+            {t("pages.shop.tastes")}
           </div>
           {product?.tastes.map((t, i) => {
             const tasteArray = t.split("-");
@@ -441,16 +446,16 @@ const RightInfoSide: React.FC = () => {
 
         <Button
           type={"button"}
-          buttonClasses={`text-secondary grow text-sm capitalize px-10 bg-colorful hover:bg-secondary duration-300
+          buttonClasses={`uppercase text-secondary grow text-sm px-10 bg-colorful hover:bg-secondary duration-300
               h-14`}
           handleClick={handleAddToCart}
         >
-          ADD TO CART
+          {t("buttons.add to cart")}
         </Button>
 
         <Button
           type={"button"}
-          buttonClasses={`basis-full text-secondary text-sm capitalize px-10 bg-secondary hover:bg-colorful duration-300
+          buttonClasses={`uppercase basis-full text-secondary text-sm px-10 bg-secondary hover:bg-colorful duration-300
               h-14`}
           handleClick={(e) => {
             handleAddToCart(e);
@@ -458,13 +463,13 @@ const RightInfoSide: React.FC = () => {
             router.push("/profile/cart");
           }}
         >
-          BUY IT NOW
+          {t("buttons.buy it now")}
         </Button>
 
         {/* categories */}
         {product?.categories && (
-          <div className="text-sm">
-            Categories:{" "}
+          <div className="text-sm capitalize">
+            {t("pages.shop.categories")}:{" "}
             {product.categories.map((c, i) => (
               <span
                 key={`${c}_${i}`}

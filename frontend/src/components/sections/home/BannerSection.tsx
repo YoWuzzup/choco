@@ -1,7 +1,9 @@
 import { Button } from "@/components";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
 export const BannerSection: React.FC = () => {
+  const t = useTranslations("");
   const router = useRouter();
 
   return (
@@ -10,14 +12,11 @@ export const BannerSection: React.FC = () => {
         className={`basis-full bg-colorful px-8 py-10 flex flex-col justify-center items-start
         md:basis-4/6`}
       >
-        <h3 className="font-bold text-3xl pb-4 ">
-          Hot Chocolate Bombs Homemade
+        <h3 className="font-bold text-3xl pb-4 first-letter:uppercase">
+          {t(`pages.home.banner.header`)}
         </h3>
-        <p className="mb-5">
-          Hot chocolate bombs or hot cocoa bombs are cute lil balls of chocolate
-          that you put into a mug. When you pour hot milk into the mug, the
-          chocolate melts and magically releases the marshmallows and cocoa
-          hiding inside.
+        <p className="mb-5 first-letter:uppercase">
+          {t(`pages.home.banner.description`)}
         </p>
         <Button
           type={"button"}
@@ -26,7 +25,7 @@ export const BannerSection: React.FC = () => {
                       hover:text-colorful hover:bg-primary`}
           handleClick={() => router.push("/shop")}
         >
-          Shop now
+          {t(`pages.home.shop now`)}
         </Button>
       </div>
 

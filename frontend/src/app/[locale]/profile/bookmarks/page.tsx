@@ -10,9 +10,10 @@ import { renewUserBookmarks } from "@/redux/slices/userBookmarksSlice";
 
 import { Button, ProfileMenu, Spinner } from "@/components";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 export default function Bookmarks() {
+  const t = useTranslations("");
   const locale = useLocale();
   const dispatch = useAppDispatch();
   const [storedAccessToken, saveAccessTokenToReduxAndLocalStorage] =
@@ -74,7 +75,7 @@ export default function Bookmarks() {
           </div>
         ) : !likes || likes.length === 0 ? (
           <div className="flex justify-center items-center mt-10">
-            There's no items in your bookmarks yet.
+            {t("pages.profile.no bookmarks")}
           </div>
         ) : (
           <div className="flex flex-col p-2 sm:p-10">

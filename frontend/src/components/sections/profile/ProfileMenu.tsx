@@ -9,22 +9,22 @@ const menu = () => {
 
   return [
     {
-      header: `start`,
+      header: t(`pages.profile.headers.start`),
       tabs: [
         {
-          text: `dashboard`,
+          text: t(`pages.profile.tabs.dashboard`),
           icon: `<DashboardOutlinedIcon />`,
           url: "/profile",
           name: "dashboard",
         },
         {
-          text: `likes`,
+          text: t(`pages.profile.tabs.likes`),
           icon: `<StarBorderIcon />`,
           url: "/profile/bookmarks",
           name: "bookmarks",
         },
         {
-          text: `cart`,
+          text: t(`pages.profile.tabs.cart`),
           icon: `<StarBorderIcon />`,
           url: "/profile/cart",
           name: "cart",
@@ -32,16 +32,16 @@ const menu = () => {
       ],
     },
     {
-      header: `account`,
+      header: t(`pages.profile.headers.account`),
       tabs: [
         {
-          text: `settings`,
+          text: t(`pages.profile.tabs.settings`),
           icon: `<SettingsOutlinedIcon />`,
           url: "/profile/settings",
           name: "settings",
         },
         {
-          text: `logout`,
+          text: t(`pages.profile.tabs.logout`),
           icon: `<LogoutIcon />`,
           url: "/auth/signout",
           name: "logout",

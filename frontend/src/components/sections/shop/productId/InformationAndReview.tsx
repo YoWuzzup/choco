@@ -4,30 +4,31 @@ import { useState } from "react";
 
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { AuthOverlay, Button, Input, Tooltip } from "@/components";
-import { POSTUpdateUser } from "@/api/user";
 import { addSingleProduct } from "@/redux/slices/productsSlice";
 import { useReduxAndLocalStorage } from "@/hooks/useReduxAndLocalStorage ";
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
 import { DELETEReview, POSTCreateProductReviews } from "@/api/reviews";
 import { userUpdate } from "@/redux/slices/userSlice";
-import { addReviews } from "@/redux/slices/reviewsSlice";
+import { useTranslations } from "next-intl";
 
 const links = [
   {
-    name: "Aboout Us",
+    name: "about us",
     href: "/about",
   },
   {
-    name: "Your Cart",
+    name: "your cart",
     href: "/profile/cart",
   },
   {
-    name: "Your Orders",
+    name: "your orders",
     href: "/profile",
   },
 ];
 
 const AddInformation: React.FC = () => {
+  const t = useTranslations("");
+
   return (
     <div
       className="py-8 px-3 mb-8 md:px-10 flex flex-col sm:flex-row justify-between gap-8
@@ -35,34 +36,29 @@ const AddInformation: React.FC = () => {
     >
       <div className="flex flex-row flex-wrap justify-center items-center">
         <p className="basis-full text-[11px] uppercase text-gray mb-1">
-          MORE INFOMATION TO YOU
+          {t("pages.shop.more information")}
         </p>
         <h3
           className="basis-full text-primary text-2xl font-medium pb-4 mb-9 relative capitalize
                     after:content-[''] after:absolute  after:bottom-0 after:left-0
                     after:w-[40px] after:h-[2px] after:bg-colorful"
         >
-          Things You Need To Know
+          {t("pages.shop.to know")}
         </h3>
 
         <div className="grid grid-rows-2 grid-cols-2 text-[#979797] gap-12">
           <div style={{ gridArea: "1 / 1 / 3 / 2" }}>
-            <p className="mb-8">
-              We use industry standard SSL encryption to protect your details.
-              Potentially sensitive information such as your name, address and
-              card details are encoded so they can only be read on the secure
-              server.
-            </p>
+            <p className="mb-8">{t("pages.shop.protect")}</p>
 
             <div className="flex flex-col justify-start">
               {[
-                "Safe Payments",
-                "Accept Credit Cart",
-                "Different Payment Method",
-                "Price Include VAT",
-                "Easy To Order",
+                t("pages.shop.tags.safe payments"),
+                t("pages.shop.tags.accept credit cart"),
+                t("pages.shop.tags.different payment method"),
+                t("pages.shop.tags.price include VAT"),
+                t("pages.shop.tags.easy to order"),
               ].map((it, i) => (
-                <span key={`${it}_${i}`} className="mb-2">
+                <span key={`${it}_${i}`} className="mb-2 capitalize">
                   {it}
                 </span>
               ))}
@@ -73,18 +69,18 @@ const AddInformation: React.FC = () => {
             style={{ gridArea: "1 / 2 / 2 / 3" }}
             className="flex flex-col justify-start"
           >
-            <h4 className="text-primary text-lg mb-2 basis-full">
-              Need More Information
+            <h4 className="text-primary text-lg mb-2 basis-full capitalize">
+              {t("pages.shop.need more information")}
             </h4>
 
             {links.map((l, i) => (
               <Link
                 href={l.href}
                 key={`${l.name}_${i}`}
-                className="relative transition-all ease-in-out delay-150 pb-1 
+                className="relative transition-all ease-in-out delay-150 pb-1 capitalize 
                             hover:text-colorful w-fit"
               >
-                {l.name}
+                {t(`pages.shop.links.${l.name}`)}
               </Link>
             ))}
           </div>
@@ -104,6 +100,7 @@ const AddInformation: React.FC = () => {
 };
 
 const Reviews: React.FC = () => {
+  const t = useTranslations("");
   const dispatch = useAppDispatch();
   const product = useAppSelector((st) => st.products.singleProduct);
   const reviews = useAppSelector((st) => st.reviews);
@@ -177,7 +174,9 @@ const Reviews: React.FC = () => {
       className="py-8 px-3 mb-8 md:px-10 flex flex-row flex-wrap justify-between gap-4
                   border-b-[1px] border-[#e7e7e7] border-solid"
     >
-      <h4 className="basis-full text-sm">Customer Reviews</h4>
+      <h4 className="basis-full text-sm capitalize">
+        {t("pages.shop.customer reviews")}
+      </h4>
 
       <div className="basis-full">
         {reviews && reviews?.length > 0 ? (
@@ -217,7 +216,7 @@ const Reviews: React.FC = () => {
                   className={`w-8 h-8 ms-1 text-yellow`}
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
+                  fill="gold"
                   viewBox="0 0 22 20"
                 >
                   <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
@@ -226,14 +225,14 @@ const Reviews: React.FC = () => {
             </div>
           ))
         ) : (
-          <div>No reviews yet</div>
+          <div className="capitalize">{t("pages.shop.no reviews yet")}</div>
         )}
         <div className="flex flex-col justify-start items-center text-paraPrimary">
           <div
-            className="text-primary hover:text-colorful cursor-pointer duration-300"
+            className="text-primary hover:text-colorful cursor-pointer duration-300 capitalize"
             onClick={handleUserExists}
           >
-            Write a review
+            {t("pages.shop.write a review")}
           </div>
           <div
             className={`flex flex-col w-full overflow-hidden transition-all duration-700 ${
@@ -257,12 +256,10 @@ const Reviews: React.FC = () => {
                     className: "",
                     children: (
                       <svg
-                        className={`w-4 h-4 ms-1 ${
-                          review.rating > index ? "text-yellow" : "text-gray"
-                        }`}
+                        className={`w-4 h-4 ms-1`}
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
-                        fill="currentColor"
+                        fill={i > review.rating ? "currentColor" : "gold"}
                         viewBox="0 0 22 20"
                       >
                         <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
@@ -272,8 +269,8 @@ const Reviews: React.FC = () => {
                 ></Input>
               ))}
             </div>
-            <div className="text-[13px]">
-              Review Title
+            <div className="text-[13px] capitalize">
+              {t("pages.shop.review title")}
               <Input
                 input={{
                   id: "title",
@@ -284,8 +281,8 @@ const Reviews: React.FC = () => {
                 }}
               />
             </div>
-            <div className="text-[13px] w-full">
-              Review {1500 - review.comment.length}
+            <div className="text-[13px] w-full capitalize">
+              {t("pages.shop.review")} ({1500 - review.comment.length})
               <Input
                 input={{
                   id: "comment",
@@ -303,7 +300,7 @@ const Reviews: React.FC = () => {
                     bg-colorful hover:bg-secondary duration-300 h-14`}
               handleClick={handleSubmitReview}
             >
-              submit review
+              {t("pages.shop.submit review")}
             </Button>
           </div>
         </div>
@@ -317,6 +314,7 @@ const Reviews: React.FC = () => {
 };
 
 export const InformationAndReview: React.FC = () => {
+  const t = useTranslations("");
   const [tab, setTab] = useState<0 | 1>(0);
 
   return (
@@ -328,21 +326,21 @@ export const InformationAndReview: React.FC = () => {
       >
         <div
           onClick={(e) => setTab(0)}
-          className={`relative cursor-pointer
+          className={`relative cursor-pointer capitalize
                 after:content-[''] after:absolute after:w-full after:bg-colorful 
                 after:h-[2px] after:bottom-0 after:left-0 after:scale-0 hover:after:scale-100
                 after:duration-300 ${tab === 0 ? "after:scale-100" : ""}`}
         >
-          Additional Information
+          {t("pages.shop.additional information")}
         </div>
         <div
           onClick={(e) => setTab(1)}
-          className={`relative cursor-pointer
+          className={`relative cursor-pointer capitalize
                 after:content-[''] after:absolute after:w-full after:bg-colorful 
                 after:h-[2px] after:bottom-0 after:left-0 after:scale-0 hover:after:scale-100
                 after:duration-300 ${tab === 1 ? "after:scale-100" : ""}`}
         >
-          Review
+          {t("pages.shop.review")}
         </div>
       </div>
 

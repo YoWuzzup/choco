@@ -4,10 +4,11 @@ import { Product, Spinner } from "@/components";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { addBestSellerProducts } from "@/redux/slices/productsSlice";
 import { currentCurency } from "@/utils/common";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect } from "react";
 
 export const BestSellerSection: React.FC = () => {
+  const t = useTranslations("");
   const locale = useLocale();
   const dispatch = useAppDispatch();
   const products = useAppSelector((st) => st.products.bestSellerProducts);
@@ -27,9 +28,11 @@ export const BestSellerSection: React.FC = () => {
     <section
       className={`w-full flex flex-col text-center justify-center items-center py-14 text-primary bg-primary`}
     >
-      <h3 className="mb-5 text-5xl font-bold font-[Quicksand]">Best Seller</h3>
-      <div className="w-3/4 text-gray mb-10">
-        Best Seller Product This Week!
+      <h3 className="mb-5 text-5xl font-bold font-[Quicksand] capitalize">
+        {t(`pages.home.best seller.header`)}
+      </h3>
+      <div className="w-3/4 text-gray mb-10 capitalize">
+        {t(`pages.home.best seller.description`)}
       </div>
 
       <div className="w-full px-2 lg:px-8 flex flex-row flex-wrap justify-center items-center gap-6 lg:justify-evenly">

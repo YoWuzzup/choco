@@ -7,8 +7,10 @@ import { renewUserOrders } from "@/redux/slices/userOrdersSlice";
 
 import { ProfileMenu, Spinner } from "@/components";
 import { GETOrders } from "@/api/orders";
+import { useTranslations } from "next-intl";
 
 export default function Profile() {
+  const t = useTranslations("");
   const userRedux = useAppSelector((st) => st.user);
   const ordersRedux = useAppSelector((st) => st.userOrders);
   const [storedUserOrders, saveUserOrdersToReduxAndLocalStorage] =
@@ -37,16 +39,16 @@ export default function Profile() {
     <div className="h-screen flex flex-row gap-2 flex-nowrap items-start justify-center sm:justify-end pt-[4rem]">
       <ProfileMenu />
       <div className="w-full sm:w-9/12 px-3">
-        <h3 className="flex justify-center items-center mt-10">
-          History of purchasing
+        <h3 className="flex justify-center items-center mt-10 capitalize">
+          {t("pages.profile.history")}
         </h3>
         {loading ? (
           <div className="mt-28">
             <Spinner />
           </div>
         ) : !userRedux?.orders || userRedux?.orders.length === 0 ? (
-          <div className="flex justify-center items-center mt-10">
-            You don't have any order yet!
+          <div className="flex justify-center items-center mt-10 first-letter:uppercase">
+            {t("pages.profile.no history")}
           </div>
         ) : (
           <div className="flex flex-col p-2 sm:p-10">
@@ -57,10 +59,10 @@ export default function Profile() {
                   className="w-full px-7 py-14 mb-8 flex flex-row flex-wrap gap-8 
                       items-center justify-center sm:justify-start shadow-lg rounded-md"
                 >
-                  <h4 className="basis-full">
-                    {`Date of order: ${new Date(o.date).toLocaleDateString(
-                      "en-GB"
-                    )}`}
+                  <h4 className="basis-full first-letter:uppercase">
+                    {`${t("pages.profile.date of order")}: ${new Date(
+                      o.date
+                    ).toLocaleDateString("en-GB")}`}
                   </h4>
                   {o.items?.map((item: any, itemIndex: number) => (
                     <div key={`${item.name}_${itemIndex}`}>

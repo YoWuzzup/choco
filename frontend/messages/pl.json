@@ -2,10 +2,24 @@
   "links": {
     "home": "strona główna",
     "shop": "sklep",
-    "about us": "o nas"
+    "about us": "o nas",
+    "products": "produkty",
+    "cart": "koszyk"
+  },
+  "languages": {
+    "ru": "ru",
+    "pl": "pl",
+    "en": "en"
   },
   "notifications": {
-    "notifications": "pokaż powiadomienia"
+    "notifications": "zobacz powiadomienia"
+  },
+  "buttons": {
+    "prev": "poprzedni",
+    "next": "następny",
+    "add to cart": "dodaj do koszyka",
+    "buy it now": "kup teraz",
+    "save changes": "zapisz zmiany"
   },
   "user menu": {
     "open menu": "otwórz menu użytkownika",
@@ -17,17 +31,17 @@
     "customer": {
       "header": "opieka nad klientem",
       "pagination": "paginacja",
-      "terms & conditions": "warunki",
+      "terms & conditions": "regulamin",
       "contact": "kontakt",
       "accessories": "akcesoria",
-      "term of use": "warunki korzystania"
+      "term of use": "warunki użytkowania"
     },
     "shop": {
       "header": "szybki sklep",
       "about us": "o nas",
       "privacy policy": "polityka prywatności",
-      "terms & conditions": "warunki",
-      "products return": "zwroty produktów",
+      "terms & conditions": "regulamin",
+      "products return": "zwrot produktów",
       "wholesale policy": "polityka hurtowa"
     },
     "company": {
@@ -36,7 +50,150 @@
       "address store": "adres sklepu",
       "privacy policy": "polityka prywatności",
       "receivers & amplifiers": "odbiorniki i wzmacniacze",
-      "chocoostore": "chocoostore"
+      "chocoostore": "chocostore"
+    }
+  },
+  "pages": {
+    "home": {
+      "home page": "strona główna",
+      "shop now": "zakupy teraz",
+      "best seller": {
+        "header": "bestseller",
+        "description": "najlepiej sprzedający się produkt w tym tygodniu!"
+      },
+      "banner": {
+        "header": "bomby czekoladowe domowej roboty",
+        "description": "Bomby czekoladowe lub bomby kakaowe to urocze kulki czekoladowe, które wkładasz do kubka. Gdy wlewasz gorące mleko do kubka, czekolada topi się i magicznie uwalnia ukryte w środku pianki marshmallow i kakao."
+      },
+      "sub": {
+        "header": "bądź na bieżąco",
+        "subheader": "zapisz się na nasz biuletyn i otrzymaj 10% zniżki",
+        "email input": "wprowadź swój adres e-mail"
+      }
+    },
+    "shop": {
+      "header": "produkty",
+      "search": "szukaj",
+      "categories": "kategorie",
+      "price": "cena",
+      "reset filter": "resetuj",
+      "review": "recenzja",
+      "reviews": "recenzje",
+      "no reviews yet": "jeszcze nie ma recenzji",
+      "customer reviews": "recenzje klientów",
+      "write a review": "napisz recenzję",
+      "review title": "tytuł recenzji",
+      "submit review": "wyślij recenzję",
+      "additional information": "dodatkowe informacje",
+      "more information": "więcej informacji dla Ciebie",
+      "need more information": "potrzebujesz więcej informacji",
+      "to know": "rzeczy, które musisz wiedzieć",
+      "protect": "Używamy szyfrowania SSL standardu przemysłowego, aby chronić Twoje dane. Potencjalnie wrażliwe informacje, takie jak Twoje imię, adres i dane karty, są kodowane, aby można je było odczytać tylko na bezpiecznym serwerze.",
+      "no reviews": "brak recenzji",
+      "size": "rozmiar",
+      "tastes": "smaki",
+      "links": {
+        "about us": "o nas",
+        "your cart": "twój koszyk",
+        "your orders": "twoje zamówienia"
+      },
+      "tags": {
+        "safe payments": "bezpieczne płatności",
+        "accept credit cart": "akceptuję kartę kredytową",
+        "different payment method": "różne metody płatności",
+        "price include VAT": "cena zawiera VAT",
+        "easy to order": "łatwe do zamówienia"
+      }
+    },
+    "about": {
+      "header": "o nas",
+      "our team": "poznaj nasz zespół",
+      "description": "Jesteśmy znani z naszych ciast! od ciast piekarniczych po ciasta niestandardowe, rzeźbione ciasta po torty ślubne, każda uroczystość zasługuje na własne ciasto. Obsługa Burlington i okolicznych społeczności od 2013 roku.",
+      "reasons": {
+        "header": "Powody, dla których warto u nas robić zakupy",
+        "first reason": {
+          "header": "WSPIERAJĄCE WSPIERANIE 24/7",
+          "subheader": "Nasz zespół obsługi zawsze dla Ciebie dostępny 7 dni w tygodniu"
+        },
+        "second reason": {
+          "header": "7 DNI ŁATWEJ WYMAGANIA",
+          "subheader": "Produkt może być wadliwy w ciągu 7 dni, aby natychmiast wymienić."
+        },
+        "third reason": {
+          "header": "GWARANCJA JAKOŚCI",
+          "subheader": "Jeśli Twoje produkty nie są idealne, możesz je zwrócić i otrzymać pełny zwrot pieniędzy."
+        }
+      },
+      "instagram": {
+        "header": "",
+        "subheader": "Bądź na bieżąco z najnowszymi wiadomościami i aktualizacjami"
+      }
+    },
+    "profile": {
+      "history": "historia zakupów",
+      "no history": "nie masz jeszcze żadnego zamówienia!",
+      "date of order": "data zamówienia",
+      "no bookmarks": "nie ma jeszcze żadnych pozycji w zakładkach.",
+      "no cart": "nie ma jeszcze żadnych pozycji w koszyku.",
+      "total price": "całkowita cena",
+      "date to deliver": "data dostawy",
+      "leave us a message": "zostaw nam wiadomość",
+      "contact": "informacje o kontakcie i dostawie",
+      "details": "napisz kilka szczegółów swojego zamówienia...",
+      "self pick up": "samodzielny odbiór",
+      "pick up at": "odbierz w",
+      "change address": "możesz zmienić swój adres dostawy w",
+      "the settings": "ustawienia",
+      "buy": "kup",
+      "receiver": "odbiorca",
+      "phone number": "numer telefonu",
+      "success": "Zamówienie złożone pomyślnie! Sprawdź swoją skrzynkę e-mailową w celu otrzymania listu potwierdzającego.",
+      "error": "Coś poszło nie tak! Spróbuj ponownie później.",
+      "link to go home": "Link do powrotu na stronę główną",
+      "settings": {
+        "header": "zmień swoje informacje",
+        "img error": "za duże, maksymalnie 2 MB",
+        "drag 'n' drop": "przeciągnij i upuść swój awatar tutaj lub kliknij, aby wybrać pliki",
+        "name": "imię",
+        "email": "e-mail",
+        "address line one": "adres linia jeden",
+        "address line two": "adres linia dwa",
+        "city": "miasto",
+        "zip": "kod pocztowy",
+        "change password": "zmień hasło",
+        "password": "hasło",
+        "confirm password": "potwierdź hasło"
+      },
+      "ordering": {
+        "confirmation": "potwierdzenie",
+        "cant accept": "Ten sklep obecnie nie może przyjmować płatności online.",
+        "total price": "całkowita cena",
+        "delivery address": "adres dostawy",
+        "confirm & order": "potwierdź i zamów"
+      },
+      "table": {
+        "product name": "nazwa produktu",
+        "price": "cena",
+        "quantity": "ilość",
+        "total": "całkowity",
+        "remove": "usuń"
+      },
+      "headers": {
+        "start": "początek",
+        "account": "konto"
+      },
+      "tabs": {
+        "dashboard": "pulpit",
+        "likes": "polubienia",
+        "cart": "koszyk",
+        "settings": "ustawienia",
+        "logout": "wyloguj"
+      }
+    },
+    "404": {
+      "not found": "ups! tej strony nie znaleziono.",
+      "info": "STRONA, KTÓRĄ SZUKASZ, NIE ISTNIEJE",
+      "return": "proszę wrócić do"
     }
   }
 }

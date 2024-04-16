@@ -14,6 +14,13 @@
   "notifications": {
     "notifications": "view notifications"
   },
+  "buttons": {
+    "prev": "prev",
+    "next": "next",
+    "add to cart": "add to cart",
+    "buy it now": "buy it now",
+    "save changes": "save changes"
+  },
   "user menu": {
     "open menu": "open user menu",
     "my profile": "my profile",
@@ -47,17 +54,61 @@
     }
   },
   "pages": {
+    "home": {
+      "home page": "home page",
+      "shop now": "shop now",
+      "best seller": {
+        "header": "best seller",
+        "description": "best seller product this week!"
+      },
+      "banner": {
+        "header": "hot chocolate bombs homemade",
+        "description": "hot chocolate bombs or hot cocoa bombs are cute lil balls of chocolate that you put into a mug. When you pour hot milk into the mug, the chocolate melts and magically releases the marshmallows and cocoa hiding inside."
+      },
+      "sub": {
+        "header": "get update",
+        "subheader": "subscribe our newsletter and get discount 10% off",
+        "email input": "enter your email"
+      }
+    },
     "shop": {
       "header": "products",
       "search": "search",
       "categories": "categories",
       "price": "price",
-      "reset filter": "reset"
+      "reset filter": "reset",
+      "review": "review",
+      "reviews": "reviews",
+      "no reviews yet": "no reviews yet",
+      "customer reviews": "customer reviews",
+      "write a review": "write a review",
+      "review title": "review title",
+      "submit review": "submit review",
+      "additional information": "additional information",
+      "more information": "more information to you",
+      "need more information": "need more information",
+      "to know": "things you need to know",
+      "protect": "We use industry standard SSL encryption to protect your details. Potentially sensitive information such as your name, address and card details are encoded so they can only be read on the secure server.",
+      "no reviews": "no reviews",
+      "size": "size",
+      "tastes": "tastes",
+      "links": {
+        "about us": "about us",
+        "your cart": "your cart",
+        "your orders": "your orders"
+      },
+      "tags": {
+        "safe payments": "safe payments",
+        "accept credit cart": "accept credit cart",
+        "different payment method": "different payment method",
+        "price include VAT": "price include VAT",
+        "easy to order": "easy to order"
+      }
     },
     "about": {
       "header": "about us",
       "our team": "meet our team",
-      "description": "We’re known for our cakes! from bakery cakes to custom cakes, sculpted cakes to wedding cakes, every celebration deserves a cst cake. serving burlington & surrounding communities since 2013.",
+      "description": "We're known for our cakes! from bakery cakes to custom cakes, sculpted cakes to wedding cakes, every celebration deserves a cst cake. serving burlington & surrounding communities since 2013.",
       "reasons": {
         "header": "Reasons to shop with us",
         "first reason": {
@@ -77,6 +128,72 @@
         "header": "",
         "subheader": "Get the latest news & updates"
       }
+    },
+    "profile": {
+      "history": "history of purchasing",
+      "no history": "you don't have any order yet!",
+      "date of order": "date of order",
+      "no bookmarks": "there's no items in your bookmarks yet.",
+      "no cart": "there's no items in your cart yet.",
+      "total price": "total price",
+      "date to deliver": "date to deliver",
+      "leave us a message": "leave us a message",
+      "contact": "contact and delivery information",
+      "details": "write some details of your order...",
+      "self pick up": "self pick up",
+      "pick up at": "pick up at",
+      "change address": "you can change your delivery address in",
+      "the settings": "the settings",
+      "buy": "buy",
+      "receiver": "receiver",
+      "phone number": "phone number",
+      "success": "Ordered Successfully! Check your email for confirmation letter.",
+      "error": "Something went wrong! Try again later.",
+      "link to go home": "Link to go home",
+      "settings": {
+        "header": "change your information",
+        "img error": "too large, max is 2MB",
+        "drag 'n' drop": "drag 'n' drop your avatar here, or click to select files",
+        "name": "name",
+        "email": "email",
+        "address line one": "address line one",
+        "address line two": "address line two",
+        "city": "city",
+        "zip": "zip/postal code",
+        "change password": "change password",
+        "password": "password",
+        "confirm password": "confirm password"
+      },
+      "ordering": {
+        "confirmation": "confirmation",
+        "cant accept": "This store can't accept online payments right now.",
+        "total price": "total price",
+        "delivery address": "delivery address",
+        "confirm & order": "confirm & order"
+      },
+      "table": {
+        "product name": "product name",
+        "price": "price",
+        "quantity": "quantity",
+        "total": "total",
+        "remove": "remove"
+      },
+      "headers": {
+        "start": "start",
+        "account": "account"
+      },
+      "tabs": {
+        "dashboard": "dashboard",
+        "likes": "likes",
+        "cart": "cart",
+        "settings": "settings",
+        "logout": "logout"
+      }
+    },
+    "404": {
+      "not found": "oops! that page can't be found.",
+      "info": "THE PAGE YOU ARE LOOKING FOR DOES NOT EXITS",
+      "return": "please return to"
     }
   }
 }

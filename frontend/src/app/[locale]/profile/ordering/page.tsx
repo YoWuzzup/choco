@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -17,6 +17,7 @@ import { userUpdate } from "@/redux/slices/userSlice";
 import { clearUserCart } from "@/redux/slices/userCartSlice";
 
 export default function Ordering() {
+  const t = useTranslations("");
   const router = useRouter();
   const dispatch = useAppDispatch();
   const userRedux = useAppSelector((st) => st.user);
@@ -79,32 +80,35 @@ export default function Ordering() {
   return (
     <div className="h-screen flex flex-col gap-10 items-center justify-start pt-[4rem]">
       <div className="w-full sm:w-9/12 px-2 py-6 sm:px-6 mt-5 sm:mt-10 flex flex-col gap-6 shadow-xl rounded-md">
-        <h2 className="text-xl text-primary">Confirmation</h2>
-        <Tooltip message={"This store can't accept online payments right now."}>
+        <h2 className="text-xl text-primary capitalize">
+          {t("pages.profile.ordering.confirmation")}
+        </h2>
+        <Tooltip message={t("pages.profile.ordering.cant accept")}>
           <div className="w-full min-h-[200px] p-5 bg-[#f5f5f5] flex flex-col items-center justify-center gap-4">
             <MoneyOffIcon className="text-paraPrimary" />
             <span className="text-paraPrimary">
-              This store can't accept online payments right now.
+              {t("pages.profile.ordering.cant accept")}
             </span>
           </div>
         </Tooltip>
 
         <div className="w-full p-5">
-          Total price: {selectedCurrency}
+          {t("pages.profile.ordering.total price")}: {selectedCurrency}
           {orderRedux?.additionalData?.totalPrice}
         </div>
 
         <div className="">
-          Delivery address:
+          {t("pages.profile.ordering.delivery address")}:
           {orderRedux?.additionalData?.selfPickup ? (
             <div className="mt-4">
-              Self pickup at {`${process.env.NEXT_PUBLIC_ADDRESS}`}
+              {t("pages.profile.self pick up")}{" "}
+              {`${process.env.NEXT_PUBLIC_ADDRESS}`}
             </div>
           ) : (
             <div className="mt-4 flex flex-row flex-nowrap items-start">
               <ul className="grow">
                 <li className="text-xs text-gray-600 uppercase mb-3">
-                  Receiver
+                  {t("pages.profile.receiver")}
                 </li>
                 <li>{userRedux?.name}</li>
                 <li>
@@ -117,19 +121,19 @@ export default function Ordering() {
 
               <ul className="grow">
                 <li className="text-xs text-gray-600 uppercase mb-3">
-                  Phone number
+                  {t("pages.profile.phone number")}
                 </li>
                 <li>{userRedux?.contacts?.phoneNumber}</li>
               </ul>
             </div>
           )}
           <div className="basis-full my-4">
-            Delivery day: {`${getOrderDay()}`}
+            {t("pages.profile.date to deliver")}: {`${getOrderDay()}`}
           </div>
           <div className="basis-full my-4">
-            You can change your delivery address in{" "}
+            {t("pages.profile.change address")}{" "}
             <Link href={"/profile/settings"} className="text-colorful">
-              the settings
+              {t("pages.profile.the settings")}
             </Link>
           </div>
         </div>
@@ -144,18 +148,18 @@ export default function Ordering() {
         >
           {success ? (
             <>
-              Ordered Successfully! Check your email for confirmation letter.
+              {t("pages.profile.success")}
               <DoneIcon className="text-success" />
             </>
           ) : (
             <>
-              Something went wrong! Try again later.
+              {t("pages.profile.error")}
               <CloseIcon className="text-error" />
             </>
           )}
 
           <Link href={"/"} className="text-colorful">
-            Link to go home
+            {t("pages.profile.link to go home")}
           </Link>
         </div>
       )}
@@ -173,10 +177,10 @@ export default function Ordering() {
         ) : (
           <Button
             type={"button"}
-            buttonClasses={`bg-colorful w-44 h-16 rounded-full text-secondary`}
+            buttonClasses={`bg-colorful w-44 h-16 rounded-full text-secondary capitalize`}
             handleClick={handleSubmit}
           >
-            Confirm & Order
+            {t("pages.profile.ordering.confirm & order")}
           </Button>
         )}
       </div>

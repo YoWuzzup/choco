@@ -11,6 +11,7 @@ import { POSTUpdateUser, POSTUpdateUserAvatar } from "@/api/user";
 import { Button, Input, ProfileMenu, Spinner } from "@/components";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { useTranslations } from "next-intl";
 
 type User = null | {
   _id: string;
@@ -23,6 +24,7 @@ type User = null | {
 };
 
 export default function Settings() {
+  const t = useTranslations("");
   // redux
   const dispatch = useAppDispatch();
   const userRedux = useAppSelector((st) => st.user);
@@ -165,7 +167,9 @@ export default function Settings() {
 
       <div className="w-full sm:w-9/12 px-3">
         <div className="w-full px-3 mt-24 sm:mt-8">
-          <h4 className="font-bold">Change your information</h4>
+          <h4 className="font-bold first-letter:uppercase">
+            {t("pages.profile.settings.header")}
+          </h4>
 
           {/* name, avatar and email */}
           <div
@@ -198,12 +202,14 @@ export default function Settings() {
                         className="object-cover w-full h-full rounded-full"
                       />
                       {errorImage ? (
-                        <p className="text-red mt-4">Too large, max is 2MB</p>
+                        <p className="text-red mt-4 capitalize">
+                          {t("pages.profile.settings.img error")}
+                        </p>
                       ) : null}
                     </>
                   ) : (
-                    <p className="max-h-full w-auto h-full ">
-                      Drag 'n' drop your avatar here, or click to select files
+                    <p className="max-h-full w-auto h-full first-letter:uppercase">
+                      {t("pages.profile.settings.drag 'n' drop")}
                     </p>
                   )}
                 </div>
@@ -219,14 +225,15 @@ export default function Settings() {
                   id: "name",
                   value: formData.name,
                   autoComplete: "name",
-                  placeholder: userRedux?.name || "Name",
+                  placeholder:
+                    userRedux?.name || t("pages.profile.settings.name"),
                   type: "text",
                   className:
                     "border border-grey rounded-lg p-3 text-paraPrimary",
                 }}
                 label={{
                   htmlFor: "name",
-                  children: <>Name</>,
+                  children: <>{t("pages.profile.settings.name")}</>,
                   className: "capitalize mb-4 text-sm text-paraPrimary",
                 }}
               />
@@ -238,14 +245,15 @@ export default function Settings() {
                   id: "email",
                   value: formData.email,
                   autoComplete: "email",
-                  placeholder: userRedux?.email || "Email",
+                  placeholder:
+                    userRedux?.email || t("pages.profile.settings.email"),
                   type: "text",
                   className: `border rounded-lg p-3 text-paraPrimary
                   ${errorEmail ? "border-red" : "border-grey"}`,
                 }}
                 label={{
                   htmlFor: "email",
-                  children: <>email</>,
+                  children: <>{t("pages.profile.settings.email")}</>,
                   className: "capitalize mb-4 text-sm text-paraPrimary",
                 }}
               />
@@ -258,7 +266,7 @@ export default function Settings() {
                   items-center shadow-lg rounded-md justify-between`}
           >
             <h4 className="capitalize basis-full">
-              Contact and delivery information
+              {t("pages.profile.contact")}
             </h4>
             <Input
               handleChange={handleChange}
@@ -268,14 +276,16 @@ export default function Settings() {
                 id: "contacts.lineOne",
                 value: formData ? formData["contacts.lineOne"] : "",
                 autoComplete: "address-line1",
-                placeholder: userRedux?.contacts?.lineOne || "address line one",
+                placeholder:
+                  userRedux?.contacts?.lineOne ||
+                  t("pages.profile.settings.address line one"),
                 type: "text",
                 className: `border rounded-lg p-3 text-paraPrimary
                     ${errorAddress ? "border-red" : "border-grey"}`,
               }}
               label={{
                 htmlFor: "contacts.lineOne",
-                children: <>Address line one</>,
+                children: <>{t("pages.profile.settings.address line one")}</>,
                 className: "capitalize mb-4 text-sm text-paraPrimary",
               }}
             />
@@ -288,13 +298,15 @@ export default function Settings() {
                 id: "contacts.lineTwo",
                 value: formData ? formData["contacts.lineTwo"] : "",
                 autoComplete: "address-line2",
-                placeholder: userRedux?.contacts?.lineTwo || "address line two",
+                placeholder:
+                  userRedux?.contacts?.lineTwo ||
+                  t("pages.profile.settings.address line two"),
                 type: "text",
                 className: `border rounded-lg p-3 text-paraPrimary`,
               }}
               label={{
                 htmlFor: "contacts.lineTwo",
-                children: <>Address line two</>,
+                children: <>{t("pages.profile.settings.address line one")}</>,
                 className: "capitalize mb-4 text-sm text-paraPrimary",
               }}
             />
@@ -307,7 +319,8 @@ export default function Settings() {
                 id: "contacts.city",
                 value: formData ? formData["contacts.city"] : "",
                 autoComplete: "home city",
-                placeholder: userRedux?.contacts?.city || "city",
+                placeholder:
+                  userRedux?.contacts?.city || t("pages.profile.settings.city"),
                 type: "text",
                 className: `border rounded-lg p-3 text-paraPrimary ${
                   errorAddress ? "border-red" : "border-grey"
@@ -315,7 +328,7 @@ export default function Settings() {
               }}
               label={{
                 htmlFor: "contacts.city",
-                children: <>city</>,
+                children: <>{t("pages.profile.settings.city")}</>,
                 className: "capitalize mb-4 text-sm text-paraPrimary",
               }}
             />
@@ -328,7 +341,8 @@ export default function Settings() {
                 id: "contacts.zip",
                 value: formData ? formData["contacts.zip"] : "",
                 autoComplete: "postal-code",
-                placeholder: userRedux?.contacts?.zip || "zip/postal code",
+                placeholder:
+                  userRedux?.contacts?.zip || t("pages.profile.settings.zip"),
                 type: "text",
                 className: `border rounded-lg p-3 text-paraPrimary ${
                   errorAddress ? "border-red" : "border-grey"
@@ -336,7 +350,7 @@ export default function Settings() {
               }}
               label={{
                 htmlFor: "contacts.zip",
-                children: <>zip</>,
+                children: <>{t("pages.profile.settings.zip")}</>,
                 className: "capitalize mb-4 text-sm text-paraPrimary",
               }}
             />
@@ -349,7 +363,9 @@ export default function Settings() {
                 id: "contacts.phoneNumber",
                 value: formData ? formData["contacts.phoneNumber"] : "",
                 autoComplete: "tel",
-                placeholder: userRedux?.contacts?.phoneNumber || "phone number",
+                placeholder:
+                  userRedux?.contacts?.phoneNumber ||
+                  t("pages.profile.phone number"),
                 type: "text",
                 className: `border rounded-lg p-3 text-paraPrimary ${
                   errorAddress ? "border-red" : "border-grey"
@@ -357,7 +373,7 @@ export default function Settings() {
               }}
               label={{
                 htmlFor: "contacts.phoneNumber",
-                children: <>phone number</>,
+                children: <>{t("pages.profile.phone number")}</>,
                 className: "capitalize mb-4 text-sm text-paraPrimary",
               }}
             />
@@ -368,7 +384,9 @@ export default function Settings() {
             className={`w-full p-2 py-7 sm:p-14 my-8 flex flex-row flex-wrap gap-4
                   items-center shadow-lg rounded-md justify-between`}
           >
-            <h4 className="capitalize basis-full">change password</h4>
+            <h4 className="capitalize basis-full">
+              {t("pages.profile.settings.change password")}
+            </h4>
             <Input
               handleChange={handleChange}
               classNameContainer="flex flex-col relative w-full md:w-5/12"
@@ -377,18 +395,18 @@ export default function Settings() {
                 id: "password",
                 value: formData.password,
                 autoComplete: "password",
-                placeholder: "Password",
+                placeholder: t("pages.profile.settings.password"),
                 type: showPasswords ? "text" : "password",
                 className: `border rounded-lg p-3 text-paraPrimary
                 ${errorPasswords ? "border-red" : "border-grey"}`,
               }}
               label={{
                 htmlFor: "password",
-                children: <>password</>,
+                children: <>{t("pages.profile.settings.password")}</>,
                 className: "capitalize mb-4 text-sm text-paraPrimary",
               }}
             >
-              {showPasswords ? (
+              {!showPasswords ? (
                 <VisibilityOffIcon
                   className="absolute bottom-4 right-3 cursor-pointer text-paraPrimary"
                   onClick={() => setShowPasswords(!showPasswords)}
@@ -408,18 +426,18 @@ export default function Settings() {
                 id: "confirmPassword",
                 value: formData.confirmPassword,
                 autoComplete: "password",
-                placeholder: "Confirm Password",
+                placeholder: t("pages.profile.settings.confirm password"),
                 type: showPasswords ? "text" : "password",
                 className: `border rounded-lg p-3 text-paraPrimary
                 ${errorPasswords ? "border-red" : "border-grey"}`,
               }}
               label={{
                 htmlFor: "confirmPassword",
-                children: <>confirm password</>,
+                children: <>{t("pages.profile.settings.confirm password")}</>,
                 className: "capitalize mb-4 text-sm text-paraPrimary",
               }}
             >
-              {showPasswords ? (
+              {!showPasswords ? (
                 <VisibilityOffIcon
                   className="absolute bottom-4 right-3 cursor-pointer text-paraPrimary"
                   onClick={() => setShowPasswords(!showPasswords)}
@@ -452,7 +470,7 @@ export default function Settings() {
                     hover:text-colorful hover:bg-primary`}
                 handleClick={(e) => handleSubmit(e)}
               >
-                Save changes
+                {t("buttons.save changes")}
               </Button>
             )}
           </div>
