@@ -29,7 +29,7 @@ export default function Ordering() {
   const [loading, setLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<null | boolean>(null);
   const [error, setError] = useState<null | Error>(null);
-  const selectedCurrency = currentCurency(locale) || "zł";
+  const selectedCurrency = currentCurency();
 
   const getOrderDay = () => {
     const startDateStr =

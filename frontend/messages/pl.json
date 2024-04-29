@@ -28,29 +28,14 @@
     "sign out": "wyloguj się"
   },
   "footer": {
-    "customer": {
-      "header": "opieka nad klientem",
-      "pagination": "paginacja",
-      "terms & conditions": "regulamin",
-      "contact": "kontakt",
-      "accessories": "akcesoria",
-      "term of use": "warunki użytkowania"
-    },
-    "shop": {
-      "header": "szybki sklep",
-      "about us": "o nas",
-      "privacy policy": "polityka prywatności",
-      "terms & conditions": "regulamin",
-      "products return": "zwrot produktów",
-      "wholesale policy": "polityka hurtowa"
+    "follow us": {
+      "header": "Śledź nas"
     },
     "company": {
-      "header": "firma",
-      "help center": "centrum pomocy",
-      "address store": "adres sklepu",
-      "privacy policy": "polityka prywatności",
-      "receivers & amplifiers": "odbiorniki i wzmacniacze",
-      "chocoostore": "chocostore"
+      "header": "Szybkie linki",
+      "help center": "Centrum pomocy",
+      "about us": "O nas",
+      "our store": "Nasz sklep"
     }
   },
   "pages": {
@@ -62,8 +47,8 @@
         "description": "najlepiej sprzedający się produkt w tym tygodniu!"
       },
       "banner": {
-        "header": "bomby czekoladowe domowej roboty",
-        "description": "Bomby czekoladowe lub bomby kakaowe to urocze kulki czekoladowe, które wkładasz do kubka. Gdy wlewasz gorące mleko do kubka, czekolada topi się i magicznie uwalnia ukryte w środku pianki marshmallow i kakao."
+        "header": "cake pops domowej roboty",
+        "description": "Cake pops to urocze przysmaki w formie małych kulek z kruszonego ciasta, wymieszanego z kremem. Następnie obtoczone w czekoladzie lub polewie cukrowej i ozdobione posypką lub innymi dodatkami. Idealne na przyjęcia lub jako słodkie upominki!"
       },
       "sub": {
         "header": "bądź na bieżąco",
@@ -108,7 +93,7 @@
     "about": {
       "header": "o nas",
       "our team": "poznaj nasz zespół",
-      "description": "Jesteśmy znani z naszych ciast! od ciast piekarniczych po ciasta niestandardowe, rzeźbione ciasta po torty ślubne, każda uroczystość zasługuje na własne ciasto. Obsługa Burlington i okolicznych społeczności od 2013 roku.",
+      "description": "melanik Cakes to domowa cukiernia specjalizująca się w indywidualnych tortach, babeczkach, kulkach z ciasta i francuskich makaronach. Staramy się tworzyć ciepłą, domową atmosferę poprzez nasze wypieki, przekazując miłość i uczyniając wasze wydarzenia wyjątkowymi. Dziękujemy za wsparcie naszej małej firmy.",
       "reasons": {
         "header": "Powody, dla których warto u nas robić zakupy",
         "first reason": {

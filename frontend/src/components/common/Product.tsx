@@ -103,7 +103,7 @@ export const Product: React.FC<{ product: TPropduct; currency?: string }> = ({
           className="w-[250px] h-[250px] flex justify-center self-center"
         >
           {product?.images ? (
-            <div className="mb-5">
+            <div className="m-5 w-full">
               <img
                 className="object-cover w-full h-full rounded-md"
                 src={product?.images[0]}

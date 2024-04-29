@@ -32,7 +32,7 @@ export const SliderSection: React.FC = () => {
 
         <div className="absolute top-1/2 left-1/4 transform -translate-x-1/3 -translate-y-1/2 flex flex-col mx-2 font-bold font-[Quicksand]">
           <h4 className="mb-4 capitalize text-base tracking-widest animate-fadeInDown">
-            WELCOME TO CHOCOO
+            WELCOME TO MELANIK'S SHOP
           </h4>
           <div className="mb-4 text-colorful text-5xl animate-fadeInLeft">
             Cakes & Sweets
@@ -61,7 +61,7 @@ export const SliderSection: React.FC = () => {
 
         <div className="absolute top-1/2 left-1/4 transform -translate-x-1/3 -translate-y-1/2 flex flex-col mx-2 font-bold font-[Quicksand]">
           <h4 className="mb-4 capitalize text-base tracking-widest animate-fadeInDown">
-            WELCOME TO CHOCOO
+            WELCOME TO MELANIK'S SHOP
           </h4>
           <div className="mb-4 text-colorful text-5xl animate-fadeInLeft">
             Special Chocolate

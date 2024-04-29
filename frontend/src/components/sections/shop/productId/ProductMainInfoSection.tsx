@@ -179,18 +179,15 @@ const RightInfoSide: React.FC = () => {
   const sizeQueryParam = searchParams.get("size");
   const tasteQueryParam = searchParams.get("taste");
   let amountQueryParam = searchParams.get("amount") || 1;
-  const selectedCurrency = currentCurency(locale) || "zł";
+  const selectedCurrency = currentCurency();
   const [showAuthOverlay, setShowAuthOverlay] = useState<boolean>(false);
 
-  const createQueryString = useCallback(
-    (key: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set(key, value);
+  const createQueryString = (key: string, value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set(key, value);
 
-      return params.toString();
-    },
-    [searchParams]
-  );
+    return params.toString();
+  };
 
   const handleFilterChange = (e: any) => {
     e.preventDefault();
@@ -215,7 +212,26 @@ const RightInfoSide: React.FC = () => {
 
     if (product?._id) {
       const urlSearchParams = new URLSearchParams(window.location.search);
-      const newCartItem = `${product._id}?${urlSearchParams.toString()}`;
+
+      // Check if there's a size in urlSearchParams, otherwise add default value
+      const sizeQueryParam = urlSearchParams.get("size");
+      const defaultSize =
+        product?.sizes && product.sizes.length > 0 ? product.sizes[0] : null;
+      const newSize = sizeQueryParam || defaultSize;
+
+      // Check if there's a taste in urlSearchParams, otherwise add default value
+      const tasteQueryParam = urlSearchParams.get("taste");
+      const defaultTaste =
+        product?.tastes && product.tastes.length > 0 ? product.tastes[0] : null;
+      const newTaste = tasteQueryParam || defaultTaste;
+
+      // Check if there's an amount in urlSearchParams, otherwise add default value
+      const amountQueryParam = urlSearchParams.get("amount");
+      const defaultAmount = 1;
+      const newAmount = amountQueryParam || defaultAmount;
+
+      // Construct new cart item
+      const newCartItem = `${product._id}?size=${newSize}&taste=${newTaste}&amount=${newAmount}`;
 
       const updatedCart = [...user.cart, newCartItem];
 
@@ -287,7 +303,7 @@ const RightInfoSide: React.FC = () => {
         className="flex flex-col justify-start w-full pb-6 mb-5
                   border-b-[1px] border-[#e7e7e7] border-solid"
       >
-        <div className="capitalize text-xl text-colorful font-bold w-full mb-4 flex flex-row items-center justify-start">
+        <div className="text-xl text-colorful font-bold w-full mb-4 flex flex-row items-center justify-start">
           {selectedCurrency} {product?.price || <Skeleton width="16" />}
         </div>
         <div className="text-xs text-[#999] font-normal flex justify-start items-center gap-5">
@@ -332,7 +348,7 @@ const RightInfoSide: React.FC = () => {
 
       {/* sizes */}
       {product?.sizes && (
-        <div className="w-full mb-5 flex flex-row flex-nowrap gap-2">
+        <div className="w-full mb-5 flex flex-row flex-wrap sm:flex-nowrap gap-2">
           <div
             className="text-[11px] w-6 text-primary font-bold uppercase relative mr-5 pb-2 h-fit
               after:bottom-0 after:left-0 after:absolute after:content-[''] 
@@ -363,7 +379,7 @@ const RightInfoSide: React.FC = () => {
 
       {/* tastes */}
       {product?.tastes && (
-        <div className="w-full mb-5 flex flex-row flex-nowrap gap-6">
+        <div className="w-full mb-5 flex flex-row flex-wrap sm:flex-nowrap gap-6">
           <div
             className="text-[11px] w-6 text-primary font-bold uppercase relative mr-5 pb-2 h-fit
           after:bottom-0 after:left-0 after:absolute after:content-[''] 
@@ -505,7 +521,10 @@ export const ProductMainInfoSection: React.FC = () => {
           await GETOneProduct(params.id).then(async (r) => {
             dispatch(addSingleProduct(r));
             // get and save to redux reviews of observable product
-            const reviews = await GETReviews({ _id: r.reviews });
+            const reviews =
+              r.reviews && r.reviews.length > 0
+                ? await GETReviews({ _id: r.reviews })
+                : [];
             dispatch(addReviews(reviews));
           });
         } catch (error) {

@@ -29,11 +29,11 @@ export const BannerSection: React.FC = () => {
         </Button>
       </div>
 
-      <div className="overflow-hidden">
+      <div className="overflow-hidden w-full md:w-2/6">
         <img
-          className="object-cover hover:scale-125 transition-all duration-700"
-          src="/home/banner3.webp"
-          alt=""
+          className="object-cover hover:scale-125 transition-all duration-700 w-full h-full"
+          src="/home/IMG_4449.jpg"
+          alt="suggesting"
         />
       </div>
     </section>

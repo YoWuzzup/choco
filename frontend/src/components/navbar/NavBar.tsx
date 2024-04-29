@@ -84,6 +84,11 @@ export default function NavBar(): ReactNode {
     setProfileMenuIsOpen((prev) => !prev);
   };
 
+  const handleChangeLanguage = (l: string) => {
+    router.push(`${path.replace(locale, l)}`);
+    router.refresh();
+  };
+
   const t = useTranslations("");
 
   useOnClickOutside(
@@ -174,18 +179,17 @@ export default function NavBar(): ReactNode {
                   ref={languageMenuRef}
                   onClick={(e) => handleLanguages(e)}
                 >
-                  {/* TODO: make changing language to keep the page */}
                   {languagesDropdown.map((l, index) => (
-                    <Link
-                      href={`/${l}`}
+                    <div
                       key={`${l}_${index}`}
-                      className="flex justify-center items-center px-4 py-2 text-sm hover:text-colorful"
+                      className="flex justify-center items-center px-4 py-2 text-sm hover:text-colorful cursor-pointer"
                       role="menuitem"
                       tabIndex={-1}
                       id={`user-language-${l}`}
+                      onClick={() => handleChangeLanguage(l)}
                     >
                       {t(`languages.${l}`)}
-                    </Link>
+                    </div>
                   ))}
                 </div>
               ) : null}

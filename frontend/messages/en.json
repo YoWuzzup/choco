@@ -28,29 +28,14 @@
     "sign out": "sign out"
   },
   "footer": {
-    "customer": {
-      "header": "customer care",
-      "pagination": "pagination",
-      "terms & conditions": "terms & conditions",
-      "contact": "contact",
-      "accessories": "accessories",
-      "term of use": "terms of use"
-    },
-    "shop": {
-      "header": "quick shop",
-      "about us": "about us",
-      "privacy policy": "privacy policy",
-      "terms & conditions": "terms & conditions",
-      "products return": "products return",
-      "wholesale policy": "wholesale policy"
+    "follow us": {
+      "header": "follow us"
     },
     "company": {
-      "header": "company",
+      "header": "quick links",
       "help center": "help center",
-      "address store": "store address",
-      "privacy policy": "privacy policy",
-      "receivers & amplifiers": "receivers & amplifiers",
-      "chocoostore": "chocostore"
+      "about us": "about us",
+      "our store": "our store"
     }
   },
   "pages": {
@@ -62,8 +47,8 @@
         "description": "best seller product this week!"
       },
       "banner": {
-        "header": "hot chocolate bombs homemade",
-        "description": "hot chocolate bombs or hot cocoa bombs are cute lil balls of chocolate that you put into a mug. When you pour hot milk into the mug, the chocolate melts and magically releases the marshmallows and cocoa hiding inside."
+        "header": "home made cake pops",
+        "description": "Cake pops are delightful bite-sized treats made from crumbled cake mixed with frosting. These little cake balls are then coated in chocolate or candy melts and decorated with sprinkles or other toppings. Perfect for parties or as sweet party favors!"
       },
       "sub": {
         "header": "get update",
@@ -108,7 +93,7 @@
     "about": {
       "header": "about us",
       "our team": "meet our team",
-      "description": "We're known for our cakes! from bakery cakes to custom cakes, sculpted cakes to wedding cakes, every celebration deserves a cst cake. serving burlington & surrounding communities since 2013.",
+      "description": "melanik cakes is a home bakery specializing in custom cakes, cupcakes, cake pops, and French macarons. We aim to create a warm, homey feeling through our baked goods, extending love and making your events special. Thank you for supporting our small business.",
       "reasons": {
         "header": "Reasons to shop with us",
         "first reason": {

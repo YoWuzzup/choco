@@ -5,72 +5,18 @@ import { ReactNode } from "react";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
 
-const customerLinks = [
-  {
-    name: "pagination",
-    href: "pagination",
-  },
-  {
-    name: "terms & conditions",
-    href: "terms",
-  },
-  {
-    name: "contact",
-    href: "contact",
-  },
-  {
-    name: "accessories",
-    href: "accessories",
-  },
-  {
-    name: "term of use",
-    href: "term",
-  },
-];
-
-const shopLinks = [
+const companyLinks = [
   {
     name: "about us",
     href: "about",
   },
   {
-    name: "privacy policy",
-    href: "policy",
-  },
-  {
-    name: "terms & conditions",
-    href: "terms",
-  },
-  {
-    name: "products return",
-    href: "returns",
-  },
-  {
-    name: "wholesale policy",
-    href: "wholesale",
-  },
-];
-
-const companyLinks = [
-  {
     name: "help center",
-    href: "help",
+    href: "mailto: ",
   },
   {
-    name: "address store",
-    href: "address",
-  },
-  {
-    name: "privacy policy",
-    href: "privacy",
-  },
-  {
-    name: "receivers & amplifiers",
-    href: "receivers",
-  },
-  {
-    name: "chocoostore",
-    href: "chocoostore",
+    name: "our store",
+    href: "shop",
   },
 ];
 
@@ -97,88 +43,15 @@ export default function Footer(): ReactNode {
   return (
     <footer
       className={`w-full bg-primary text-primary mx-auto mb-10 px-2 sm:px-6 lg:px-8
-                flex flex-col sm:flex-row flex-wrap justify-center 
+                flex flex-col sm:flex-row flex-wrap justify-center
                 border-b border-[#ddd] border-solid`}
     >
-      {/* logo block */}
-      <div
-        className={`flex flex-col flex-wrap py-5 items-center 
-                  md:items-center basis-auto sm:basis-full`}
-      >
-        <div className="flex items-center mb-4">
-          <Link href={"/"}>
-            <img className="h-32 w-auto" src="/logo.png" alt="Choco" />
-          </Link>
-        </div>
-        <div className="text-primary text-sm text-center font-bold mb-8 md:text-left">
-          Subscribe our newsletter and get discount 10% off
-        </div>
-        <div className="flex flex-row flex-nowrap justify-center items-center gap-3">
-          {socialMediaLinks.map((m, index) => (
-            <Link href={`${m.href}`} key={`${m.name}_${index}`}>
-              {m.icon}
-            </Link>
-          ))}
-        </div>
-      </div>
-
-      {/* customer links */}
+      {/* quick links */}
       <div className="flex flex-col items-center py-5 sm:w-1/3 capitalize">
         <h4
           className={`font-bold text-primary relative mb-8 
-          after:bottom-0 after:left-0 after:absolute after:content-[''] after:w-10 after:border-b
-          after:translate-y-4`}
-        >
-          {t(`footer.customer.header`)}
-        </h4>
-        <div className="flex flex-col items-center text-primary text-sm leading-8 text-center">
-          {customerLinks.map((l, index) => {
-            return (
-              <Link
-                href={l.href}
-                key={`${l.name}_${index}`}
-                className="transition-all duration-300 hover:text-colorful"
-              >
-                {t(`footer.customer.${l.name}`)}
-              </Link>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* shop links */}
-      <div
-        className={`flex flex-col items-center py-5 sm:w-1/3 capitalize
-                  sm:border-l sm:border-r sm:border-solid sm:border-[#ddd]`}
-      >
-        <h4
-          className={`font-bold text-primary relative mb-8 
-          after:bottom-0 after:left-0 after:absolute after:content-[''] after:w-10 after:border-b
-          after:translate-y-4`}
-        >
-          {t(`footer.shop.header`)}
-        </h4>
-        <div className="capitalize flex flex-col items-center text-primary text-sm leading-8 text-center">
-          {shopLinks.map((l, index) => {
-            return (
-              <Link
-                href={l.href}
-                key={`${l.name}_${index}`}
-                className="transition-all duration-300 hover:text-colorful"
-              >
-                {t(`footer.shop.${l.name}`)}
-              </Link>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* company links */}
-      <div className="flex flex-col items-center py-5 sm:w-1/3 capitalize">
-        <h4
-          className={`font-bold text-primary relative mb-8 
-          after:bottom-0 after:left-0 after:absolute after:content-[''] after:w-10 after:border-b
-          after:translate-y-4`}
+          after:bottom-0 after:left-0 after:absolute after:content-[''] after:h-[2px] 
+          after:w-10 after:translate-y-4 after:bg-colorful`}
         >
           {t(`footer.company.header`)}
         </h4>
@@ -194,6 +67,53 @@ export default function Footer(): ReactNode {
               </Link>
             );
           })}
+        </div>
+      </div>
+
+      {/* logo block */}
+      <div
+        className={`flex flex-col flex-wrap py-5 px-4 items-center sm:w-1/3 md:items-center
+              sm:border-l sm:border-r sm:border-solid sm:border-[#ddd]`}
+      >
+        <div className="flex items-center mb-4">
+          <Link href={"/"}>
+            <img className="h-32 w-auto" src="/logo.png" alt="Choco" />
+          </Link>
+        </div>
+        <div className="text-primary text-sm text-center font-bold mb-8 lg:text-left">
+          Subscribe our newsletter and get discount 10% off
+        </div>
+      </div>
+
+      {/* follow us */}
+      <div className="flex flex-col items-center py-5 sm:w-1/3">
+        <h4
+          className={`font-bold text-primary relative mb-8 capitalize text-left
+          after:bottom-0 after:left-0 after:absolute after:content-[''] after:h-[2px] 
+          after:w-10 after:translate-y-4 after:bg-colorful`}
+        >
+          {t(`footer.follow us.header`)}
+        </h4>
+        <div className="flex flex-col items-center text-primary text-sm leading-8 text-center gap-4">
+          <a
+            href={`tel:$`}
+            className="text-sm font-bold hover:text-colorful duration-300"
+          >
+            {process.env.NEXT_PUBLIC_TELEPHONE}
+          </a>
+          <a
+            href={`mailto:${process.env.NEXT_PUBLIC_EMAIL}`}
+            className="text-sm font-bold hover:text-colorful duration-300"
+          >
+            {process.env.NEXT_PUBLIC_EMAIL}
+          </a>
+          <div className="flex flex-row flex-nowrap justify-center items-center gap-3">
+            {socialMediaLinks.map((m, index) => (
+              <Link href={`${m.href}`} key={`${m.name}_${index}`}>
+                {m.icon}
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
     </footer>

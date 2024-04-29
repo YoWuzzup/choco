@@ -152,4 +152,12 @@ export class UserService {
 
     return avatar;
   }
+
+  async getUserAvatar(_id: ObjectId | string) {
+    const user = await this.findOneUser({ _id });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { avatar, ...userUnused } = user;
+
+    return avatar;
+  }
 }

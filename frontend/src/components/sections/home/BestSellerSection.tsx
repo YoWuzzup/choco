@@ -12,7 +12,7 @@ export const BestSellerSection: React.FC = () => {
   const locale = useLocale();
   const dispatch = useAppDispatch();
   const products = useAppSelector((st) => st.products.bestSellerProducts);
-  const selectedCurrency = currentCurency(locale) || "zł";
+  const selectedCurrency = currentCurency();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -28,7 +28,7 @@ export const BestSellerSection: React.FC = () => {
     <section
       className={`w-full flex flex-col text-center justify-center items-center py-14 text-primary bg-primary`}
     >
-      <h3 className="mb-5 text-5xl font-bold font-[Quicksand] capitalize">
+      <h3 className="mb-5 text-5xl font-bold font-[Quicksand] first-letter:uppercase">
         {t(`pages.home.best seller.header`)}
       </h3>
       <div className="w-3/4 text-gray mb-10 capitalize">

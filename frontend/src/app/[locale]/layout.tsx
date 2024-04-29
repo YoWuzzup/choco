@@ -12,7 +12,7 @@ import { NavBar } from "../../components/index";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: { default: "Choco", template: "%s | My Website" },
+  title: { default: "Melanik cake", template: "%s | My Website" },
   description: "Written by YoWuzzup",
 };
 
@@ -34,7 +34,7 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang={params.locale}>
+    <html lang={locale}>
       <ReduxStoreProvider>
         <body className={inter.className}>
           <NextIntlProvider

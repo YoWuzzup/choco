@@ -48,6 +48,7 @@ export class UserController {
     return userToSend;
   }
 
+  @UseGuards(AccessTokenGuard)
   @Post(':id/update-user-avatar')
   @UseInterceptors(FileInterceptor('avatar'))
   async updateUserAvatar(
@@ -57,6 +58,14 @@ export class UserController {
     const user = await this.userService.updateUserAvatar(_id, file);
 
     return user;
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Get(':id/get-user-avatar')
+  async getUserAvatar(@Param('id') _id: ObjectId | string) {
+    const avatar = await this.userService.getUserAvatar(_id);
+
+    return avatar;
   }
 
   // @Roles('admin') // Specify the roles allowed to access this route

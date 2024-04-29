@@ -49,10 +49,12 @@ export const POSTUpdateUser = async (
 export const POSTUpdateUserAvatar = async (
   id: string,
   formData: FormData,
+  access_token: string,
   config: AxiosConfig = {
     withCredentials: true,
     headers: {
       "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${access_token}`,
     },
   }
 ): Promise<any> => {
@@ -64,6 +66,27 @@ export const POSTUpdateUserAvatar = async (
         ...config,
       }
     );
+
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const GETUserAvatar = async (
+  id: string,
+  access_token: string,
+  config: AxiosConfig = {
+    withCredentials: true,
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+  }
+): Promise<any> => {
+  try {
+    const res = await axios.get(`${url}user/${id}/get-user-avatar`, {
+      ...config,
+    });
 
     return res.data;
   } catch (error) {

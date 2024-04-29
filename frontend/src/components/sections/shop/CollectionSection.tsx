@@ -193,11 +193,10 @@ const ResultSection: React.FC = () => {
   );
   const router = useRouter();
   const pathname = usePathname();
-  const locale = useLocale();
   const searchParams = useSearchParams();
   const pageQueryParam = searchParams.get("page");
 
-  const selectedCurrency = currentCurency(locale) || "$";
+  const selectedCurrency = currentCurency();
 
   const createQueryString = useCallback(
     (key: string, value: string) => {

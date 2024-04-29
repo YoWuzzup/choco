@@ -50,7 +50,7 @@ export default function Cart() {
     selfPickup: true,
     totalPrice: 0,
   });
-  const selectedCurrency = currentCurency(locale) || "zł";
+  const selectedCurrency = currentCurency();
 
   const handleIncrementAmount = async (item: string) => {
     const [productId, query] = item.split("?");
@@ -324,11 +324,12 @@ export default function Cart() {
                         <div className="flex items-center justify-center">
                           <Button
                             type={"button"}
-                            buttonClasses={`group/button w-6 h-6 p-1 sm:w-10 sm:h-10 sm:p-2 flex justify-center items-center border border-red bg-primary rounded-full duration-300
-                            hover:bg-red`}
+                            buttonClasses={`group/button w-6 h-6 p-1 sm:w-10 sm:h-10 
+                            sm:p-2 flex justify-center items-center border-2 border-danger  
+                            bg-transparent text-danger rounded-full duration-300 hover:bg-danger`}
                             handleClick={(e) => handleRemoveCart(e, c)}
                           >
-                            <DeleteIcon className="w-full h-full text-red group-hover/button:text-secondary" />
+                            <DeleteIcon className="w-full h-full group-hover/button:text-secondary duration-300" />
                           </Button>
                         </div>
                       </td>

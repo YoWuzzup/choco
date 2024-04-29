@@ -1,23 +1,23 @@
-export const currentCurency = (locale: string) => {
-  const currencies: {
-    readonly [key: string]: string;
-  } = {
-    en: "$",
-    pl: "zł",
-    ru: "zł",
-  };
-
-  return currencies[locale] || "zł";
+export const currentCurency: () => string = () => {
+  return "zł";
 };
 
 export const getColorsByTaste = (tastes: string[]): (string | undefined)[] => {
   const colorsToMap: { [key: string]: string } = {
-    vanilla: "#F3E5AB",
+    vanilla: "#FFF8DC",
     chocolate: "brown",
     strawberry: "red",
+    snickers: "#8B4513",
+    nutella: "#8B4513",
+    bounty: "#8FBC8F",
+    cherry: "#DC143C",
     blueberry: "blue",
     caramel: "orange",
     lemon: "yellow",
+    delicate: "#FFCCCC",
+    decadent: "#800020",
+    "red velvet": "#B22222",
+    refreshing: "#7FFFD4",
   };
 
   const colors = tastes.map((taste) => colorsToMap[taste] || "white");

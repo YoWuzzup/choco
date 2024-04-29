@@ -128,7 +128,11 @@ export default function Settings() {
 
       const fData = new FormData();
       fData.append("avatar", image);
-      const savedAvatar = await POSTUpdateUserAvatar(userRedux?._id, fData);
+      const savedAvatar = await POSTUpdateUserAvatar(
+        userRedux?._id,
+        fData,
+        storedAccessToken as string
+      );
 
       // save whole image to local storage and redux
       saveUserAvatar(savedAvatar);
