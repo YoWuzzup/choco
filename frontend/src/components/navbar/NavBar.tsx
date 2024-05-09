@@ -128,7 +128,7 @@ export default function NavBar(): ReactNode {
           <div className="flex flex-1 items-center justify-center sm:items-stretch">
             <div className="flex flex-shrink-0 items-center">
               <Link href={"/"}>
-                <img className="w-auto h-16" src="/logo.png" alt="Choco" />
+                <img className="w-auto h-16" src="/logo.png" alt="Melanik's cake" />
               </Link>
             </div>
             <div className="hidden sm:ml-6 sm:flex justify-center items-center">

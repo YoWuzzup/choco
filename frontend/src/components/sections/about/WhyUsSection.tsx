@@ -6,9 +6,9 @@ export const WhyUsSection: React.FC = () => {
   const t = useTranslations();
 
   return (
-    // TODO: get a pic for section background
     <section
-      className={`w-full flex flex-col text-center justify-center items-center py-32 text-primary bg-primary`}
+      className={`w-full flex flex-col text-center justify-center items-center 
+        py-32 text-secondary bg-[url('/about/mochi_bg.jpg')] bg-cover bg-center`}
     >
       <h3
         className="relative pb-10 mb-14 text-4xl font-normal font-[Quicksand] first-latter:capitalize

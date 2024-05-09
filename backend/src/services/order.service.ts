@@ -27,7 +27,12 @@ export class OrderService {
 
     // replace order items ids with actual objects
     const newOrdersPromises = orders.map(async (o) => {
-      const ids = o.items;
+      const ids = o.items.map((i) => {
+        if (typeof i === 'string') return i.split('?')[0];
+
+        return i.toString();
+      });
+
       const productData = await this.productService.getProducts({
         _id: ids,
         sort: { age: 1 },

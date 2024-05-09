@@ -88,10 +88,9 @@ const AddInformation: React.FC = () => {
       </div>
 
       <div>
-        {/* TODO: add image */}
         <img
-          className="object-cover h-full w-full"
-          src="/home/slide1.1.webp"
+          className="object-cover text-right h-full w-full"
+          src="/about/info_pic.png"
           alt="first slide"
         />
       </div>

@@ -4,8 +4,19 @@ type SliceState =
   | []
   | {
       _id: string;
-      name: string;
-      description: string;
+      items: {
+        categories: string[];
+        description: { en: string; ru: string; pl: string; _id: string };
+        images: string[];
+        name: string;
+        price: number;
+        reviews: {}[];
+        sizes: string[];
+        tastes: string[];
+        _id: string;
+      }[];
+      contacts: {};
+      date: string | Date;
     }[];
 
 const userOrdersSlice = createSlice({

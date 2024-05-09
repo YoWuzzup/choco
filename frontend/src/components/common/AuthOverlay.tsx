@@ -87,7 +87,7 @@ const Login: React.FC<{
           href={""}
           className="outline-none focus:outline-none focus-visible:outline-none"
         >
-          <img className="mx-auto mb-5" src="/logo.png" alt="Choco" />
+          <img className="mx-auto mb-5" src="/logo.png" alt="Melanik's cake" />
         </Link>{" "}
       </div>
 
@@ -275,7 +275,7 @@ const Register: React.FC<{
           href={""}
           className="outline-none focus:outline-none focus-visible:outline-none"
         >
-          <img className="mx-auto mb-5" src="/logo.png" alt="Choco" />
+          <img className="mx-auto mb-5" src="/logo.png" alt="Melanik's cake" />
         </Link>{" "}
       </div>
 
@@ -469,7 +469,7 @@ const Forgot: React.FC<{
           href={""}
           className="outline-none focus:outline-none focus-visible:outline-none"
         >
-          <img className="mx-auto mb-5" src="/logo.png" alt="Choco" />
+          <img className="mx-auto mb-5" src="/logo.png" alt="Melanik's cake" />
         </Link>{" "}
       </div>
 

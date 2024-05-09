@@ -1,9 +1,7 @@
 import mongoose, { ObjectId } from 'mongoose';
 
 export const OrdersSchema = new mongoose.Schema({
-  items: [
-    { type: mongoose.Schema.Types.ObjectId || String || {}, ref: 'products' },
-  ],
+  items: [{ type: mongoose.Schema.Types.Mixed }],
   additionalInfo: { type: mongoose.Schema.Types.Mixed },
   contacts: {
     city: String,
@@ -17,7 +15,7 @@ export const OrdersSchema = new mongoose.Schema({
 });
 
 export interface Orders extends mongoose.Document {
-  items: ObjectId | string | object;
+  items: any[];
   additionalInfo: Record<string, any>;
   contacts: {
     city: string;

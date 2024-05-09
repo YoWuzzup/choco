@@ -52,36 +52,43 @@ export default function Profile() {
           </div>
         ) : (
           <div className="flex flex-col p-2 sm:p-10">
-            {ordersRedux?.map((o: any, i: number) =>
-              o.items && o.items.length > 0 ? (
-                <div
-                  key={`${o?.date}_${i}`}
-                  className="w-full px-7 py-14 mb-8 flex flex-row flex-wrap gap-8 
+            {[...ordersRedux]
+              .sort((a, b) => {
+                const dateA = new Date(a.date);
+                const dateB = new Date(b.date);
+
+                return dateA < dateB ? 1 : dateA > dateB ? -1 : 0;
+              })
+              .map((o: any, i: number) =>
+                o.items && o.items.length > 0 ? (
+                  <div
+                    key={`${o?.date}_${i}`}
+                    className="w-full px-7 py-14 mb-8 flex flex-row flex-wrap gap-8 
                       items-center justify-center sm:justify-start shadow-lg rounded-md"
-                >
-                  <h4 className="basis-full first-letter:uppercase">
-                    {`${t("pages.profile.date of order")}: ${new Date(
-                      o.date
-                    ).toLocaleDateString("en-GB")}`}
-                  </h4>
-                  {o.items?.map((item: any, itemIndex: number) => (
-                    <div key={`${item.name}_${itemIndex}`}>
-                      <img
-                        src={`${item.images[0] || ""}`}
-                        alt={`picture ${i}`}
-                        className="w-[100px] h-[100px]"
-                        style={{ objectFit: "cover" }}
-                      />
-                      <div className="flex flex-col grow">
-                        <div className="text-sm capitalize text-primary my-3">
-                          {item?.name}
+                  >
+                    <h4 className="basis-full first-letter:uppercase">
+                      {`${t("pages.profile.date of order")}: ${new Date(
+                        o.date
+                      ).toLocaleDateString("en-GB")}`}
+                    </h4>
+                    {o.items?.map((item: any, itemIndex: number) => (
+                      <div key={`${item.name}_${itemIndex}`}>
+                        <img
+                          src={`${item.images[0] || ""}`}
+                          alt={`picture ${i}`}
+                          className="w-[100px] h-[100px]"
+                          style={{ objectFit: "cover" }}
+                        />
+                        <div className="flex flex-col grow">
+                          <div className="text-sm capitalize text-primary my-3">
+                            {item?.name}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              ) : null
-            )}
+                    ))}
+                  </div>
+                ) : null
+              )}
           </div>
         )}
       </div>

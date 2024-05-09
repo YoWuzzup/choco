@@ -9,8 +9,12 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
-// TODO:get instagram posts or pictures for these slides
-const posts = ["TODO", "TODO", "TODO", "TODO"];
+const posts = [
+  "/about/cake pops.jpg",
+  "/about/cakes.jpg",
+  "/about/cupcakes.jpg",
+  "/about/mochi_mochi.jpg",
+];
 
 const CustomPrevArrow = (props: any) => (
   <div
@@ -69,17 +73,21 @@ export const InstagramSection: React.FC = () => {
         }}
       >
         {posts.map((p, i) => (
-          <div key={`${p}_${i}`} className="relative group w-full h-80">
+          <div key={`${p}_${i}`} className="relative group/image w-full h-80">
+            <img
+              alt={`instagram ${i}`}
+              src={`${p}`}
+              className="w-full h-full object-cover"
+            />
             <div
               className="absolute top-0 left-0 w-full h-80 bg-secondary opacity-0 
                         flex justify-center items-center transition-all duration-500
-                        group-hover:opacity-70"
+                        group-hover/image:opacity-70"
             />
             <Link href={`${process.env.NEXT_PUBLIC_INSTAGRAM_LINK}`}>
               <InstagramIcon
-                className="absolute top-1/2 left-1/2 text-5xl
-                        -translate-x-1/2 -translate-y-1/2
-                        text-secondary transition-all duration-500"
+                className="absolute w-32 h-32 p-6 top-1/2 left-1/2 text-5xl -translate-x-1/2 -translate-y-1/2 
+                  text-secondary transition-all duration-500 group-hover/image:text-colorful"
               />
             </Link>
           </div>
