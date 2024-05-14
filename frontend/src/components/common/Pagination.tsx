@@ -1,3 +1,4 @@
+"use client";
 import { useSearchParams } from "next/navigation";
 import React from "react";
 
@@ -40,10 +41,9 @@ export const Pagination: React.FC<TPagination> = ({
             onClick={handleChange}
             className={`flex items-center justify-center p-4 h-full ms-0 leading-tight
               rounded-full duration-300 shadow-md hover:bg-colorful hover:text-secondary
-              ${
-                currentPageNumber === i
-                  ? "bg-colorful text-secondary"
-                  : "text-primary bg-primary"
+              ${currentPageNumber === i
+                ? "bg-colorful text-secondary"
+                : "text-primary bg-primary"
               }`}
           >
             {i}

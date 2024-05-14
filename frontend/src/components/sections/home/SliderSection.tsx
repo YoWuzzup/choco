@@ -1,3 +1,4 @@
+"use client";
 import { Button, Slider } from "@/components";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -26,7 +27,7 @@ export const SliderSection: React.FC = () => {
       <div className={`relative z-10`}>
         <img
           className="object-cover min-h-[450px] md:min-h-[580px] xl:min-h-[620px]"
-          src="/home/slide1.1.webp"
+          src="/home/slide1.2.webp"
           alt="first slide"
         />
 
