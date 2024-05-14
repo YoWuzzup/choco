@@ -112,11 +112,11 @@ export default function Bookmarks() {
 
                     <Button
                       type={"button"}
-                      buttonClasses={`group/button p-2 border border-red bg-primary rounded-full duration-300 
-                        hover:bg-red`}
+                      buttonClasses={`group/button p-2 border border-secondary bg-primary rounded-full duration-300
+                        hover:border-danger`}
                       handleClick={(e) => handleRemoveLike(e, b._id)}
                     >
-                      <DeleteIcon className="text-red group-hover/button:text-secondary" />
+                      <DeleteIcon className="text-primary group-hover/button:text-danger" />
                     </Button>
                   </>
                 </Link>

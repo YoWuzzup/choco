@@ -31,7 +31,7 @@ export const SliderSection: React.FC = () => {
           alt="first slide"
         />
 
-        <div className="absolute top-1/2 left-1/4 transform -translate-x-1/3 -translate-y-1/2 flex flex-col mx-2 font-bold font-[Quicksand]">
+        <div className="absolute top-1/2 left-1/4 transform -translate-x-1/3 -translate-y-1/2 flex flex-col mx-2 font-bold font-[Quicksand] text-black">
           <h4 className="mb-4 capitalize text-base tracking-widest animate-fadeInDown">
             WELCOME TO MELANIK'S SHOP
           </h4>
@@ -43,7 +43,7 @@ export const SliderSection: React.FC = () => {
           </div>
           <Button
             type={"button"}
-            buttonClasses={`text-base bg-primary border-2 w-40 h-12 uppercase transition-all duration-300 ease-in-out
+            buttonClasses={`text-base text-primary bg-primary border-2 w-40 h-12 uppercase transition-all duration-300 ease-in-out
               hover:text-colorful hover:border-white`}
             handleClick={handleClick}
           >
@@ -60,7 +60,7 @@ export const SliderSection: React.FC = () => {
           alt="second slide"
         />
 
-        <div className="absolute top-1/2 left-1/4 transform -translate-x-1/3 -translate-y-1/2 flex flex-col mx-2 font-bold font-[Quicksand]">
+        <div className="absolute top-1/2 left-1/4 transform -translate-x-1/3 -translate-y-1/2 flex flex-col mx-2 font-bold font-[Quicksand] text-black">
           <h4 className="mb-4 capitalize text-base tracking-widest animate-fadeInDown">
             WELCOME TO MELANIK'S SHOP
           </h4>
@@ -72,7 +72,7 @@ export const SliderSection: React.FC = () => {
           </div>
           <Button
             type={"button"}
-            buttonClasses={`text-base bg-primary border-2 w-40 h-12 uppercase transition-all duration-300 ease-in-out
+            buttonClasses={`text-base text-primary bg-primary border-2 w-40 h-12 uppercase transition-all duration-300 ease-in-out
               hover:text-colorful hover:border-white`}
             handleClick={handleClick}
           >

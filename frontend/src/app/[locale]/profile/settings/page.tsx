@@ -12,6 +12,7 @@ import { Button, Input, ProfileMenu, Spinner } from "@/components";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useTranslations } from "next-intl";
+import { useDarkMode } from "usehooks-ts";
 
 type User = null | {
   _id: string;
@@ -25,6 +26,7 @@ type User = null | {
 
 export default function Settings() {
   const t = useTranslations("");
+  const { isDarkMode } = useDarkMode();
   // redux
   const dispatch = useAppDispatch();
   const userRedux = useAppSelector((st) => st.user);
@@ -178,8 +180,9 @@ export default function Settings() {
           {/* name, avatar and email */}
           <div
             className={`w-full p-2 py-7 sm:p-14 my-8 flex flex-row flex-wrap md:flex-nowrap 
-                  gap-8 justify-center
-                  items-center md:justify-between shadow-lg rounded-md`}
+                  gap-8 justify-center items-center md:justify-between 
+                  rounded-md shadow-lg ${isDarkMode ? 'shadow-colorfulColor' : ''} 
+                  `}
           >
             <Dropzone
               onDrop={(acceptedFiles) => handleImageChange(acceptedFiles)}
@@ -198,10 +201,10 @@ export default function Settings() {
                           image
                             ? URL.createObjectURL(image)
                             : userRedux?.avatar instanceof File
-                            ? URL.createObjectURL(userRedux?.avatar)
-                            : typeof userRedux?.avatar === "object"
-                            ? `data:${userRedux?.avatar.mimetype};base64,${userRedux?.avatar.buffer}`
-                            : `${userRedux?.avatar}`
+                              ? URL.createObjectURL(userRedux?.avatar)
+                              : typeof userRedux?.avatar === "object"
+                                ? `data:${userRedux?.avatar.mimetype};base64,${userRedux?.avatar.buffer}`
+                                : `${userRedux?.avatar}`
                         }
                         className="object-cover w-full h-full rounded-full"
                       />
@@ -267,7 +270,7 @@ export default function Settings() {
           {/* contact info */}
           <div
             className={`w-full p-2 py-7 sm:p-14 my-8 flex flex-row flex-wrap gap-4
-                  items-center shadow-lg rounded-md justify-between`}
+                  items-center shadow-lg rounded-md justify-between ${isDarkMode ? 'shadow-colorfulColor' : ''}`}
           >
             <h4 className="capitalize basis-full">
               {t("pages.profile.contact")}
@@ -326,9 +329,8 @@ export default function Settings() {
                 placeholder:
                   userRedux?.contacts?.city || t("pages.profile.settings.city"),
                 type: "text",
-                className: `border rounded-lg p-3 text-paraPrimary ${
-                  errorAddress ? "border-red" : "border-grey"
-                }`,
+                className: `border rounded-lg p-3 text-paraPrimary ${errorAddress ? "border-red" : "border-grey"
+                  }`,
               }}
               label={{
                 htmlFor: "contacts.city",
@@ -348,9 +350,8 @@ export default function Settings() {
                 placeholder:
                   userRedux?.contacts?.zip || t("pages.profile.settings.zip"),
                 type: "text",
-                className: `border rounded-lg p-3 text-paraPrimary ${
-                  errorAddress ? "border-red" : "border-grey"
-                }`,
+                className: `border rounded-lg p-3 text-paraPrimary ${errorAddress ? "border-red" : "border-grey"
+                  }`,
               }}
               label={{
                 htmlFor: "contacts.zip",
@@ -371,9 +372,8 @@ export default function Settings() {
                   userRedux?.contacts?.phoneNumber ||
                   t("pages.profile.phone number"),
                 type: "text",
-                className: `border rounded-lg p-3 text-paraPrimary ${
-                  errorAddress ? "border-red" : "border-grey"
-                }`,
+                className: `border rounded-lg p-3 text-paraPrimary ${errorAddress ? "border-red" : "border-grey"
+                  }`,
               }}
               label={{
                 htmlFor: "contacts.phoneNumber",
@@ -386,7 +386,7 @@ export default function Settings() {
           {/* passwords */}
           <div
             className={`w-full p-2 py-7 sm:p-14 my-8 flex flex-row flex-wrap gap-4
-                  items-center shadow-lg rounded-md justify-between`}
+                  items-center shadow-lg rounded-md justify-between ${isDarkMode ? 'shadow-colorfulColor' : ''}`}
           >
             <h4 className="capitalize basis-full">
               {t("pages.profile.settings.change password")}
@@ -458,7 +458,7 @@ export default function Settings() {
           {/* save button */}
           <div
             className={`w-full px-7 py-14 my-8 flex flex-row flex-nowrap gap-8 
-                  items-center justify-between shadow-lg rounded-md`}
+                  items-center justify-between shadow-lg rounded-md ${isDarkMode ? 'shadow-colorfulColor' : ''}`}
           >
             {loading ? (
               <Spinner
@@ -468,7 +468,7 @@ export default function Settings() {
             ) : (
               <Button
                 type={"button"}
-                buttonClasses={`text-secondary bg-colorful border-2 rounded-full p-3
+                buttonClasses={`text-secondary bg-colorful border-2 border-colorfulColor rounded-full p-3
                     w-full h-12 uppercase transition-all duration-300 ease-in-out
                     text-primary flex items-center justify-center
                     hover:text-colorful hover:bg-primary`}

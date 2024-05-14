@@ -5,7 +5,7 @@ import {
   useRouter,
   useSearchParams,
 } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
@@ -30,8 +30,9 @@ import { useReduxAndLocalStorage } from "@/hooks/useReduxAndLocalStorage ";
 import { currentCurency, getColorsByTaste } from "@/utils/common";
 import { GETReviews } from "@/api/reviews";
 import { addReviews } from "@/redux/slices/reviewsSlice";
+import { useDarkMode } from "usehooks-ts";
 
-const BreadcrumbAndNExtPrevBtns: React.FC = () => {
+const BreadcrumbAndNextPrevBtns: React.FC = () => {
   const t = useTranslations("");
   const router = useRouter();
   const product = useAppSelector((st) => st.products.singleProduct);
@@ -129,11 +130,10 @@ const LeftPictureSide: React.FC = () => {
             ),
             customPaging: (i: number) => (
               <img
-                className={`w-36 h-16 sm:h-28 md:h-36 object-cover cursor-pointer ${
-                  i === currentSlide
-                    ? "border-solid border-2 border-colorfulColor"
-                    : ""
-                }`}
+                className={`w-36 h-16 sm:h-28 md:h-36 object-cover cursor-pointer ${i === currentSlide
+                  ? "border-solid border-2 border-colorfulColor"
+                  : ""
+                  }`}
                 src={product?.images[i]}
                 alt="first slide"
               />
@@ -162,6 +162,7 @@ const LeftPictureSide: React.FC = () => {
 };
 
 const RightInfoSide: React.FC = () => {
+  const { isDarkMode } = useDarkMode();
   const t = useTranslations("");
   const product = useAppSelector((st) => st.products.singleProduct);
   const reviews = useAppSelector((st) => st.reviews);
@@ -288,12 +289,12 @@ const RightInfoSide: React.FC = () => {
           handleClick={handleLikeProduct}
         >
           <FavoriteBorderOutlinedIcon
-            className={`w-10 h-10 p-2 transition-all duration-300 rounded-full shadow-md
-                  ${
-                    user?.likes?.includes(product?._id)
-                      ? "bg-colorful hover:bg-primary text-secondary hover:text-primary"
-                      : "bg-primary hover:bg-colorful text-primary hover:text-secondary"
-                  }`}
+            className={`w-10 h-10 p-2 transition-all duration-300 rounded-full shadow-md 
+                ${isDarkMode ? "shadow-colorfulColor" : ""}
+                  ${user?.likes?.includes(product?._id)
+                ? "bg-colorful hover:bg-primary text-secondary hover:text-primary"
+                : "bg-primary hover:bg-colorful text-primary hover:text-secondary"
+              }`}
           />
         </Button>
       </div>
@@ -361,11 +362,10 @@ const RightInfoSide: React.FC = () => {
               key={`${s}_${i}`}
               buttonClasses={`py-2 px-4 border-solid border-[1px] border-black cursor-pointer
               transition-all duration-300 hover:bg-secondary hover:text-secondary
-              ${
-                sizeQueryParam === s
+              ${sizeQueryParam === s
                   ? "bg-secondary text-secondary"
                   : "bg-primary text-primary"
-              }`}
+                }`}
               handleClick={(e) => handleFilterChange(e)}
               value={s}
               id="size"
@@ -407,10 +407,9 @@ const RightInfoSide: React.FC = () => {
                   buttonClasses={`relative rounded-full cursor-pointer transition-all duration-300 w-9 h-9 p-2
                     after:bottom-1/2 after:left-1/2 after:absolute after:content-[''] 
                     after:w-12 after:h-12 after:rounded-full after:border-2 after:-translate-x-1/2 after:translate-y-1/2      
-                    ${
-                      tasteQueryParam === t
-                        ? `after:border-colorfulColor`
-                        : "after:border-secondary"
+                    ${tasteQueryParam === t
+                      ? `after:border-colorfulColor`
+                      : "after:border-secondary"
                     }`}
                   style={{
                     background: `conic-gradient(${gradientTaste})`,
@@ -544,7 +543,7 @@ export const ProductMainInfoSection: React.FC = () => {
       className="w-full text-primary bg-primary flex flex-col mx-auto
                 pb-16 pt-4 px-3 content-center mt-[4rem]"
     >
-      <BreadcrumbAndNExtPrevBtns />
+      <BreadcrumbAndNextPrevBtns />
       <div className="flex flex-col md:flex-row flex-nowrap justify-between [&>*]:w-full md:[&>*]:w-[48%]">
         <LeftPictureSide />
         <RightInfoSide />

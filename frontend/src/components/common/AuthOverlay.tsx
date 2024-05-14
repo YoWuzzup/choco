@@ -10,7 +10,7 @@ import {
 import { useReduxAndLocalStorage } from "@/hooks/useReduxAndLocalStorage ";
 import { saveAccessTokenToRedux } from "@/redux/slices/accessTokenSlice";
 import { userLogin, userRegister } from "@/redux/slices/userSlice";
-import { useOnClickOutside } from "usehooks-ts";
+import { useDarkMode, useOnClickOutside } from "usehooks-ts";
 
 type TAuthOverlay = {
   setShowAuthOverlay: (e: any) => void;
@@ -23,6 +23,7 @@ const Login: React.FC<{
   ) => void;
   setShowAuthOverlay: (arg0: boolean) => void;
 }> = ({ handlePageChange, setShowAuthOverlay }) => {
+  const { isDarkMode } = useDarkMode();
   const [storedAccessToken, saveAccessToken] =
     useReduxAndLocalStorage("access_token");
   const [storedUser, saveUser] = useReduxAndLocalStorage("user");
@@ -100,9 +101,8 @@ const Login: React.FC<{
           handleChange={handleLoginChange}
           label={{
             htmlFor: "email",
-            className: `block text-sm font-medium leading-6 ${
-              emailIsValid ? "text-primary" : "text-red"
-            }`,
+            className: `block text-sm font-medium leading-6 ${emailIsValid ? "text-primary" : "text-red"
+              }`,
             children: <>Email address</>,
           }}
           input={{
@@ -112,9 +112,8 @@ const Login: React.FC<{
             autoComplete: "email",
             required: true,
             className: `block w-full py-1.5 px-2 shadow-sm placeholder:text-gray
-                border border-solid ${
-                  emailIsValid ? "border-gray" : "border-red"
-                }
+                border border-solid ${emailIsValid ? "border-gray" : "border-red"
+              }
                 sm:text-sm sm:leading-6 outline-none focus:outline-none focus-visible:outline-none`,
           }}
         />
@@ -125,9 +124,8 @@ const Login: React.FC<{
             classNameContainer="w-full"
             label={{
               htmlFor: "password",
-              className: `block text-sm font-medium leading-6 ${
-                passwordIsValid ? "text-primary" : "text-red"
-              }`,
+              className: `block text-sm font-medium leading-6 ${passwordIsValid ? "text-primary" : "text-red"
+                }`,
               children: (
                 <div className="flex flex-row flex-nowrap justify-between">
                   Password{" "}
@@ -152,8 +150,7 @@ const Login: React.FC<{
               autoComplete: "password",
               required: true,
               className: `block w-full py-1.5 px-2 shadow-sm placeholder:text-gray
-                border border-solid ${
-                  passwordIsValid ? "border-gray" : "border-red"
+                border border-solid ${passwordIsValid ? "border-gray" : "border-red"
                 }
                 sm:text-sm sm:leading-6 outline-none focus:outline-none focus-visible:outline-none`,
             }}
@@ -181,9 +178,10 @@ const Login: React.FC<{
 
         <Button
           type={"button"}
-          buttonClasses={`flex w-full h-14 justify-center items-center bg-[#F2F2F2]
-                text-sm font-semibold leading-6 text-primary shadow-sm duration-300
-                outline-none focus:outline-none focus-visible:outline-none`}
+          buttonClasses={`flex w-full h-14 justify-center items-center bg-gray-light
+                text-sm font-semibold leading-6 shadow-sm duration-300
+                outline-none focus:outline-none focus-visible:outline-none
+                ${isDarkMode ? "text-secondary " : "text-primary"}`}
           handleClick={(e: React.MouseEvent<HTMLButtonElement>) =>
             handlePageChange(e, "register")
           }
@@ -203,6 +201,7 @@ const Register: React.FC<{
   ) => void;
   setShowAuthOverlay: (arg0: boolean) => void;
 }> = ({ handlePageChange, setShowAuthOverlay }) => {
+  const { isDarkMode } = useDarkMode();
   const [storedAccessToken, saveAccessToken] =
     useReduxAndLocalStorage("access_token");
   const [storedUser, saveUser] = useReduxAndLocalStorage("user");
@@ -313,11 +312,10 @@ const Register: React.FC<{
             label={{
               htmlFor: "password",
               className: `block text-sm font-medium leading-6
-              ${
-                passwordIsValid || confirmPasswordIsValid
+              ${passwordIsValid || confirmPasswordIsValid
                   ? "text-gray"
                   : "text-red"
-              }`,
+                }`,
               children: (
                 <div className="flex flex-row flex-nowrap justify-between">
                   Password
@@ -333,11 +331,10 @@ const Register: React.FC<{
               required: true,
               className: `block w-full py-1.5 px-2 text-gray shadow-sm placeholder:text-gray border border-solid 
                         sm:text-sm sm:leading-6 outline-none focus:outline-none focus-visible:outline-none
-                        ${
-                          passwordIsValid || confirmPasswordIsValid
-                            ? "border-gray"
-                            : "border-red"
-                        }`,
+                        ${passwordIsValid || confirmPasswordIsValid
+                  ? "border-gray"
+                  : "border-red"
+                }`,
             }}
           />
         </div>
@@ -349,11 +346,10 @@ const Register: React.FC<{
             label={{
               htmlFor: "confirmPassword",
               className: `block text-sm font-medium leading-6
-              ${
-                passwordIsValid || confirmPasswordIsValid
+              ${passwordIsValid || confirmPasswordIsValid
                   ? "text-gray"
                   : "text-red"
-              }`,
+                }`,
               children: (
                 <div className="flex flex-row flex-nowrap justify-between">
                   Confirm password
@@ -369,11 +365,10 @@ const Register: React.FC<{
               className: `block w-full py-1.5 px-2 text-gray shadow-sm border border-solid
               placeholder:text-gray sm:text-sm sm:leading-6 
               outline-none focus:outline-none focus-visible:outline-none
-              ${
-                passwordIsValid || confirmPasswordIsValid
+              ${passwordIsValid || confirmPasswordIsValid
                   ? "border-gray"
                   : "border-red"
-              }`,
+                }`,
             }}
           />
         </div>
@@ -400,9 +395,10 @@ const Register: React.FC<{
 
           <Button
             type={"button"}
-            buttonClasses={`flex flex-col sm:flex-row w-full sm:h-14 justify-center items-center bg-[#F2F2F2]
+            buttonClasses={`flex flex-col sm:flex-row w-full sm:h-14 justify-center items-center bg-gray-light
                 text-sm font-semibold leading-6 text-primary shadow-sm duration-300 
-                outline-none focus:outline-none focus-visible:outline-none`}
+                outline-none focus:outline-none focus-visible:outline-none
+                ${isDarkMode ? "text-secondary " : "text-primary"}`}
             handleClick={(e: React.MouseEvent<HTMLButtonElement>) =>
               handlePageChange(e, "login")
             }
@@ -422,6 +418,7 @@ const Forgot: React.FC<{
     page: "register" | "login" | "forgot"
   ) => void;
 }> = ({ handlePageChange }) => {
+  const { isDarkMode } = useDarkMode();
   const [loading, setLoading] = useState<boolean>(false);
   const [emailIsValid, setEmailIsValid] = useState<boolean>(true);
   const [res, setRes] = useState<null | {
@@ -522,7 +519,8 @@ const Forgot: React.FC<{
             type={"button"}
             buttonClasses={`flex w-full h-14 justify-center items-center bg-[#F2F2F2]
             text-sm font-semibold leading-6 text-primary shadow-sm duration-300 
-            outline-none focus:outline-none focus-visible:outline-none`}
+            outline-none focus:outline-none focus-visible:outline-none
+            ${isDarkMode ? "text-secondary " : "text-primary"}`}
             handleClick={(e: React.MouseEvent<HTMLButtonElement>) =>
               handlePageChange(e, "login")
             }

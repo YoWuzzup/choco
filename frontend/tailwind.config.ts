@@ -21,6 +21,7 @@ const config: Config = {
     colors: {
       ...colors,
       "gray-dark": "#343a40",
+      "gray-light": "#F2F2F2",
       primary: "#007bff",
       secondary: "#6c757d",
       success: "#28a745",
@@ -29,7 +30,7 @@ const config: Config = {
       danger: "#dc3545",
       light: "#f8f9fa",
       dark: "#343a40",
-      colorfulColor: "#f69d9f",
+      colorfulColor: "rgb(var(--colorful-text-color))",
     },
     fontFamily: {
       sans: [

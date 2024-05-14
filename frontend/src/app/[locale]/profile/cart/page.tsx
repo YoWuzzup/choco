@@ -397,14 +397,14 @@ export default function Cart() {
                       after:bg-white after:border-gray after:border after:rounded-full 
                       after:h-5 after:w-5 after:transition-all peer-checked:bg-colorfulColor"
                       />
-                      <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                      <span className="ms-3 text-sm font-medium text-primary">
                         {t("pages.profile.self pick up")}
                       </span>
                     </label>
                   </div>
                   {userRedux?.contacts &&
-                  Object.values(userRedux?.contacts).some((v) => v) &&
-                  !data.selfPickup ? (
+                    Object.values(userRedux?.contacts).some((v) => v) &&
+                    !data.selfPickup ? (
                     <>
                       <ul className="grow">
                         <li className="text-xs text-gray-600 uppercase ">
@@ -428,9 +428,8 @@ export default function Cart() {
                       </ul>
                     </>
                   ) : (
-                    <>{`${t("pages.profile.pick up at")} ${
-                      process.env.NEXT_PUBLIC_ADDRESS
-                    }`}</>
+                    <>{`${t("pages.profile.pick up at")} ${process.env.NEXT_PUBLIC_ADDRESS
+                      }`}</>
                   )}
                   <div className="basis-full my-4">
                     {t("pages.profile.change address")}{" "}

@@ -6,7 +6,7 @@ export const HeaderAboutSection: React.FC = () => {
 
   return (
     <section
-      className="w-full text-secondary bg-[#f2f2f2] flex flex-col mx-auto
+      className="w-full text-secondary flex flex-col mx-auto
                 py-32 mt-[4rem] justify-center items-center"
     >
       {/* header name */}

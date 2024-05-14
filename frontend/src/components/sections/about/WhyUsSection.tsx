@@ -8,7 +8,7 @@ export const WhyUsSection: React.FC = () => {
   return (
     <section
       className={`w-full flex flex-col text-center justify-center items-center 
-        py-32 text-secondary bg-[url('/about/mochi_bg.jpg')] bg-cover bg-center`}
+        py-32 text-secondary bg-[url('/about/mochi_bg.webp')] bg-colorful bg-no-repeat bg-right`}
     >
       <h3
         className="relative pb-10 mb-14 text-4xl font-normal font-[Quicksand] first-latter:capitalize

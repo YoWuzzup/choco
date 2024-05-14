@@ -9,7 +9,6 @@ import { useEffect } from "react";
 
 export const BestSellerSection: React.FC = () => {
   const t = useTranslations("");
-  const locale = useLocale();
   const dispatch = useAppDispatch();
   const products = useAppSelector((st) => st.products.bestSellerProducts);
   const selectedCurrency = currentCurency();
