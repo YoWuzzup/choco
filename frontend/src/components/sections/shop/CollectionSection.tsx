@@ -80,7 +80,7 @@ const FilterSection: React.FC = () => {
           const res = await GETProducts(queryParams);
           dispatch(addListOfProducts(res));
         } catch (error) {
-          console.log(`something wrong shop/useEffect ${error}`);
+          console.log(`something wrong shop/FilterSection/useEffect ${error}`);
         }
       };
       fetchData();

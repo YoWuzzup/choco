@@ -527,7 +527,7 @@ export const ProductMainInfoSection: React.FC = () => {
             dispatch(addReviews(reviews));
           });
         } catch (error) {
-          console.log(`something wrong shop/useEffect ${error}`);
+          console.log(`something wrong shop/ProductMainInfoSection/useEffect ${error}`);
         }
       };
       fetchData();
